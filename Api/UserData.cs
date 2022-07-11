@@ -88,13 +88,13 @@ namespace Api
             {
                 Id = 1,
                 Name = "Lilly",
-                Avatar = "Bilde av Lilly"
+                Avatar = "twa-girl"
             },
             new User
             {
                 Id = 2,
                 Name = "Robin",
-                Avatar = "Bilde av Robin"
+                Avatar = "twa-boy"
             }
         };
 

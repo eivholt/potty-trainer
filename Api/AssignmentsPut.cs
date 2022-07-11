@@ -10,11 +10,11 @@ using Data;
 
 namespace Api;
 
-public class ProductsPut
+public class AssignmentsPut
 {
-    private readonly IProductData productData;
+    private readonly IAssignmentData productData;
 
-    public ProductsPut(IProductData productData)
+    public AssignmentsPut(IAssignmentData productData)
     {
         this.productData = productData;
     }
@@ -25,9 +25,9 @@ public class ProductsPut
         ILogger log)
     {
         var body = await new StreamReader(req.Body).ReadToEndAsync();
-        var product = JsonSerializer.Deserialize<Product>(body, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        var product = JsonSerializer.Deserialize<Assignment>(body, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
-        var updatedProduct = await productData.UpdateProduct(product);
+        var updatedProduct = await productData.UpdateAssignment(product);
         return new OkObjectResult(updatedProduct);
     }
 }

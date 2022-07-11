@@ -39,9 +39,9 @@ else
                            type="number"
                            min="1"
                            max="100"
-                           value="@product.Quantity"
+                           value="@product.Weight"
                            placeholder="1"
-                           @onchange="@(e => product.Quantity = int.Parse(e.Value.ToString()))" />
+                           @onchange="@(e => product.Weight = int.Parse(e.Value.ToString()))" />
                 </div>
             </div>
         </div>
@@ -59,7 +59,7 @@ else
 }
 
 @code {
-    private Product product;
+    private Assignment product;
 
     [Parameter] public int ProductId { get; set; }
 
@@ -67,11 +67,11 @@ else
     {
         if (ProductId == 0)
         {
-            product = new Product();
+            product = new Assignment();
         }
         else
         {
-            var products = await http.GetFromJsonAsync<IEnumerable<Product>>("api/products");
+            var products = await http.GetFromJsonAsync<IEnumerable<Assignment>>("api/products");
             product = products.First(p => p.Id == ProductId);
         }
     }

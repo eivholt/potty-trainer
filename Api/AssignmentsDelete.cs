@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Api;
 
-public class ProductsDelete
+public class AssignmentsDelete
 {
-    private readonly IProductData productData;
+    private readonly IAssignmentData productData;
 
-    public ProductsDelete(IProductData productData)
+    public AssignmentsDelete(IAssignmentData productData)
     {
         this.productData = productData;
     }
@@ -22,7 +22,7 @@ public class ProductsDelete
         int productId,
         ILogger log)
     {
-        var result = await productData.DeleteProduct(productId);
+        var result = await productData.DeleteAssignment(productId);
 
         if (result)
         {

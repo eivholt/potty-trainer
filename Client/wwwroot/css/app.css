@@ -118,10 +118,13 @@ ul.list {
 
 div.card-content {
     background-color: #fafafa;
+    display: inline-block;
+    margin: auto;
 }
 
+
     div.card-content .name {
-        font-size: 28px;
+        font-size: 50px;
         color: #000;
     }
 

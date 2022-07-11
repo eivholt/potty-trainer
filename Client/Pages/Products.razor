@@ -24,14 +24,14 @@
 
 @code {
     private string errorMessage = "";
-    private IEnumerable<Product> products;
-    private Product productToDelete;
+    private IEnumerable<Assignment> products;
+    private Assignment productToDelete;
     private bool showModal;
     private string modalMessage = "";
 
     protected override async Task OnInitializedAsync()
     {
-        products = await http.GetFromJsonAsync<IEnumerable<Product>>("api/products");
+        products = await http.GetFromJsonAsync<IEnumerable<Assignment>>("api/assignments");
     }
 
     private void AddNewProduct()
@@ -41,15 +41,15 @@
 
     private async Task HandleRefresh()
     {
-        products = await http.GetFromJsonAsync<IEnumerable<Product>>("api/products");
+        products = await http.GetFromJsonAsync<IEnumerable<Assignment>>("api/assignments");
     }
 
-    private void SelectProduct(Product product)
+    private void SelectProduct(Assignment product)
     {
         navigation.NavigateTo($"/product/{product.Id}");
     }
 
-    private void DeleteProduct(Product product)
+    private void DeleteProduct(Assignment product)
     {
         productToDelete = product;
         showModal = true;

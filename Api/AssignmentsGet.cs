@@ -12,19 +12,20 @@ namespace Api
 {
     public class AssignmentsGet
     {
-        private readonly IAssignmentData m_assignmentData;
+        private readonly IUserData m_userData;
 
-        public AssignmentsGet(IAssignmentData assignmentData)
+        public AssignmentsGet(IUserData userData)
         {
-            m_assignmentData = assignmentData;
+            m_userData = userData;
         }
 
         [FunctionName("AssignmentsGet")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "assignments")] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "users/{userid:int}/assignments")] HttpRequest req,
+            ILogger log,
+            int userid)
         {
-            var assignments = await m_assignmentData.GetAssignments();
+            var assignments = await m_userData.GetUserWithAssignments(userid);
             return new OkObjectResult(assignments);
 
 

@@ -1,8 +1,8 @@
-﻿@page "/product/{productId:int}"
+﻿@page "/user/{userId:int}"
 @inject HttpClient http
 @inject NavigationManager navigation
 
-@if (product == null)
+@if (user == null)
 {
     <p>Loading...</p>
 }
@@ -11,25 +11,41 @@ else
     <div class="card edit-detail">
         <header class="card-header">
             <p class="card-header-title">
-                @product.Name
+                @user.Name
             </p>
         </header>
         <div class="card-content">
-            <div class="content">
-                @if (product.Id != 0)
+            @foreach (var assignment in user.Assignments)
+            {
+                <li role="presentation">
+                    <div class="card">
+                        <CardContent Name="@assignment.Name"
+                             Description="@assignment.Description" />
+
+                       @* <footer class="card-footer">
+                            <ButtonFooter Class="edit-item"
+                                  IconClasses="fas fa-edit"
+                                  OnClick="@(async _ => await SelectUser.InvokeAsync(user))"
+                                  Label="Edit" />
+                        </footer>*@
+                    </div>
+                </li>
+            }
+            @*<div class="content">
+                @if (user.Id != 0)
                 {
                     <label class="label" for="id">id</label>
                     <input name="id"
                            class="input"
-                           value="@product.Id"
+                           value="@user.Id"
                            readonly="readonly" />
                 }
                 <InputDetail Name="name"
                              Placeholder="Oranges"
-                             @bind-Value="product.Name" />
+                             @bind-Value="user.Name" />
                 <InputDetail Name="description"
                              Placeholder="box"
-                             @bind-Value="product.Description" />
+                             @bind-Value="user.Description" />
                 <div class="field">
                     <label class="label" for="quantity">
                         quantity
@@ -39,11 +55,11 @@ else
                            type="number"
                            min="1"
                            max="100"
-                           value="@product.Weight"
+                           value="@user.Weight"
                            placeholder="1"
-                           @onchange="@(e => product.Weight = int.Parse(e.Value.ToString()))" />
+                           @onchange="@(e => user.Weight = int.Parse(e.Value.ToString()))" />
                 </div>
-            </div>
+            </div>*@
         </div>
         <footer class="card-footer ">
             <ButtonFooter Class="cancel-button"
@@ -59,21 +75,13 @@ else
 }
 
 @code {
-    private Assignment product;
+    private User user;
 
-    [Parameter] public int ProductId { get; set; }
+    [Parameter] public int UserId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (ProductId == 0)
-        {
-            product = new Assignment();
-        }
-        else
-        {
-            var products = await http.GetFromJsonAsync<IEnumerable<Assignment>>("api/products");
-            product = products.First(p => p.Id == ProductId);
-        }
+        user = await http.GetFromJsonAsync<User>($"api/users/{UserId}/assignments");
     }
 
     private void CancelProduct()
@@ -83,13 +91,13 @@ else
 
     private async Task Save()
     {
-        if (product.Id == 0)
+        if (user.Id == 0)
         {
-            await http.PostAsJsonAsync("api/products", product);
+            await http.PostAsJsonAsync("api/products", user);
         }
         else
         {
-            await http.PutAsJsonAsync("api/products", product);
+            await http.PutAsJsonAsync("api/products", user);
         }
         navigation.NavigateTo("/");
     }

@@ -31,7 +31,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        products = await http.GetFromJsonAsync<IEnumerable<Assignment>>("api/products");
+        products = await http.GetFromJsonAsync<IEnumerable<Assignment>>("api/assignments");
     }
 
     private void AddNewProduct()
@@ -41,7 +41,7 @@
 
     private async Task HandleRefresh()
     {
-        products = await http.GetFromJsonAsync<IEnumerable<Assignment>>("api/products");
+        products = await http.GetFromJsonAsync<IEnumerable<Assignment>>("api/assignments");
     }
 
     private void SelectProduct(Assignment product)

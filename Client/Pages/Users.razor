@@ -1,0 +1,32 @@
+﻿@page "/users"
+@inject HttpClient http
+@inject NavigationManager navigation
+
+<div class="content-container">
+    <div class="columns is-multiline is-variable">
+        <div class="column is-8">
+            <UserList
+                Users="@users"
+                SelectUser="@SelectUser"/>
+        </div>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<User> users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await http.GetFromJsonAsync<IEnumerable<User>>("api/users");
+    }
+
+    private async Task HandleRefresh()
+    {
+        users = await http.GetFromJsonAsync<IEnumerable<User>>("api/users");
+    }
+
+    private void SelectUser(User user)
+    {
+        navigation.NavigateTo($"/user/{user.Id}");
+    }
+}

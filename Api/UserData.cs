@@ -90,6 +90,33 @@ namespace Api
             },
             new Assignment
             {
+                Id = 42,
+                Name = "Rydde sekk",
+                Description = "Sette matboks og flaske på kjøkkenbenken",
+                OncePerDay = true,
+                Weight = 2,
+                Emoji = "twa-backpack"
+            },
+            new Assignment
+            {
+                Id = 43,
+                Name = "Henge opp klær",
+                Description = "Henge opp klær på knagg",
+                OncePerDay = false,
+                Weight = 2,
+                Emoji = "twa-coat"
+            },
+            new Assignment
+            {
+                Id = 44,
+                Name = "Kle på selv",
+                Description = "Kle på seg selv",
+                OncePerDay = false,
+                Weight = 2,
+                Emoji = "twa-gloves"
+            },
+            new Assignment
+            {
                 Id = 50,
                 Name = "Sykle",
                 Description = "Sykkeltur",
@@ -114,11 +141,35 @@ namespace Api
                 OncePerDay = true,
                 Weight = 2,
                 Emoji = "twa-horse-face"
+            },
+            new Assignment
+            {
+                Id = 53,
+                Name = "Minecraft",
+                Description = "Lage noe i Minecraft",
+                OncePerDay = true,
+                Weight = 2,
+                Emoji = "twa-pick"
+            },
+            new Assignment
+            {
+                Id = 54,
+                Name = "Tegne",
+                Description = "Lage tegning",
+                OncePerDay = false,
+                Weight = 3,
+                Emoji = "twa-crayon"
+            },
+            new Assignment
+            {
+                Id = 55,
+                Name = "Lage noe",
+                Description = "Lage noe nytt",
+                OncePerDay = false,
+                Weight = 2,
+                Emoji = "twa-knot"
             }
         };
-
-        // Rydde sekk, henge opp klær, minecraft, tegne, lage noe
-        // Kle på selv
 
         private readonly List<User> m_users = new List<User>
         {
@@ -149,11 +200,11 @@ namespace Api
 
             if(user.Id == 1) 
             {
-                assignmentIds = new int[] { 20, 21, 30, 31, 40, 41, 50, 51, 52 };
+                assignmentIds = new int[] { 20, 21, 30, 31, 40, 41, 42, 43, 44, 50, 51, 52, 53, 54, 55 };
             } 
             else if (user.Id == 2)
             {
-                assignmentIds = new int[] { 10, 11, 20, 21, 41 };
+                assignmentIds = new int[] { 10, 11, 20, 21, 41, 44, 54, 55 };
             }
 
             user.Assignments = new List<Assignment>(from userAssignment in m_assignments

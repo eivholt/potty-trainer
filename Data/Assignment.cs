@@ -2,6 +2,10 @@
 
 public class Assignment
 {
+    public Assignment()
+    {
+        Emoji = "twa-pile-of-poo";
+    }
     public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }

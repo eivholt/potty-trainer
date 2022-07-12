@@ -1,12 +1,16 @@
-﻿<div class="card-content">
+﻿<div class="card-content"
+     @onclick="OnClick">
     <div class="content">
-        <div class="name">@Name</div>
-        <div class="twa-5x @Emoji"></div>
+        <div class="symbol">
+            <div class="twa-5x @Emoji"></div>
+        </div>
         
+        <div class="name">@Name</div>
     </div>
 </div>
 
 @code {
     [Parameter] public string Name { get; set; }
     [Parameter] public string Emoji { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; }
 }

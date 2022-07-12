@@ -5,14 +5,10 @@
         {
             <li role="presentation">
                 <div class="card">
-                <CardContent Name="@user.Name"
-                         Emoji="@user.Avatar" />
-                    <footer class="card-footer">
-                        <ButtonFooter Class="edit-item"
-                            IconClasses="fas fa-edit"
-                            OnClick="@(async _ => await SelectUser.InvokeAsync(user))"
-                            Label="Edit" />
-                    </footer>
+                    <CardContent 
+                        Name="@user.Name"
+                        Emoji="@user.Avatar"
+                        OnClick="@(async _ => await SelectUser.InvokeAsync(user))" />
                 </div>
             </li>
         }
@@ -20,7 +16,7 @@
 }
 else
 {
-    <div>Loading data...</div>
+    <div class="loader"></div>
 }
 @code {
     [Parameter] public IEnumerable<User> Users { get; set; }

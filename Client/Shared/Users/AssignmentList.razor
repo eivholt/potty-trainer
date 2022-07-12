@@ -1,0 +1,28 @@
+﻿@if (User != null)
+{
+    <ul class="list">
+        @foreach (var assignment in User.Assignments)
+        {
+            <li role="presentation">
+                <div class="card">
+                <CardContent Name="@assignment.Name"
+                         Emoji="@assignment.Emoji" />
+                    <footer class="card-footer">
+                        <ButtonFooter Class="edit-item"
+                            IconClasses="fas fa-edit"
+                              OnClick="@(async _ => await SelectAssignment.InvokeAsync(assignment))"
+                            Label="Edit" />
+                    </footer>
+                </div>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <div>Loading data...</div>
+}
+@code {
+    [Parameter] public User User { get; set; }
+    [Parameter] public EventCallback<Assignment> SelectAssignment { get; set; }
+}

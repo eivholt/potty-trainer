@@ -8,70 +8,42 @@
 }
 else
 {
-    <div class="card edit-detail">
+    <div class="content-container">
+        <div class="columns is-multiline is-variable">
+            <div class="column is-8">
+                <AssignmentList User="@user"
+                      SelectAssignment="@SelectAssignment" />
+            </div>
+        </div>
+    </div>
+    @*<div class="content-container">
         <header class="card-header">
+            <div class="twa-5x @user.Avatar"></div>
             <p class="card-header-title">
                 @user.Name
             </p>
         </header>
         <div class="card-content">
+            <ul class="list">
             @foreach (var assignment in user.Assignments)
             {
                 <li role="presentation">
-                    <div class="card">
-                        <CardContent Name="@assignment.Name"
-                             Description="@assignment.Description" />
-
-                       @* <footer class="card-footer">
-                            <ButtonFooter Class="edit-item"
-                                  IconClasses="fas fa-edit"
-                                  OnClick="@(async _ => await SelectUser.InvokeAsync(user))"
-                                  Label="Edit" />
-                        </footer>*@
-                    </div>
+                        <div class="twa-5x @assignment.Emoji"></div>
+                        <p>@assignment.Name</p>
+                        <p>@assignment.Description</p>
                 </li>
-            }
-            @*<div class="content">
-                @if (user.Id != 0)
-                {
-                    <label class="label" for="id">id</label>
-                    <input name="id"
-                           class="input"
-                           value="@user.Id"
-                           readonly="readonly" />
                 }
-                <InputDetail Name="name"
-                             Placeholder="Oranges"
-                             @bind-Value="user.Name" />
-                <InputDetail Name="description"
-                             Placeholder="box"
-                             @bind-Value="user.Description" />
-                <div class="field">
-                    <label class="label" for="quantity">
-                        quantity
-                    </label>
-                    <input name="quantity"
-                           class="input"
-                           type="number"
-                           min="1"
-                           max="100"
-                           value="@user.Weight"
-                           placeholder="1"
-                           @onchange="@(e => user.Weight = int.Parse(e.Value.ToString()))" />
-                </div>
-            </div>*@
+            </ul>
         </div>
         <footer class="card-footer ">
             <ButtonFooter Class="cancel-button"
-                          IconClasses="fas fa-undo"
-                          OnClick="@CancelProduct"
-                          Label="Cancel" />
+                          IconClasses="fas fa-angle-left"
+                          OnClick="@CancelProduct"/>
             <ButtonFooter Class="save-button"
                           IconClasses="fas fa-save"
-                          OnClick="@Save"
-                          Label="Save" />
+                          OnClick="@Save"/>
         </footer>
-    </div>
+    </div>*@
 }
 
 @code {
@@ -100,5 +72,10 @@ else
             await http.PutAsJsonAsync("api/products", user);
         }
         navigation.NavigateTo("/");
+    }
+
+    private void SelectAssignment(Assignment assignment)
+    {
+        navigation.NavigateTo($"/user/{assignment.Id}");
     }
 }

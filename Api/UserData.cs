@@ -22,15 +22,17 @@ namespace Api
                 Name = "Bæsj",
                 Description = "Bæsje i do",
                 OncePerDay = false,
-                Weight = 5
-            },
+                Weight = 5,
+                Emoji = "twa-pile-of-poo"
+    },
             new Assignment
             {
                 Id = 11,
                 Name = "Tiss",
                 Description = "Tisse i do",
                 OncePerDay = false,
-                Weight = 2
+                Weight = 2,
+                Emoji = "twa-toilet"
             },
             new Assignment
             {
@@ -38,7 +40,8 @@ namespace Api
                 Name = "Tannpuss morgen",
                 Description = "Pusse tenner morgen",
                 OncePerDay = true,
-                Weight = 1
+                Weight = 1,
+                Emoji = "twa-toothbrush"
             },
             new Assignment
             {
@@ -46,7 +49,8 @@ namespace Api
                 Name = "Tannpuss kveld",
                 Description = "Pusse tenner kveld",
                 OncePerDay = true,
-                Weight = 1
+                Weight = 1,
+                Emoji = "twa-toothbrush"
             },
             new Assignment
             {
@@ -54,7 +58,8 @@ namespace Api
                 Name = "Matte",
                 Description = "Gjøre matteoppgave",
                 OncePerDay = true,
-                Weight = 5
+                Weight = 5,
+                Emoji = "twa-plus"
             },
             new Assignment
             {
@@ -62,7 +67,8 @@ namespace Api
                 Name = "Lese",
                 Description = "Lese selv",
                 OncePerDay = true,
-                Weight = 5
+                Weight = 5,
+                Emoji = "twa-open-book"
             },
             new Assignment
             {
@@ -70,17 +76,49 @@ namespace Api
                 Name = "Rydde rommet",
                 Description = "Rydde rommet",
                 OncePerDay = true,
-                Weight = 7
+                Weight = 7,
+                Emoji = "twa-flexed-biceps"
             },
             new Assignment
             {
                 Id = 41,
-                Name = "Bære fatet",
-                Description = "Bære middagsfatet til kjøkken",
+                Name = "Rydde fat",
+                Description = "Bære fat og bestikk til kjøkken",
                 OncePerDay = true,
-                Weight = 1
+                Weight = 1,
+                Emoji = "twa-fork-and-knife-with-plate"
+            },
+            new Assignment
+            {
+                Id = 50,
+                Name = "Sykle",
+                Description = "Sykkeltur",
+                OncePerDay = false,
+                Weight = 1,
+                Emoji = "twa-woman-mountain-biking"
+            },
+            new Assignment
+            {
+                Id = 51,
+                Name = "Stallen",
+                Description = "Tur i stallen",
+                OncePerDay = true,
+                Weight = 1,
+                Emoji = "twa-unicorn"
+            },
+            new Assignment
+            {
+                Id = 52,
+                Name = "Ri",
+                Description = "Rideøvelse",
+                OncePerDay = true,
+                Weight = 2,
+                Emoji = "twa-horse-face"
             }
         };
+
+        // Rydde sekk, henge opp klær, minecraft, tegne, lage noe
+        // Kle på selv
 
         private readonly List<User> m_users = new List<User>
         {
@@ -111,7 +149,7 @@ namespace Api
 
             if(user.Id == 1) 
             {
-                assignmentIds = new int[] { 20, 21, 30, 31, 40, 41 };
+                assignmentIds = new int[] { 20, 21, 30, 31, 40, 41, 50, 51, 52 };
             } 
             else if (user.Id == 2)
             {

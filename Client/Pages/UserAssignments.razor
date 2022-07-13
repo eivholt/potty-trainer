@@ -76,6 +76,7 @@ else
 
     private void SelectAssignment(Assignment assignment)
     {
-        navigation.NavigateTo($"/user/{assignment.Id}");
+        http.PostAsJsonAsync($"api/users/{UserId}/completedassignments", assignment);
+        //navigation.NavigateTo($"/user/{assignment.Id}");
     }
 }

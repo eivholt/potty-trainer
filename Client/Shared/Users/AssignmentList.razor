@@ -5,14 +5,11 @@
         {
             <li role="presentation">
                 <div class="card">
-                <CardContent Name="@assignment.Name"
-                         Emoji="@assignment.Emoji" />
-                    <footer class="card-footer">
-                        <ButtonFooter Class="edit-item"
-                            IconClasses="fas fa-edit"
-                              OnClick="@(async _ => await SelectAssignment.InvokeAsync(assignment))"
-                            Label="Edit" />
-                    </footer>
+                <AssignmentCardContent 
+                    Name="@assignment.Name"
+                    Emoji="@assignment.Emoji"
+                    Description="@assignment.Description"
+                    OnClick="@(async _ => await SelectAssignment.InvokeAsync(assignment))" />
                 </div>
             </li>
         }

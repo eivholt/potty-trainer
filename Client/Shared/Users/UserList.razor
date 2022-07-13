@@ -5,7 +5,7 @@
         {
             <li role="presentation">
                 <div class="card">
-                    <CardContent 
+                    <UserCardContent 
                         Name="@user.Name"
                         Emoji="@user.Avatar"
                         OnClick="@(async _ => await SelectUser.InvokeAsync(user))" />

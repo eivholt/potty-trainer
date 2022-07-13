@@ -138,6 +138,59 @@ div.card-content {
         width: 50%;
     }
 
+div.user-card-content {
+    background-color: #fafafa;
+    padding: 1rem;
+}
+
+    div.user-card-content .content {
+        display: flex;
+    }
+
+    div.user-card-content .name {
+        font-size: 50px;
+        color: #000;
+        flex-grow: 1;
+    }
+
+    div.user-card-content .symbol {
+        font-size: 20px;
+        color: #999;
+        width: 50%;
+    }
+
+div.assignment-card-content {
+    background-color: #fafafa;
+    padding: 1rem;
+    display: table;
+    width: 100%;
+}
+
+    div.assignment-card-content .content {
+        display: flex;
+    }
+
+    div.assignment-card-content .symbol {
+        font-size: 20px;
+        color: #999;
+        width: auto;
+        vertical-align: middle;
+    }
+
+    div.assignment-card-content .details {
+        flex-grow: 1;
+        margin-left: 3rem;
+    }
+            div.assignment-card-content .name {
+                font-size: 40px;
+                /*color: #000;*/
+            }
+        
+            div.assignment-card-content .description {
+                font-size: 25px;
+                color: #000;
+            }
+
 .card {
     margin-bottom: 2em;
     cursor: pointer;

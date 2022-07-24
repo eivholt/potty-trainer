@@ -1,4 +1,4 @@
-﻿@page "/user/{userId:int}"
+﻿@page "/user/{userId}"
 @inject HttpClient http
 @inject NavigationManager navigation
 
@@ -49,7 +49,7 @@ else
 @code {
     private User user;
 
-    [Parameter] public int UserId { get; set; }
+    [Parameter] public string UserId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -63,14 +63,14 @@ else
 
     private async Task Save()
     {
-        if (user.Id == 0)
-        {
-            await http.PostAsJsonAsync("api/products", user);
-        }
-        else
-        {
-            await http.PutAsJsonAsync("api/products", user);
-        }
+        //if (user.Id == 0)
+        //{
+        //    await http.PostAsJsonAsync("api/products", user);
+        //}
+        //else
+        //{
+        //    await http.PutAsJsonAsync("api/products", user);
+        //}
         navigation.NavigateTo("/");
     }
 

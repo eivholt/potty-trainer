@@ -1,7 +1,7 @@
 ﻿@if (User != null)
 {
     <ul class="list">
-        @foreach (var assignment in User.Assignments)
+        @foreach (var assignment in User.Assignments.OrderBy(a => a.Timestamp))
         {
             <li role="presentation">
                 <div class="card">

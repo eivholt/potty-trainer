@@ -1,13 +1,11 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Data;
+using System;
+using System.Threading.Tasks;
+using User = Data.User;
 
 namespace Api
 {
@@ -21,26 +19,39 @@ namespace Api
         }
 
         [FunctionName("UsersGet")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "users/{userid:int?}")] HttpRequest req,
-            ILogger log,
-            int? userid)
+        public IActionResult UsersGetStreaming(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "users")] HttpRequest req,
+            ILogger log
+            )
         {
-            if (userid != null)
+            return new OkObjectResult(m_userData.GetUsers());
+        }
+
+        [FunctionName("UserGet")]
+        public async Task<IActionResult> UserGet(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/{userid}")] HttpRequest req,
+            ILogger log,
+            string userId)
+        {
+            if (!Guid.TryParse(userId, out _))
             {
-                var user = await m_userData.GetUser(userid.Value);
-                if(user != null)
+                return new BadRequestResult();
+            } 
+            else 
+            {
+                User user;
+                try { user = await m_userData.GetUser(userId); }
+                catch (Azure.RequestFailedException)
+                {
+                    return new NotFoundResult();
+                }
+                
+                if (user != null)
                 {
                     return new OkObjectResult(user);
                 }
+                else { return new NotFoundResult(); }
             }
-            else
-            {
-                var users = await m_userData.GetUsers();
-                return new OkObjectResult(users);
-            }
-
-            return new BadRequestResult();
         }
     }
 }

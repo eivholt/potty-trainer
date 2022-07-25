@@ -1,33 +1,48 @@
-﻿using Azure.Data.Tables;
+﻿using Azure;
+using Azure.Data.Tables;
+using System;
+
 namespace Data.TableEntities
 {
-    public static class UserEntity
+    public class UserEntity : TableEntityBase
     {
-        public const string PartitionKey = "user";
+        public static string PartitionKeyName = "user";
 
-        public static TableEntity GetEntity(User user)
+        public UserEntity(string rowKey) : base(PartitionKeyName, rowKey)
         {
-            var userEntity = new TableEntity(PartitionKey, user.RowKey) 
+        }
+
+        public UserEntity()
+        {
+
+        }
+
+        public string Name { get; set; }
+        public string Avatar { get; set; }
+        public int Goal { get; set; } = 0;
+        public int XP { get; set; } = 0;
+
+        public static UserEntity GetEntity(User user)
+        {
+            var userEntity = new UserEntity(user.RowKey) 
             {
-                { nameof(User.Name), user.Name },
-                { nameof(User.Avatar), user.Avatar },
-                { nameof(User.Goal), user.Goal },
-                { nameof(User.XP), user.XP }
+                Name = user.Name,
+                Avatar = user.Avatar,
+                Goal = user.Goal,
+                XP = user.XP
             };
 
             return userEntity;
         }
 
-        public static User FromEntity(TableEntity userEntity)
+        public static User FromEntity(UserEntity userEntity)
         {
-            return new User
+            return new User(userEntity.RowKey, userEntity.Timestamp)
             {
-                PartitionKey = userEntity.PartitionKey,
-                RowKey = userEntity.RowKey,
-                Avatar = userEntity.GetString(nameof(User.Avatar)),
-                Name = userEntity.GetString(nameof(User.Name)),
-                Goal = userEntity.GetInt32(nameof(User.Goal)).Value,
-                XP = userEntity.GetInt32(nameof(User.XP)).Value,
+                Avatar = userEntity.Avatar,
+                Name = userEntity.Name,
+                Goal = userEntity.Goal,
+                XP = userEntity.XP,
             };
         }
     }

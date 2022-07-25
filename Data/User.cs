@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using Azure;
+using Data.TableEntities;
+using System;
+using System.Collections.Generic;
 
 namespace Data
 {
-    public class User
+    public class User : DataModel
     {
-        public User()
-        {
-            //Assignments = new List<Assignment>();
-            //CompletedAssignments = new List<CompletedAssignment>();
-        }
-        public string RowKey { get; set; }
-        public string PartitionKey { get; set; }
+        public User() : base() { }
+        public User(string rowKey) : base(rowKey, UserEntity.PartitionKeyName, null) { }
+
+        public User(string rowKey, DateTimeOffset? timestamp) : base(rowKey, UserEntity.PartitionKeyName, timestamp) { }
+
         public string Name { get; set; }
         public string Avatar { get; set; }
         public List<Assignment> Assignments { get; set; }

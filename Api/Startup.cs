@@ -12,5 +12,6 @@ public class Startup : FunctionsStartup
     {
         builder.Services.AddSingleton<IUserData, UserTable>();
         builder.Services.AddSingleton<IAssignmentData, AssignmentTable>();
+        builder.Services.AddSingleton<IAssignmentsForUser, AssignmentsForUserTable>();
     }
 }

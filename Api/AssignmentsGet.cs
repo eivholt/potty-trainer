@@ -14,12 +14,12 @@ namespace Api
 {
     public class AssignmentsGet
     {
-        private readonly IAssignmentData m_assignmentData;
+        private readonly IAssignmentsForUser m_assignmentsForUserData;
         private readonly IUserData m_userData;
 
-        public AssignmentsGet(IAssignmentData assignmentData, IUserData userData)
+        public AssignmentsGet(IAssignmentsForUser assignmentsForUserData, IUserData userData)
         {
-            m_assignmentData = assignmentData;
+            m_assignmentsForUserData = assignmentsForUserData;
             m_userData = userData;
         }
 
@@ -45,7 +45,8 @@ namespace Api
 
                 if (user != null)
                 {
-                    user.Assignments = await m_assignmentData.GetUserAssignments().ToListAsync();
+                    
+                    user.Assignments = await m_assignmentsForUserData.GetAssignmentsForUser(user.RowKey).ToListAsync();
                     return new OkObjectResult(user);
                 }
                 else { return new NotFoundResult(); }

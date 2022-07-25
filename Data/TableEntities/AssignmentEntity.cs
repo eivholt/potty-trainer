@@ -3,37 +3,51 @@ using System;
 
 namespace Data.TableEntities
 {
-    public static class AssignmentEntity
+    public class AssignmentEntity : TableEntityBase
     {
-        public const string PartitionKey = "assignment";
-        public static TableEntity GetEntity(Assignment assignment)
+        public static string PartitionKeyName = "assignment";
+
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Emoji { get; set; }
+        public string EmojiModifier { get; set; }
+        public bool OncePerDay { get; set; }
+        public int Weight { get; set; }
+
+        public AssignmentEntity(string rowKey) : base(PartitionKeyName, rowKey)
         {
-            var assignmentEntity = new TableEntity(PartitionKey, assignment.RowKey) 
+        }
+
+        public AssignmentEntity()
+        {
+
+        }
+
+        public static AssignmentEntity GetEntity(Assignment assignment)
+        {
+            var assignmentEntity = new AssignmentEntity(assignment.RowKey) 
             {
-                { nameof(Assignment.Name), assignment.Name },
-                { nameof(Assignment.Description), assignment.Description },
-                { nameof(Assignment.Emoji), assignment.Emoji },
-                { nameof(Assignment.EmojiModifier), assignment.EmojiModifier },
-                { nameof(Assignment.OncePerDay), assignment.OncePerDay },
-                { nameof(Assignment.Weight), assignment.Weight }
+                Name = assignment.Name,
+                Description = assignment.Description,
+                Emoji = assignment.Emoji,
+                EmojiModifier = assignment.EmojiModifier,
+                OncePerDay = assignment.OncePerDay,
+                Weight = assignment.Weight
             };
             
             return assignmentEntity;
         }
 
-        public static Assignment FromEntity(TableEntity assignmentEntity)
+        public static Assignment FromEntity(AssignmentEntity assignmentEntity)
         {
-            return new Assignment
+            return new Assignment(assignmentEntity.RowKey, PartitionKeyName, assignmentEntity.Timestamp.Value)
             {
-                PartitionKey = assignmentEntity.PartitionKey,
-                RowKey = assignmentEntity.RowKey,
-                Timestamp = assignmentEntity.Timestamp.Value,
-                Emoji = assignmentEntity.GetString(nameof(Assignment.Emoji)),
-                EmojiModifier = assignmentEntity.GetString(nameof(Assignment.EmojiModifier)),
-                Name = assignmentEntity.GetString(nameof(Assignment.Name)),
-                Description = assignmentEntity.GetString(nameof(Assignment.Description)),
-                OncePerDay = assignmentEntity.GetBoolean(nameof(Assignment.OncePerDay)).Value,
-                Weight = assignmentEntity.GetInt32(nameof(Assignment.Weight)).Value
+                Emoji = assignmentEntity.Emoji,
+                EmojiModifier = assignmentEntity.EmojiModifier,
+                Name = assignmentEntity.Name,
+                Description = assignmentEntity.Description,
+                OncePerDay = assignmentEntity.OncePerDay,
+                Weight = assignmentEntity.Weight
             };
         }
     }

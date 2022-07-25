@@ -6,7 +6,7 @@ namespace Api
 {
     public interface IUserData
     {
-        Task<User> GetUser(string rowKey);
+        Task<User> GetUser(string userId);
         IAsyncEnumerable<User> GetUsers();
     }
 }

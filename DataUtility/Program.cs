@@ -7,6 +7,7 @@ var storageConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_
 var pottytrainerTableUsers = "users";
 var pottytrainerTableAssignments = "assignments";
 var pottytrainerTableAssignmentsForUser = "assignmentsforuser";
+var pottytrainerTableCompletedAssignments = "completedassignments";
 var m_tableServiceClient = new TableServiceClient(storageConnectionString);
 
 // Users
@@ -121,5 +122,27 @@ foreach(var user in DataGenerator.UserData.GetUsers())
     {
         var addEntityResult = await assignmentsForUserTableClient.AddEntityAsync(AssignmentForUserEntity.GetEntity(assignment, user));
         Console.WriteLine($"Created Assignment for user: {addEntityResult.ToString()}");
+    }
+}
+
+// Completed assignments
+var completedAssignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableCompletedAssignments);
+
+retryCreateTable = true;
+
+while (retryCreateTable)
+{
+    try
+    {
+        var createCompletedAssignmentsTableResult = await completedAssignmentsTableClient.CreateAsync();
+        Console.WriteLine("\t" + createCompletedAssignmentsTableResult);
+        retryCreateTable = false;
+    }
+    catch (RequestFailedException rfe)
+    {
+        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
+        {
+            await Task.Delay(5000);
+        }
     }
 }

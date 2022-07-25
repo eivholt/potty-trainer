@@ -9,6 +9,7 @@ namespace Api
 {
     public interface IAssignmentData
     {
+        Task CompleteAssignment(string assignmentId, string userId, DateTime timeCompleted, int xp);
         Task<Assignment> GetUserAssignment(string assignmentId);
         IAsyncEnumerable<Assignment> GetUserAssignments();
     }

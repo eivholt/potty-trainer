@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Data
 {
-    public class CompletedAssignment
+    public class CompletedAssignment : DataModel
     {
-        public DateTime Timestamp { get; set; }
-        public Assignment Assignment { get; set; }
+
     }
 }

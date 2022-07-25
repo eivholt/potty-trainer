@@ -16,12 +16,12 @@ namespace Api.Table
 
         public async Task<Assignment> GetUserAssignment(string assignmentId)
         {
-            return AssignmentEntity.FromEntity(await m_assigmentTableClient.GetEntityAsync<TableEntity>(AssignmentEntity.PartitionKey, assignmentId.ToUpper()));
+            return AssignmentEntity.FromEntity(await m_assigmentTableClient.GetEntityAsync<AssignmentEntity>(AssignmentEntity.PartitionKeyName, assignmentId.ToUpper()));
         }
 
         public async IAsyncEnumerable<Assignment> GetUserAssignments()
         {
-            var assigmentQuery = m_assigmentTableClient.QueryAsync<TableEntity>();
+            var assigmentQuery = m_assigmentTableClient.QueryAsync<AssignmentEntity>();
             await foreach (var assignmentResult in assigmentQuery)
             {
                 yield return AssignmentEntity.FromEntity(assignmentResult);

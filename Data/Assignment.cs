@@ -1,19 +1,23 @@
-﻿using System;
+﻿using Azure;
+using Data.TableEntities;
+using System;
 
 namespace Data;
 
-public class Assignment
+public class Assignment : DataModel
 {
-    public Assignment()
+    public Assignment() : base()
     {
-        Emoji = "twa-pile-of-poo";
-        EmojiModifier = string.Empty;
+
+    }
+    public Assignment(string rowKey, string partitionKey, DateTimeOffset? timestamp) : base(rowKey, partitionKey, timestamp)
+    {
     }
 
-    public string RowKey { get; set; }
-    public string PartitionKey { get; set; }
+    public Assignment(string rowKey) : base(rowKey, AssignmentEntity.PartitionKeyName)
+    {
+    }
 
-    public DateTimeOffset Timestamp { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public bool OncePerDay { get; set; }

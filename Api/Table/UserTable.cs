@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Api.Table
 {
-    internal class UserTable : IUserData
+    public class UserTable : IUserData
     {
         private static string m_storageConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING");
         private static string m_pottytrainerTableUsers = "users";
@@ -16,12 +16,12 @@ namespace Api.Table
 
         public async Task<User> GetUser(string userId)
         {
-            return UserEntity.FromEntity(await m_userTableClient.GetEntityAsync<TableEntity>(UserEntity.PartitionKey, userId.ToUpper()));
+            return UserEntity.FromEntity(await m_userTableClient.GetEntityAsync<UserEntity>(UserEntity.PartitionKeyName, userId.ToUpper()));
         }
 
         public async IAsyncEnumerable<User> GetUsers()
         {
-            var userQuery = m_userTableClient.QueryAsync<TableEntity>();
+            var userQuery = m_userTableClient.QueryAsync<UserEntity>();
             await foreach (var userResult in userQuery)
             {
                 yield return UserEntity.FromEntity(userResult);

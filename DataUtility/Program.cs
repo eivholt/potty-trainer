@@ -6,10 +6,11 @@ using Data.TableEntities;
 var storageConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING");
 var pottytrainerTableUsers = "users";
 var pottytrainerTableAssignments = "assignments";
+var pottytrainerTableAssignmentsForUser = "assignmentsforuser";
 var m_tableServiceClient = new TableServiceClient(storageConnectionString);
 
+// Users
 var userTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableUsers);
-
 var deleteUsersTableResult = await userTableClient.DeleteAsync();
 Console.WriteLine("\t" + deleteUsersTableResult);
 
@@ -54,6 +55,7 @@ foreach (var user in users)
     Console.WriteLine($"Created User: {user.Name}");
 }
 
+// Assignments
 var assignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignments);
 
 var deleteAssignmentsTableResult = await assignmentsTableClient.DeleteAsync();
@@ -87,4 +89,37 @@ foreach (var assignment in assignments)
 {
     var addEntityResult = await assignmentsTableClient.AddEntityAsync(AssignmentEntity.GetEntity(assignment));
     Console.WriteLine($"Created Assignment: {addEntityResult.ToString()}");
+}
+
+// Assignments for users
+
+var assignmentsForUserTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignmentsForUser);
+
+retryCreateTable = true;
+
+while (retryCreateTable)
+{
+    try
+    {
+        var createAssignmentsForUserTableResult = await assignmentsForUserTableClient.CreateAsync();
+        Console.WriteLine("\t" + createAssignmentsForUserTableResult);
+        retryCreateTable = false;
+    }
+    catch (RequestFailedException rfe)
+    {
+        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
+        {
+            await Task.Delay(5000);
+        }
+    }
+}
+
+foreach(var user in DataGenerator.UserData.GetUsers())
+{
+    var userWithAssignments = DataGenerator.UserData.GetUserWithAssignments(user.RowKey);
+    foreach(var assignment in userWithAssignments.Assignments)
+    {
+        var addEntityResult = await assignmentsForUserTableClient.AddEntityAsync(AssignmentForUserEntity.GetEntity(assignment, user));
+        Console.WriteLine($"Created Assignment for user: {addEntityResult.ToString()}");
+    }
 }

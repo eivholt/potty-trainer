@@ -14,20 +14,30 @@ namespace Api
 {
     public class CompletedAssignmentsPost
     {
-        private readonly IAssignmentData m_userData;
+        private readonly IAssignmentData m_assignmentData;
 
-        public CompletedAssignmentsPost(IAssignmentData userData)
+        public CompletedAssignmentsPost(IAssignmentData assignmentData)
         {
-            m_userData = userData;
+            m_assignmentData = assignmentData;
         }
 
         [FunctionName("CompletedAssignments")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "users/{userid}/completedassignments")] HttpRequest req,
+        public async Task<IActionResult> CompleteUserAssignmentPost(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "users/{userid}/completedassignment/{assignmentid}")] HttpRequest req,
             ILogger log,
-            string userid)
+            string userid,
+            string assignmentid)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await m_assignmentData.CompleteAssignment(assignmentid, userid, DateTime.UtcNow, 1);
+            }
+            catch
+            {
+                return new BadRequestResult();
+            }
+
+            return new OkResult();
             //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             //dynamic completedAssignmentRequest = JsonConvert.DeserializeObject(requestBody);
 

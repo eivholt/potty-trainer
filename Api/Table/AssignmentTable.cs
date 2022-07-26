@@ -1,7 +1,6 @@
 ﻿using Azure.Data.Tables;
 using Data;
 using Data.TableEntities;
-using Microsoft.Azure.Documents;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

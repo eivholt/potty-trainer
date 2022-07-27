@@ -2,15 +2,20 @@
      @onclick="OnClick">
     <div class="content">
         <div class="symbol">
-            <div class="twa-5x @Emoji"></div>
+            <div class="twa-5x @User.Avatar"></div>
         </div>
         
-        <div class="name">@Name</div>
+        <div class="user-card-main">
+            <p class="title">@User.Name</p>
+            <div class="user-progress">
+                <progress class="is-large is-primary" value="@User.XP" max="@User.Goal"></progress>
+                <p class="subtitle">@User.XP/@User.Goal</p>
+            </div>
+        </div>
     </div>
 </div>
 
 @code {
-    [Parameter] public string Name { get; set; }
-    [Parameter] public string Emoji { get; set; }
+    [Parameter] public User User { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
 }

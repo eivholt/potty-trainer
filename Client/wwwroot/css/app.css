@@ -129,14 +129,36 @@ div.card-content {
     div.card-content .name {
         font-size: 50px;
         color: #000;
-        flex-grow: 1;
+        flex-grow: 0.2;
     }
 
     div.card-content .symbol {
         font-size: 20px;
         color: #999;
         width: 50%;
+        flex-grow: 0.5;
     }
+
+    div.card-content .user-progress {
+        display: flex;
+        flex-grow: 0.3;
+    }
+
+        div.card-content .xp {
+            font-size: 10px;
+            color: #000;
+            flex-grow: 0.2;
+        }
+
+        div.card-content .goal {
+            font-size: 10px;
+            color: #000;
+            flex-grow: 0.2;
+        }
+        div.card-content .progress {
+            flex-grow: 0.2;
+        }
+
 
 div.user-card-content {
     background-color: #fafafa;
@@ -147,7 +169,7 @@ div.user-card-content {
         display: flex;
     }
 
-    div.user-card-content .name {
+    div.user-card-content .user-card-main {
         font-size: 50px;
         color: #000;
         flex-grow: 1;
@@ -156,7 +178,7 @@ div.user-card-content {
     div.user-card-content .symbol {
         font-size: 20px;
         color: #999;
-        width: 50%;
+        width: 25%;
     }
 
 div.assignment-card-content {

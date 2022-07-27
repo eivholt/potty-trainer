@@ -19,6 +19,13 @@ namespace Api.Table
             return UserEntity.FromEntity(await m_userTableClient.GetEntityAsync<UserEntity>(UserEntity.PartitionKeyName, userId.ToUpper()));
         }
 
+        public async Task<Azure.Response> UpdateXp(string userId, int xp)
+        {
+            var userEntityToUpdate = await m_userTableClient.GetEntityAsync<UserEntity>(UserEntity.PartitionKeyName, userId.ToUpper());
+            userEntityToUpdate.Value.XP = xp;
+            return await m_userTableClient.UpdateEntityAsync<UserEntity>(userEntityToUpdate, userEntityToUpdate.Value.ETag, TableUpdateMode.Merge);
+        }
+
         public async IAsyncEnumerable<User> GetUsers()
         {
             var userQuery = m_userTableClient.QueryAsync<UserEntity>();

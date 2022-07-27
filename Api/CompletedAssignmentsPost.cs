@@ -1,24 +1,22 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Linq;
-using Data;
+using System;
+using System.Threading.Tasks;
 
 namespace Api
 {
     public class CompletedAssignmentsPost
     {
         private readonly IAssignmentData m_assignmentData;
+        private readonly IUserData m_userData;
 
-        public CompletedAssignmentsPost(IAssignmentData assignmentData)
+        public CompletedAssignmentsPost(IAssignmentData assignmentData, IUserData userData)
         {
             m_assignmentData = assignmentData;
+            m_userData = userData;
         }
 
         [FunctionName("CompletedAssignments")]
@@ -30,7 +28,8 @@ namespace Api
         {
             try
             {
-                await m_assignmentData.CompleteAssignment(assignmentid, userid, DateTime.UtcNow);
+                var xpSum = await m_assignmentData.CompleteAssignment(assignmentid, userid, DateTime.UtcNow);
+                await m_userData.UpdateXp(userid, xpSum);
             }
             catch
             {

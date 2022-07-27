@@ -74,10 +74,10 @@ else
         navigation.NavigateTo("/");
     }
 
-    private void SelectAssignment(Assignment assignment)
+    private async Task SelectAssignment(Assignment assignment)
     {
         //"users/{userid}/completedassignment/{assignmentid}"
-        http.PostAsJsonAsync($"api/users/{UserId}/completedassignment/{assignment.RowKey}", assignment);
-        //navigation.NavigateTo($"/user/{assignment.Id}");
+        await http.PostAsJsonAsync($"api/users/{UserId}/completedassignment/{assignment.RowKey}", assignment);
+        navigation.NavigateTo($"/users");
     }
 }

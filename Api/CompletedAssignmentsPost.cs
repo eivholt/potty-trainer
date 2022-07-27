@@ -30,7 +30,7 @@ namespace Api
         {
             try
             {
-                await m_assignmentData.CompleteAssignment(assignmentid, userid, DateTime.UtcNow, 1);
+                await m_assignmentData.CompleteAssignment(assignmentid, userid, DateTime.UtcNow);
             }
             catch
             {
@@ -38,21 +38,6 @@ namespace Api
             }
 
             return new OkResult();
-            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            //dynamic completedAssignmentRequest = JsonConvert.DeserializeObject(requestBody);
-
-
-            //var user = await m_userData.GetUserWithAssignments(userid);
-
-            //var completedAssignment = new CompletedAssignment
-            //{
-            //    Timestamp = DateTime.Now,
-            //    Assignment = user.Assignments.First(assignment => assignment.Id.Equals((int)completedAssignmentRequest.id))
-            //};
-
-            //user.CompletedAssignments.Add(completedAssignment);
-
-            //return new OkObjectResult(completedAssignment);
         }
     }
 }

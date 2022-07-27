@@ -30,9 +30,11 @@ namespace Api.Table
             }
         }
 
-        public async Task CompleteAssignment(string assignmentId, string userId, DateTime timeCompleted, int xp)
+        public async Task CompleteAssignment(string assignmentId, string userId, DateTime timeCompleted)
         {
-            await m_completedAssigmentTableClient.AddEntityAsync<CompletedAssignmentEntity>(CompletedAssignmentEntity.GetEntity(assignmentId, userId, DateTime.UtcNow, xp));
+            var assignment = await GetUserAssignment(assignmentId);
+
+            await m_completedAssigmentTableClient.AddEntityAsync<CompletedAssignmentEntity>(CompletedAssignmentEntity.GetEntity(assignment.RowKey, userId, timeCompleted, assignment.Weight));
         }
     }
 }

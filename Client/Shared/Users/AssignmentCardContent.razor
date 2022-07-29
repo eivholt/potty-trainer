@@ -1,20 +1,20 @@
 ﻿<div class="assignment-card-content"
      @onclick="OnClick">
-    <div class="content">
-        <div class="symbol">
-            <div class="twa-5x @Emoji"></div>
+    
+     <div class="symbols">
+        <div class="emoji">
+            <div class="twa-5x @Assignment.Emoji"></div>
         </div>
-        
-        <div class="details">
-            <div class="name">@Name</div>
-            <div class="description">@Description</div>
+        <div class="emoji-modifier">
+            <div class="twa-2x @Assignment.EmojiModifier"></div>
         </div>
     </div>
+
+    <div class="name">@Assignment.Name</div>
+    <div class="description">@Assignment.Description</div>
 </div>
 
 @code {
-    [Parameter] public string Name { get; set; }
-    [Parameter] public string Emoji { get; set; }
-    [Parameter] public string Description { get; set; }
+    [Parameter] public Assignment Assignment { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
 }

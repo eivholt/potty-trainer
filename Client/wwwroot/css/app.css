@@ -150,34 +150,41 @@ div.user-card-content {
 div.assignment-card-content {
     background-color: #fafafa;
     padding: 1rem;
-    display: table;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
     width: 100%;
 }
 
-    div.assignment-card-content .content {
+    div.assignment-card-content .symbols {
+        grid-column: 1;
+        grid-row: 1 / span 2;
         display: flex;
+        flex-direction: row;
+        align-items: baseline;
+        margin-top: 1em;
     }
 
-    div.assignment-card-content .symbol {
-        font-size: 20px;
-        color: #999;
+    div.assignment-card-content .emoji {
         width: auto;
-        vertical-align: middle;
     }
 
-    div.assignment-card-content .details {
-        flex-grow: 1;
-        margin-left: 3rem;
+    div.assignment-card-content .emoji-modifier {
+        width: auto;
+        margin-left: -1em;
     }
-            div.assignment-card-content .name {
-                font-size: 40px;
-                /*color: #000;*/
-            }
-        
-            div.assignment-card-content .description {
-                font-size: 25px;
-                color: #000;
-            }
+
+    div.assignment-card-content .name {
+        font-size: 40px;
+        grid-area: 1 / 2 / 2 / 2;
+    }
+
+    div.assignment-card-content .description {
+        font-size: 25px;
+        color: #000;
+        grid-area: 2 / 2 / 2 / 2;
+    }
 
 .card {
     margin-bottom: 2em;

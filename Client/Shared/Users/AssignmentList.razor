@@ -6,9 +6,7 @@
             <li role="presentation">
                 <div class="card">
                 <AssignmentCardContent 
-                    Name="@assignment.Name"
-                    Emoji="@assignment.Emoji"
-                    Description="@assignment.Description"
+                    Assignment="@assignment"
                     OnClick="@(async _ => await SelectAssignment.InvokeAsync(assignment))" />
                 </div>
             </li>

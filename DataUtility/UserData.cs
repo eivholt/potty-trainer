@@ -7,6 +7,15 @@ namespace DataGenerator
     {
         private static readonly List<Assignment> m_assignments = new List<Assignment>
         {
+            new Assignment("4390A97B-0323-4787-AC9E-02A5E2B36DEC")
+            {
+                Name = "Medisin",
+                Description = string.Empty,
+                OncePerDay = true,
+                Weight = 1,
+                Emoji = "twa-pill",
+                EmojiModifier = "twa-sun-with-face"
+            },
             new Assignment("14F831F8-2951-4FAB-8E76-68C925076793")
             {
                 Name = "Bæsj",
@@ -14,7 +23,7 @@ namespace DataGenerator
                 OncePerDay = false,
                 Weight = 3,
                 Emoji = "twa-pile-of-poo"
-    },
+            },
             new Assignment("36A7CDC7-BD3D-4876-B962-628870C0C72C")
             {
                 Name = "Tiss",
@@ -39,7 +48,7 @@ namespace DataGenerator
                 OncePerDay = true,
                 Weight = 2,
                 Emoji = "twa-toothbrush",
-                EmojiModifier = "twa-full-moon-face"
+                EmojiModifier = "twa-first-quarter-moon-face"
             },
             new Assignment("CA55E579-76F9-4CFD-BDBB-A04736A20222")
             {
@@ -79,7 +88,8 @@ namespace DataGenerator
                 Description = "Uten somling eller klager",
                 OncePerDay = true,
                 Weight = 3,
-                Emoji = "twa-spaghetti"
+                Emoji = "twa-spaghetti",
+                EmojiModifier = "twa-grinning-face-with-smiling-eyes"
             },
             new Assignment("1A3BA5D0-42A8-4123-82F8-DFB26756E29D")
             {
@@ -87,7 +97,16 @@ namespace DataGenerator
                 Description = "Sette matboks og flaske på kjøkkenbenken",
                 OncePerDay = true,
                 Weight = 1,
-                Emoji = "twa-backpack"
+                Emoji = "twa-backpack",
+                EmojiModifier = "twa-beverage-box"
+            },
+            new Assignment("DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6")
+            {
+                Name = "Lage matpakke",
+                OncePerDay = true,
+                Weight = 3,
+                Emoji= "twa-sandwich",
+                EmojiModifier = "twa-backpack"
             },
             new Assignment("9A0F2632-E68B-4DDC-977C-DF40E67B7B3B")
             {
@@ -111,7 +130,8 @@ namespace DataGenerator
                 Description = string.Empty,
                 OncePerDay = false,
                 Weight = 1,
-                Emoji = "twa-bathtub"
+                Emoji = "twa-bathtub",
+                EmojiModifier = "twa-shower"
             },
             new Assignment("98CE9CA3-5A23-42DC-9792-FB701D66562E")
             {
@@ -119,7 +139,8 @@ namespace DataGenerator
                 Description = string.Empty,
                 OncePerDay = false,
                 Weight = 1,
-                Emoji = "twa-socks"
+                Emoji = "twa-socks",
+                EmojiModifier = "twa-stopwatch"
             },
             new Assignment("6707DFD0-51DA-4BBD-95B4-721521B82837")
             {
@@ -230,7 +251,9 @@ namespace DataGenerator
                     "98CE9CA3-5A23-42DC-9792-FB701D66562E",
                     "5F2C5F1C-07D9-4300-A6B2-D152CBE1B857",
                     "137EF03A-D5A4-4B46-8DFE-266CFE31AAD3",
-                    "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3"
+                    "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3",
+                    "DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6",
+                    "4390A97B-0323-4787-AC9E-02A5E2B36DEC"
                 };
             } 
             else if (user.Name == "Robin")

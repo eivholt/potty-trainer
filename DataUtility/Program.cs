@@ -10,60 +10,43 @@ var pottytrainerTableAssignmentsForUser = "assignmentsforuser";
 var pottytrainerTableCompletedAssignments = "completedassignments";
 var m_tableServiceClient = new TableServiceClient(storageConnectionString);
 
-// Users
-var userTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableUsers);
-var deleteUsersTableResult = await userTableClient.DeleteAsync();
-Console.WriteLine("\t" + deleteUsersTableResult);
-
 var retryCreateTable = true;
 
-while (retryCreateTable)
-{
-    try
-    {
-        var createUsersTableResult = await userTableClient.CreateAsync();
-        Console.WriteLine("\t" + createUsersTableResult);
-        retryCreateTable = false;
-    }
-    catch (RequestFailedException rfe)
-    {
-        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
-        {
-            Console.WriteLine("Table staged for deletion, retrying...");
-            await Task.Delay(5000);
-        }
-    }
-}
+// Users
+//var userTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableUsers);
+//var deleteUsersTableResult = await userTableClient.DeleteAsync();
+//Console.WriteLine("\t" + deleteUsersTableResult);
 
-//var users = new List<User>();
-//for (int i = 0; i < 1000; i++)
+//while (retryCreateTable)
 //{
-//    users.Add(new User
+//    try
 //    {
-//        RowKey = Guid.NewGuid().ToString(),
-//        Name = $"Stresstest_{i}",
-//        Avatar = "twa-girl",
-//        Goal = 1000,
-//        XP = i,
-//    });
+//        var createUsersTableResult = await userTableClient.CreateAsync();
+//        Console.WriteLine("\t" + createUsersTableResult);
+//        retryCreateTable = false;
+//    }
+//    catch (RequestFailedException rfe)
+//    {
+//        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
+//        {
+//            Console.WriteLine("Table staged for deletion, retrying...");
+//            await Task.Delay(5000);
+//        }
+//    }
 //}
 
-var users = DataGenerator.UserData.GetUsers();
+//var users = DataGenerator.UserData.GetUsers();
 
-foreach (var user in users)
-{
-    var addEntityResult = await userTableClient.AddEntityAsync(UserEntity.GetEntity(user));
-    Console.WriteLine($"Created User: {user.Name}");
-}
+//foreach (var user in users)
+//{
+//    var addEntityResult = await userTableClient.AddEntityAsync(UserEntity.GetEntity(user));
+//    Console.WriteLine($"Created User: {user.Name}");
+//}
 
 // Assignments
 var assignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignments);
-
 var deleteAssignmentsTableResult = await assignmentsTableClient.DeleteAsync();
-Console.WriteLine("\t" + deleteAssignmentsTableResult);
-
-await Task.Delay(5000);
-
+Console.WriteLine("Table assignments deleted: " + deleteAssignmentsTableResult.Status);
 
 retryCreateTable = true;
 
@@ -79,6 +62,7 @@ while (retryCreateTable)
     {
         if (rfe.ErrorCode.Equals("TableBeingDeleted"))
         {
+            Console.WriteLine("Table busy, retrying in 5 seconds..");
             await Task.Delay(5000);
         }
     }
@@ -93,8 +77,9 @@ foreach (var assignment in assignments)
 }
 
 // Assignments for users
-
 var assignmentsForUserTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignmentsForUser);
+var deleteAssignmentsForUserTableResult = await assignmentsForUserTableClient.DeleteAsync();
+Console.WriteLine("Table assignmentsforuser deleted: " + deleteAssignmentsForUserTableResult.Status);
 
 retryCreateTable = true;
 
@@ -110,6 +95,7 @@ while (retryCreateTable)
     {
         if (rfe.ErrorCode.Equals("TableBeingDeleted"))
         {
+            Console.WriteLine("Table busy, retrying in 5 seconds..");
             await Task.Delay(5000);
         }
     }
@@ -126,23 +112,26 @@ foreach(var user in DataGenerator.UserData.GetUsers())
 }
 
 // Completed assignments
-var completedAssignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableCompletedAssignments);
+//var completedAssignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableCompletedAssignments);
+//var deleteCompletedAssignmentsTableResult = await completedAssignmentsTableClient.DeleteAsync();
+//Console.WriteLine("Table completedassignments deleted: " + deleteCompletedAssignmentsTableResult.Status);
 
-retryCreateTable = true;
+//retryCreateTable = true;
 
-while (retryCreateTable)
-{
-    try
-    {
-        var createCompletedAssignmentsTableResult = await completedAssignmentsTableClient.CreateAsync();
-        Console.WriteLine("\t" + createCompletedAssignmentsTableResult);
-        retryCreateTable = false;
-    }
-    catch (RequestFailedException rfe)
-    {
-        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
-        {
-            await Task.Delay(5000);
-        }
-    }
-}
+//while (retryCreateTable)
+//{
+//    try
+//    {
+//        var createCompletedAssignmentsTableResult = await completedAssignmentsTableClient.CreateAsync();
+//        Console.WriteLine("\t" + createCompletedAssignmentsTableResult);
+//        retryCreateTable = false;
+//    }
+//    catch (RequestFailedException rfe)
+//    {
+//        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
+//        {
+//            Console.WriteLine("Table busy, retrying in 5 seconds..");
+//            await Task.Delay(5000);
+//        }
+//    }
+//}

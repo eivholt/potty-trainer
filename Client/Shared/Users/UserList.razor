@@ -1,7 +1,7 @@
 ﻿@if (Users != null && Users.Count() > 0)
 {
     <ul class="list">
-        @foreach (var user in Users)
+        @foreach (var user in Users.OrderBy(u => u.Name))
         {
             <li role="presentation">
                 <div class="card">

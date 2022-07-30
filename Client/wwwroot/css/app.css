@@ -181,7 +181,7 @@ div.assignment-card-content {
 
     div.assignment-card-content .symbols {
         grid-column: 1;
-        grid-row: 1 / span 2;
+        grid-row: 1;
         display: flex;
         flex-direction: row;
         align-items: baseline;
@@ -197,10 +197,22 @@ div.assignment-card-content {
         margin-left: -1em;
     }
 
-    div.assignment-card-content .name {
-        font-size: 40px;
-        grid-area: 1 / 2 / 2 / 2;
+    div.assignment-card-content .stars {
+        grid-column: 1;
+        grid-row: 2;
+        display: flex;
+        flex-direction: row;
+        align-self: end;
     }
+
+    div.assignment-card-content .shadow {
+        filter: grayscale(1);
+    }
+
+div.assignment-card-content .name {
+    font-size: 40px;
+    grid-area: 1 / 2 / 2 / 2;
+}
 
     div.assignment-card-content .description {
         font-size: 25px;

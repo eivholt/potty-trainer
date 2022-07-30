@@ -30,11 +30,11 @@ namespace Api.Table
             }
         }
 
-        public async Task<int> CompleteAssignment(string assignmentId, string userId, DateTime timeCompleted)
+        public async Task<int> CompleteAssignment(string assignmentId, string userId)
         {
             var assignment = await GetUserAssignment(assignmentId);
 
-            await m_completedAssigmentTableClient.AddEntityAsync<CompletedAssignmentEntity>(CompletedAssignmentEntity.GetEntity(assignment.RowKey, userId, timeCompleted, assignment.Weight));
+            await m_completedAssigmentTableClient.AddEntityAsync<CompletedAssignmentEntity>(CompletedAssignmentEntity.GetEntity(assignment.RowKey, userId, assignment.Weight, assignment.Name));
 
             var completedAssignmentsForUserQuery = m_completedAssigmentTableClient.QueryAsync<CompletedAssignmentEntity>(e => e.UserRowKey.Equals(userId));
 
@@ -47,12 +47,25 @@ namespace Api.Table
             return xpSum;
         }
 
+        public async Task<int> CalculateXp(string userId)
+        {
+            var completedAssignmentsForUserQuery = m_completedAssigmentTableClient.QueryAsync<CompletedAssignmentEntity>(e => e.UserRowKey.Equals(userId));
+
+            int xpSum = 0;
+            await foreach (var completedAssignment in completedAssignmentsForUserQuery)
+            {
+                xpSum += completedAssignment.XP;
+            }
+
+            return xpSum;
+        }
+
         public async IAsyncEnumerable<CompletedAssignment> GetCompletedAssignmentsToday(string userId)
         {
             var completedAssignmentsForUserTodayQuery = m_completedAssigmentTableClient.QueryAsync<CompletedAssignmentEntity>(
             e =>
             e.UserRowKey.Equals(userId) &&
-            e.TimeCompleted >= DateTime.UtcNow.Date);
+            e.Timestamp >= DateTime.UtcNow.Date);
             await foreach(var completedAssignment in completedAssignmentsForUserTodayQuery)
             {
                 var assigmentResponse = await m_assigmentTableClient.GetEntityAsync<AssignmentEntity>(AssignmentEntity.PartitionKeyName, completedAssignment.AssignmentRowKey);

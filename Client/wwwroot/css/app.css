@@ -119,6 +119,7 @@ ul.list {
 div.user-card-content {
     background-color: #fafafa;
     padding: 1rem;
+    padding-bottom: 0;
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr auto auto;
@@ -134,7 +135,8 @@ div.user-card-content {
     div.user-card-content .name {
         grid-area: 1 / 2 / 1 / 2;
         vertical-align: middle;
-        font-size: 40px;
+        font-size: 50px;
+        padding-left: 2rem;
     }
 
     div.user-card-content .user-card-details {
@@ -145,22 +147,22 @@ div.user-card-content {
 
     div.user-card-content .xp-bar {
         width: 100%;
+        height: 3em;
     }
 
     div.user-card-content .user-card-history {
         grid-column: 1 / span 3;
         grid-row: 3;
-        text-align: center;
         display: flex;
-        flex-flow: row;
+        flex-flow: wrap;
     }
 
     div.user-card-content .symbols {
         display: flex;
         flex-direction: row;
-        flex-flow: wrap;
-        align-items: baseline;
-        transform: scale(0.6);
+        padding: 0.4em;
+        transform: scale(0.8);
+        box-shadow: 0px 0.25em 0.5em -0.125em rgb(10, 10, 10, 10%);
     }
 
     div.user-card-content .emoji-modifier {

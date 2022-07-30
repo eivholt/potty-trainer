@@ -9,6 +9,6 @@ namespace Api
     {
         Task<User> GetUser(string userId);
         IAsyncEnumerable<User> GetUsers();
-        Task<Response> UpdateXp(string userId, int xp);
+        Task<User> UpdateXp(string userId, int xp);
     }
 }

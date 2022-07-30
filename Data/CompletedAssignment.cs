@@ -5,6 +5,10 @@ namespace Data
 {
     public class CompletedAssignment : DataModel
     {
+        public CompletedAssignment()
+        {
+
+        }
         public CompletedAssignment(string rowKey, string partitionKey, DateTimeOffset? timestamp) : base(rowKey, partitionKey, timestamp)
         {
         }

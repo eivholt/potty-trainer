@@ -1,4 +1,6 @@
-﻿<div class="user-card-content" contenteditable="false"
+﻿@inject HttpClient http
+
+<div class="user-card-content" contenteditable="false"
      @onclick="OnClick">
             <div class="symbol">
                 <div class="twa-5x @User.Avatar"></div>
@@ -8,13 +10,32 @@
 
     <div class="user-card-details">
         <progress class="xp-bar" max="@User.Goal" value="@User.XP">
-            <progressbar value="@User.XP"/>
+            <progressbar class="is-large" value="@User.XP"/>
         </progress>
         <p class="subtitle">@User.XP/@User.Goal</p>
+    </div>
+    <div class="user-card-history">
+        @foreach (var completedAssignment in CompletedAssignmentsToday.OrderBy(a => a.TimeCompleted))
+        {
+            <div class="symbols">
+                <div class="emoji">
+                    <div class="twa-4x @completedAssignment.Assignment.Emoji"></div>
+                </div>
+                <div class="emoji-modifier">
+                    <div class="twa-2x @completedAssignment.Assignment.EmojiModifier"></div>
+                </div>
+            </div>
+        }
     </div>
 </div>
 
 @code {
     [Parameter] public User User { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
+    private List<CompletedAssignment> CompletedAssignmentsToday { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        CompletedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
+    }
 }

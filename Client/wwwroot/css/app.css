@@ -121,7 +121,7 @@ div.user-card-content {
     padding: 1rem;
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr auto auto;
     gap: 20px;
     width: 100%;
 }
@@ -145,6 +145,26 @@ div.user-card-content {
 
     div.user-card-content .xp-bar {
         width: 100%;
+    }
+
+    div.user-card-content .user-card-history {
+        grid-column: 1 / span 3;
+        grid-row: 3;
+        text-align: center;
+        display: flex;
+        flex-flow: row;
+    }
+
+    div.user-card-content .symbols {
+        display: flex;
+        flex-direction: row;
+        flex-flow: wrap;
+        align-items: baseline;
+        transform: scale(0.6);
+    }
+
+    div.user-card-content .emoji-modifier {
+        margin-left: -2em;
     }
 
 div.assignment-card-content {

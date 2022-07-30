@@ -46,5 +46,19 @@ namespace Api.Table
 
             return xpSum;
         }
+
+        public async IAsyncEnumerable<CompletedAssignment> GetCompletedAssignmentsToday(string userId)
+        {
+            var completedAssignmentsForUserTodayQuery = m_completedAssigmentTableClient.QueryAsync<CompletedAssignmentEntity>(
+            e =>
+            e.UserRowKey.Equals(userId) &&
+            e.TimeCompleted >= DateTime.UtcNow.Date);
+            await foreach(var completedAssignment in completedAssignmentsForUserTodayQuery)
+            {
+                var assigmentResponse = await m_assigmentTableClient.GetEntityAsync<AssignmentEntity>(AssignmentEntity.PartitionKeyName, completedAssignment.AssignmentRowKey);
+
+                yield return CompletedAssignmentEntity.FromEntity(completedAssignment, assigmentResponse.Value);
+            }
+        }
     }
 }

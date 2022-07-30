@@ -10,6 +10,27 @@
         </div>
     </div>
 
+    <div class="stars">
+        @switch(Assignment.Weight)
+        {
+            case 3:
+                <div class="twa-2x twa-glowing-star" />
+                <div class="twa-2x twa-glowing-star" />
+                <div class="twa-2x twa-glowing-star" />
+                break;
+            case 2:
+                <div class="twa-2x twa-star" />
+                <div class="twa-2x twa-star" />
+                <div class="shadow"><div class="twa-2x twa-star" /></div>
+                break;
+            case 1:
+                <div class="twa-2x twa-star" />
+                <div class="shadow"><div class="twa-2x twa-star" /></div>
+                <div class="shadow"><div class="twa-2x twa-star" /></div>
+                break;
+        }
+    </div>
+
     <div class="name">@Assignment.Name</div>
     <div class="description">@Assignment.Description</div>
 </div>

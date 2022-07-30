@@ -10,12 +10,12 @@
 
     <div class="user-card-details">
         <progress class="xp-bar" max="@User.Goal" value="@User.XP">
-            <progressbar class="is-large" value="@User.XP"/>
+            <progressbar value="@User.XP"/>
         </progress>
         <p class="subtitle">@User.XP/@User.Goal</p>
     </div>
     <div class="user-card-history">
-        @foreach (var completedAssignment in CompletedAssignmentsToday.OrderBy(a => a.TimeCompleted))
+        @foreach (var completedAssignment in CompletedAssignmentsToday.OrderBy(a => a.Timestamp))
         {
             <div class="symbols">
                 <div class="emoji">
@@ -32,7 +32,7 @@
 @code {
     [Parameter] public User User { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
-    private List<CompletedAssignment> CompletedAssignmentsToday { get; set; }
+    private List<CompletedAssignment> CompletedAssignmentsToday { get; set; } = new List<CompletedAssignment>();
 
     protected override async Task OnInitializedAsync()
     {

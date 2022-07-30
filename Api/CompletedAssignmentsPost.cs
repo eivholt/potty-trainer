@@ -28,15 +28,32 @@ namespace Api
         {
             try
             {
-                var xpSum = await m_assignmentData.CompleteAssignment(assignmentid, userid, DateTime.UtcNow);
-                await m_userData.UpdateXp(userid, xpSum);
+                var xpSum = await m_assignmentData.CompleteAssignment(assignmentid, userid);
+                var updatedUser = await m_userData.UpdateXp(userid, xpSum);
+                return new OkObjectResult(updatedUser);
             }
             catch
             {
                 return new BadRequestResult();
             }
+        }
 
-            return new OkResult();
+        [FunctionName("CompletedAssignmentsRecalculate")]
+        public async Task<IActionResult> CompleteUserAssignmentRecalculatePost(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "users/{userid}/completedassignment")] HttpRequest req,
+            ILogger log,
+            string userid)
+        {
+            try
+            {
+                var xpSum = await m_assignmentData.CalculateXp(userid);
+                var updatedUser = await m_userData.UpdateXp(userid, xpSum);
+                return new OkObjectResult(updatedUser);
+            }
+            catch
+            {
+                return new BadRequestResult();
+            }
         }
     }
 }

@@ -12,69 +12,69 @@ var m_tableServiceClient = new TableServiceClient(storageConnectionString);
 
 var retryCreateTable = true;
 
-// Users
-//var userTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableUsers);
-//var deleteUsersTableResult = await userTableClient.DeleteAsync();
-//Console.WriteLine("\t" + deleteUsersTableResult);
-
-//while (retryCreateTable)
-//{
-//    try
-//    {
-//        var createUsersTableResult = await userTableClient.CreateAsync();
-//        Console.WriteLine("\t" + createUsersTableResult);
-//        retryCreateTable = false;
-//    }
-//    catch (RequestFailedException rfe)
-//    {
-//        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
-//        {
-//            Console.WriteLine("Table staged for deletion, retrying...");
-//            await Task.Delay(5000);
-//        }
-//    }
-//}
-
-//var users = DataGenerator.UserData.GetUsers();
-
-//foreach (var user in users)
-//{
-//    var addEntityResult = await userTableClient.AddEntityAsync(UserEntity.GetEntity(user));
-//    Console.WriteLine($"Created User: {user.Name}");
-//}
-
-// Assignments
-var assignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignments);
-var deleteAssignmentsTableResult = await assignmentsTableClient.DeleteAsync();
-Console.WriteLine("Table assignments deleted: " + deleteAssignmentsTableResult.Status);
-
-retryCreateTable = true;
+//Users
+var userTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableUsers);
+var deleteUsersTableResult = await userTableClient.DeleteAsync();
+Console.WriteLine("\t" + deleteUsersTableResult);
 
 while (retryCreateTable)
 {
     try
     {
-        var createAssignmentsTableResult = await assignmentsTableClient.CreateAsync();
-        Console.WriteLine("\t" + createAssignmentsTableResult);
+        var createUsersTableResult = await userTableClient.CreateAsync();
+        Console.WriteLine("\t" + createUsersTableResult);
         retryCreateTable = false;
     }
     catch (RequestFailedException rfe)
     {
         if (rfe.ErrorCode.Equals("TableBeingDeleted"))
         {
-            Console.WriteLine("Table busy, retrying in 5 seconds..");
+            Console.WriteLine("Table staged for deletion, retrying...");
             await Task.Delay(5000);
         }
     }
 }
 
-var assignments = DataGenerator.UserData.GetAssignments();
+var users = DataGenerator.UserData.GetUsers();
 
-foreach (var assignment in assignments)
+foreach (var user in users)
 {
-    var addEntityResult = await assignmentsTableClient.AddEntityAsync(AssignmentEntity.GetEntity(assignment));
-    Console.WriteLine($"Created Assignment: {addEntityResult.ToString()}");
+    var addEntityResult = await userTableClient.AddEntityAsync(UserEntity.GetEntity(user));
+    Console.WriteLine($"Created User: {user.Name}");
 }
+
+// Assignments
+//var assignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignments);
+//var deleteAssignmentsTableResult = await assignmentsTableClient.DeleteAsync();
+//Console.WriteLine("Table assignments deleted: " + deleteAssignmentsTableResult.Status);
+
+//retryCreateTable = true;
+
+//while (retryCreateTable)
+//{
+//    try
+//    {
+//        var createAssignmentsTableResult = await assignmentsTableClient.CreateAsync();
+//        Console.WriteLine("\t" + createAssignmentsTableResult);
+//        retryCreateTable = false;
+//    }
+//    catch (RequestFailedException rfe)
+//    {
+//        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
+//        {
+//            Console.WriteLine("Table busy, retrying in 5 seconds..");
+//            await Task.Delay(5000);
+//        }
+//    }
+//}
+
+//var assignments = DataGenerator.UserData.GetAssignments();
+
+//foreach (var assignment in assignments)
+//{
+//    var addEntityResult = await assignmentsTableClient.AddEntityAsync(AssignmentEntity.GetEntity(assignment));
+//    Console.WriteLine($"Created Assignment: {addEntityResult.ToString()}");
+//}
 
 // Assignments for users
 var assignmentsForUserTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignmentsForUser);

@@ -12,17 +12,17 @@ namespace Data.TableEntities
 
         public string AssignmentRowKey { get; set; }
         public string UserRowKey { get; set; }
-        public DateTime TimeCompleted { get; set; }
         public int XP { get; set; }
+        public string Name { get; set; }
 
-        public static CompletedAssignmentEntity GetEntity(string assignmentId, string userId, DateTime timeCompleted, int xp)
+        public static CompletedAssignmentEntity GetEntity(string assignmentId, string userId, int xp, string name)
         {
             var completedAssignmentEntity = new CompletedAssignmentEntity(Guid.NewGuid().ToString())
             {
                 AssignmentRowKey = assignmentId,
                 UserRowKey = userId,
-                TimeCompleted = timeCompleted,
-                XP = xp
+                XP = xp,
+                Name = name
             };
 
             return completedAssignmentEntity;
@@ -33,7 +33,6 @@ namespace Data.TableEntities
             return new CompletedAssignment(completedAssignment.RowKey.ToUpper(), completedAssignment.PartitionKey, completedAssignment.Timestamp)
             {
                 Assignment = AssignmentEntity.FromEntity(assignmentEntity),
-                TimeCompleted = completedAssignment.TimeCompleted,
                 AssignmentRowKey = completedAssignment.AssignmentRowKey,
                 UserRowKey = completedAssignment.UserRowKey,
                 XP = completedAssignment.XP

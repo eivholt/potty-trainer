@@ -10,11 +10,20 @@ namespace DataGenerator
             new Assignment("4390A97B-0323-4787-AC9E-02A5E2B36DEC")
             {
                 Name = "Medisin",
-                Description = string.Empty,
+                Description = "Morgen",
                 OncePerDay = true,
                 Weight = 1,
                 Emoji = "twa-pill",
                 EmojiModifier = "twa-sun-with-face"
+            },
+            new Assignment("B8C0E9D3-F4AB-4586-B648-8CEC87F865FB")
+            {
+                Name = "Medisin",
+                Description = "Kveld",
+                OncePerDay = true,
+                Weight = 1,
+                Emoji = "twa-pill",
+                EmojiModifier = "twa-first-quarter-moon-face"
             },
             new Assignment("14F831F8-2951-4FAB-8E76-68C925076793")
             {
@@ -253,7 +262,8 @@ namespace DataGenerator
                     "137EF03A-D5A4-4B46-8DFE-266CFE31AAD3",
                     "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3",
                     "DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6",
-                    "4390A97B-0323-4787-AC9E-02A5E2B36DEC"
+                    "4390A97B-0323-4787-AC9E-02A5E2B36DEC",
+                    "B8C0E9D3-F4AB-4586-B648-8CEC87F865FB"
                 };
             } 
             else if (user.Name == "Robin")

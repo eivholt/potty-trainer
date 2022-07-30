@@ -27,5 +27,17 @@ namespace Data.TableEntities
 
             return completedAssignmentEntity;
         }
+
+        public static CompletedAssignment FromEntity(CompletedAssignmentEntity completedAssignment, AssignmentEntity assignmentEntity)
+        {
+            return new CompletedAssignment(completedAssignment.RowKey.ToUpper(), completedAssignment.PartitionKey, completedAssignment.Timestamp)
+            {
+                Assignment = AssignmentEntity.FromEntity(assignmentEntity),
+                TimeCompleted = completedAssignment.TimeCompleted,
+                AssignmentRowKey = completedAssignment.AssignmentRowKey,
+                UserRowKey = completedAssignment.UserRowKey,
+                XP = completedAssignment.XP
+            };
+        }
     }
 }

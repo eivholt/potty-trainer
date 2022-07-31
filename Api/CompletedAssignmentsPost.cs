@@ -42,12 +42,12 @@ namespace Api
         public async Task<IActionResult> CompleteUserAssignmentRecalculatePost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "users/{userid}/completedassignment")] HttpRequest req,
             ILogger log,
-            string userid)
+            string userId)
         {
             try
             {
-                var xpSum = await m_assignmentData.CalculateXp(userid);
-                var updatedUser = await m_userData.UpdateXp(userid, xpSum);
+                var xpSum = await m_assignmentData.CalculateXp(userId);
+                var updatedUser = await m_userData.UpdateXp(userId, xpSum);
                 return new OkObjectResult(updatedUser);
             }
             catch

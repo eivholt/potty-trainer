@@ -1,4 +1,5 @@
 ﻿@inject HttpClient http
+@inject NavigationManager navigation
 
 <div class="user-card-content" contenteditable="false"
      @onclick="OnClick">
@@ -23,9 +24,9 @@
             </div>
         }
         
-        @foreach (var completedAssignment in CompletedAssignmentsToday.OrderBy(a => a.Timestamp))
+        @foreach (var completedAssignment in CompletedAssignmentsToday.OrderBy(a => a.TimeCompleted))
         {
-            <div class="symbols">
+            <div class="symbols" @onclick="@(async _ => await UndoCompletedAssignmentCallback(completedAssignment))" @onclick:stopPropagation>
                 <div class="emoji">
                     <div class="twa-4x @completedAssignment.Assignment.Emoji"></div>
                 </div>
@@ -45,7 +46,15 @@
 
     protected override async Task OnInitializedAsync()
     {
+        IsLoadingCompletedAssignmentsToday = true;
         CompletedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
+        StateHasChanged();
         IsLoadingCompletedAssignmentsToday = false;
+    }
+
+    private async Task UndoCompletedAssignmentCallback(CompletedAssignment completedAssignment)
+    {
+        var deleteCompletedAssignmentResult = await http.DeleteAsync($"api/users/{completedAssignment.UserRowKey}/completedassignments/{completedAssignment.RowKey}");
+        await OnInitializedAsync();
     }
 }

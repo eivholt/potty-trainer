@@ -15,5 +15,6 @@ namespace Data
         public string AssignmentRowKey { get; set; }
         public string UserRowKey { get; set; }
         public int XP { get; set; }
+        public DateTime TimeCompleted { get; set; }
     }
 }

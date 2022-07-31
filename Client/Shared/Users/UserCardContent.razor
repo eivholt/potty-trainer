@@ -1,5 +1,5 @@
 ﻿@inject HttpClient http
-@inject NavigationManager navigation
+@inject NavigationManager NavigationManager
 
 <div class="user-card-content" contenteditable="false"
      @onclick="OnClick">
@@ -12,7 +12,6 @@
     <div class="user-card-details">
         <div class="progress-xp">
             <progress class="progress is-small is-primary" value="@User.XP" max="@User.Goal" >@User.XP/@User.Goal</progress>
-            @*<div class="progress-bar progress-bar-striped bg-primary" style="height: 100px" role="progressbar" aria-valuenow="@User.XP" aria-valuemin="0" aria-valuemax="@User.Goal" />*@
         </div>
         <p class="subtitle">@User.XP/@User.Goal</p>
     </div>
@@ -26,10 +25,10 @@
         {
             <div class="symbols" @onclick="@(async _ => await UndoCompletedAssignmentCallback(completedAssignment))" @onclick:stopPropagation>
                 <div class="emoji">
-                    <div class="twa-4x @completedAssignment.Assignment.Emoji"></div>
+                    <div class="twa-2x @completedAssignment.Assignment.Emoji"></div>
                 </div>
                 <div class="emoji-modifier">
-                    <div class="twa-2x @completedAssignment.Assignment.EmojiModifier"></div>
+                    <div class="twa @completedAssignment.Assignment.EmojiModifier"></div>
                 </div>
             </div>
         }
@@ -54,5 +53,6 @@
     {
         var deleteCompletedAssignmentResult = await http.DeleteAsync($"api/users/{completedAssignment.UserRowKey}/completedassignments/{completedAssignment.RowKey}");
         await OnInitializedAsync();
+        NavigationManager.NavigateTo("/users", true);
     }
 }

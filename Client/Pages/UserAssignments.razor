@@ -1,6 +1,6 @@
 ﻿@page "/user/{userId}"
 @inject HttpClient http
-@inject NavigationManager navigation
+@inject NavigationManager NavigationManager
 
 @if (user == null)
 {
@@ -59,7 +59,7 @@ else
 
     private void CancelProduct()
     {
-        navigation.NavigateTo("/");
+        NavigationManager.NavigateTo("/");
     }
 
     private async Task Save()
@@ -72,7 +72,7 @@ else
         //{
         //    await http.PutAsJsonAsync("api/products", user);
         //}
-        navigation.NavigateTo("/");
+        NavigationManager.NavigateTo("/");
     }
 
     private async Task SelectAssignment(Assignment assignment)
@@ -83,7 +83,7 @@ else
         {
             IsInputDisabled = true;
             await http.PostAsJsonAsync($"api/users/{UserId}/completedassignment/{assignment.RowKey}", assignment);
-            navigation.NavigateTo($"/users");
+            NavigationManager.NavigateTo($"/users");
             IsInputDisabled = false;
         }
     }

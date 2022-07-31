@@ -145,9 +145,9 @@ div.user-card-content {
         text-align: center;
     }
 
-    div.user-card-content .xp-bar {
+    div.user-card-content .progress-xp {
         width: 100%;
-        height: 3em;
+        height: 1em;
     }
 
     div.user-card-content .user-card-history {
@@ -156,6 +156,12 @@ div.user-card-content {
         display: flex;
         flex-flow: wrap;
     }
+
+        div.user-card-content .user-card-history progress {
+            width: 100%;
+            height: 0.2em;
+            margin-bottom: 1em;
+        }
 
     div.user-card-content .symbols {
         display: flex;

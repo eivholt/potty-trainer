@@ -1,6 +1,6 @@
 ﻿@page "/users"
 @inject HttpClient http
-@inject NavigationManager navigation
+@inject NavigationManager NavigationManager
 
 <div class="content-container">
     <div class="columns is-multiline is-variable">
@@ -27,6 +27,6 @@
 
     private void SelectUser(User user)
     {
-        navigation.NavigateTo($"/user/{user.RowKey}");
+        NavigationManager.NavigateTo($"/user/{user.RowKey}");
     }
 }

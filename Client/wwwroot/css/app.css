@@ -145,9 +145,8 @@ div.user-card-content {
         text-align: center;
     }
 
-    div.user-card-content .progress-xp {
-        width: 100%;
-        height: 1em;
+    div.user-card-content *.progress-xp progress {
+        height: 2em;
     }
 
     div.user-card-content .user-card-history {
@@ -155,6 +154,7 @@ div.user-card-content {
         grid-row: 3;
         display: flex;
         flex-flow: wrap;
+        margin-bottom: 0.3em;
     }
 
         div.user-card-content .user-card-history progress {
@@ -166,13 +166,13 @@ div.user-card-content {
     div.user-card-content .symbols {
         display: flex;
         flex-direction: row;
-        padding: 0.4em;
-        transform: scale(0.8);
-        box-shadow: 0px 0.25em 0.5em -0.125em rgb(10, 10, 10, 10%);
+        padding: 0.2em;
+
+        box-shadow: 0px 0.25em 0.5em -0.125em rgb(10, 10, 10, 20%);
     }
 
     div.user-card-content .emoji-modifier {
-        margin-left: -2em;
+        margin-left: -1.3em;
     }
 
 div.assignment-card-content {
@@ -190,7 +190,7 @@ div.assignment-card-content {
         grid-row: 1;
         display: flex;
         flex-direction: row;
-        align-items: baseline;
+        align-items: start;
         margin-top: 1em;
     }
 

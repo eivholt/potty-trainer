@@ -15,6 +15,14 @@
         <p class="subtitle">@User.XP/@User.Goal</p>
     </div>
     <div class="user-card-history">
+        @if(IsLoadingCompletedAssignmentsToday)
+        {
+            <div class="progress mt-2" style="height: 2em;">
+                <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated"
+                 style="height: auto; background-color: #204066;"></div>
+            </div>
+        }
+        
         @foreach (var completedAssignment in CompletedAssignmentsToday.OrderBy(a => a.Timestamp))
         {
             <div class="symbols">
@@ -33,9 +41,11 @@
     [Parameter] public User User { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
     private List<CompletedAssignment> CompletedAssignmentsToday { get; set; } = new List<CompletedAssignment>();
+    private bool IsLoadingCompletedAssignmentsToday { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
         CompletedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
+        IsLoadingCompletedAssignmentsToday = false;
     }
 }

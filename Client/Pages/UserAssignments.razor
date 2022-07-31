@@ -48,6 +48,7 @@ else
 
 @code {
     private User user;
+    private bool IsInputDisabled { get; set; }
 
     [Parameter] public string UserId { get; set; }
 
@@ -77,7 +78,13 @@ else
     private async Task SelectAssignment(Assignment assignment)
     {
         //"users/{userid}/completedassignment/{assignmentid}"
-        await http.PostAsJsonAsync($"api/users/{UserId}/completedassignment/{assignment.RowKey}", assignment);
-        navigation.NavigateTo($"/users");
+
+        if (!IsInputDisabled)
+        {
+            IsInputDisabled = true;
+            await http.PostAsJsonAsync($"api/users/{UserId}/completedassignment/{assignment.RowKey}", assignment);
+            navigation.NavigateTo($"/users");
+            IsInputDisabled = false;
+        }
     }
 }

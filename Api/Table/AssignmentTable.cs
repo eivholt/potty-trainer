@@ -34,7 +34,7 @@ namespace Api.Table
         {
             var assignment = await GetUserAssignment(assignmentId);
 
-            await m_completedAssigmentTableClient.AddEntityAsync<CompletedAssignmentEntity>(CompletedAssignmentEntity.GetEntity(assignment.RowKey, userId, assignment.Weight, assignment.Name));
+            await m_completedAssigmentTableClient.AddEntityAsync<CompletedAssignmentEntity>(CompletedAssignmentEntity.GetEntity(assignment.RowKey, userId, assignment.Weight, assignment.Name, DateTime.UtcNow));
 
             var completedAssignmentsForUserQuery = m_completedAssigmentTableClient.QueryAsync<CompletedAssignmentEntity>(e => e.UserRowKey.Equals(userId));
 
@@ -65,13 +65,19 @@ namespace Api.Table
             var completedAssignmentsForUserTodayQuery = m_completedAssigmentTableClient.QueryAsync<CompletedAssignmentEntity>(
             e =>
             e.UserRowKey.Equals(userId) &&
-            e.Timestamp >= DateTime.UtcNow.Date);
+            e.TimeCompleted >= DateTime.UtcNow.Date);
             await foreach(var completedAssignment in completedAssignmentsForUserTodayQuery)
             {
                 var assigmentResponse = await m_assigmentTableClient.GetEntityAsync<AssignmentEntity>(AssignmentEntity.PartitionKeyName, completedAssignment.AssignmentRowKey);
 
                 yield return CompletedAssignmentEntity.FromEntity(completedAssignment, assigmentResponse.Value);
             }
+        }
+
+        public async Task<bool> DeleteCompletedAssignment(string userId, string completedAssignmentId)
+        {
+            var deleteCompletedAssignmentResult = await m_completedAssigmentTableClient.DeleteEntityAsync(CompletedAssignmentEntity.PartitionKeyName, completedAssignmentId);
+            return !deleteCompletedAssignmentResult.IsError;
         }
     }
 }

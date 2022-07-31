@@ -12,5 +12,6 @@ namespace Api
         IAsyncEnumerable<CompletedAssignment> GetCompletedAssignmentsToday(string userId);
         Task<Assignment> GetUserAssignment(string assignmentId);
         IAsyncEnumerable<Assignment> GetUserAssignments();
+        Task<bool> DeleteCompletedAssignment(string userId, string completedAssignmentId);
     }
 }

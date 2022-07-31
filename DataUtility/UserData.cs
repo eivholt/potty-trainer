@@ -206,6 +206,13 @@ namespace DataGenerator
                 OncePerDay = false,
                 Weight = 3,
                 Emoji = "twa-broom"
+            },
+            new Assignment("BA2737ED-9F57-4E93-8A62-24F1332B79F4")
+            {
+                Name = "Gjøre noe fint for andre",
+                OncePerDay = false,
+                Weight = 3,
+                Emoji = "twa-heart-hands"
             }
         };
 
@@ -270,7 +277,8 @@ namespace DataGenerator
                     "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3",
                     "DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6",
                     "4390A97B-0323-4787-AC9E-02A5E2B36DEC",
-                    "B8C0E9D3-F4AB-4586-B648-8CEC87F865FB"
+                    "B8C0E9D3-F4AB-4586-B648-8CEC87F865FB",
+                    "BA2737ED-9F57-4E93-8A62-24F1332B79F4"
                 };
             } 
             else if (user.Name == "Robin")
@@ -289,7 +297,8 @@ namespace DataGenerator
                     "3214D15A-C87C-4AAE-BA73-0FBB5C384C7D",
                     "5F2C5F1C-07D9-4300-A6B2-D152CBE1B857",
                     "137EF03A-D5A4-4B46-8DFE-266CFE31AAD3",
-                    "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3"
+                    "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3",
+                    "BA2737ED-9F57-4E93-8A62-24F1332B79F4"
                 };
             }
             else if (user.Name == "Eivind")
@@ -317,7 +326,8 @@ namespace DataGenerator
                     "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3",
                     "DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6",
                     "4390A97B-0323-4787-AC9E-02A5E2B36DEC",
-                    "B8C0E9D3-F4AB-4586-B648-8CEC87F865FB"
+                    "B8C0E9D3-F4AB-4586-B648-8CEC87F865FB",
+                    "BA2737ED-9F57-4E93-8A62-24F1332B79F4"
                 };
             }
 

@@ -14,15 +14,17 @@ namespace Data.TableEntities
         public string UserRowKey { get; set; }
         public int XP { get; set; }
         public string Name { get; set; }
+        public DateTime TimeCompleted { get; set; }
 
-        public static CompletedAssignmentEntity GetEntity(string assignmentId, string userId, int xp, string name)
+        public static CompletedAssignmentEntity GetEntity(string assignmentId, string userId, int xp, string name, DateTime timeCompleted)
         {
-            var completedAssignmentEntity = new CompletedAssignmentEntity(Guid.NewGuid().ToString())
+            var completedAssignmentEntity = new CompletedAssignmentEntity(Guid.NewGuid().ToString().ToUpper())
             {
-                AssignmentRowKey = assignmentId,
-                UserRowKey = userId,
+                AssignmentRowKey = assignmentId.ToUpper(),
+                UserRowKey = userId.ToUpper(),
                 XP = xp,
-                Name = name
+                Name = name,
+                TimeCompleted = timeCompleted
             };
 
             return completedAssignmentEntity;
@@ -30,12 +32,13 @@ namespace Data.TableEntities
 
         public static CompletedAssignment FromEntity(CompletedAssignmentEntity completedAssignment, AssignmentEntity assignmentEntity)
         {
-            return new CompletedAssignment(completedAssignment.RowKey.ToUpper(), completedAssignment.PartitionKey, completedAssignment.Timestamp)
+            return new CompletedAssignment(completedAssignment.RowKey, completedAssignment.PartitionKey, completedAssignment.Timestamp)
             {
                 Assignment = AssignmentEntity.FromEntity(assignmentEntity),
                 AssignmentRowKey = completedAssignment.AssignmentRowKey,
                 UserRowKey = completedAssignment.UserRowKey,
-                XP = completedAssignment.XP
+                XP = completedAssignment.XP,
+                TimeCompleted =completedAssignment.TimeCompleted
             };
         }
     }

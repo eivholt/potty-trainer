@@ -20,7 +20,7 @@ namespace Api
 
         [FunctionName("CompletedAssignmentDelete")]
         public async Task<IActionResult> CompletedAssignmentDelete(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "users/{userid}/completedassignments/{completedassignmentid}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "users/{userid}/completedassignments/{completedassignmentid}")] HttpRequest req,
             ILogger log,
             string userId,
             string completedassignmentId)

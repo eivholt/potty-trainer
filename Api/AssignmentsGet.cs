@@ -25,7 +25,7 @@ namespace Api
 
         [FunctionName("AssignmentsGet")]
         public async Task<IActionResult> GetUserAssignments(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "users/{userid}/assignments")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users/{userid}/assignments")] HttpRequest req,
             ILogger log,
             string userId)
         {

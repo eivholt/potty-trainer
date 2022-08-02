@@ -20,7 +20,7 @@ namespace Api
 
         [FunctionName("UsersGet")]
         public IActionResult UsersGetStreaming(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "users")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users")] HttpRequest req,
             ILogger log
             )
         {
@@ -29,7 +29,7 @@ namespace Api
 
         [FunctionName("UserGet")]
         public async Task<IActionResult> UserGet(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/{userid}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "user/{userid}")] HttpRequest req,
             ILogger log,
             string userId)
         {

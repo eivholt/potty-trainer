@@ -21,7 +21,7 @@ namespace Api
 
         [FunctionName("CompletedAssignments")]
         public async Task<IActionResult> CompleteUserAssignmentPost(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "users/{userid}/completedassignment/{assignmentid}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "users/{userid}/completedassignment/{assignmentid}")] HttpRequest req,
             ILogger log,
             string userid,
             string assignmentid)
@@ -40,7 +40,7 @@ namespace Api
 
         [FunctionName("CompletedAssignmentsRecalculate")]
         public async Task<IActionResult> CompleteUserAssignmentRecalculatePost(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "users/{userid}/completedassignment")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "users/{userid}/completedassignment")] HttpRequest req,
             ILogger log,
             string userId)
         {

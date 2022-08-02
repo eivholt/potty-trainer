@@ -17,7 +17,7 @@ namespace Api
 
         [FunctionName("CompletedAssignmentsToday")]
         public IActionResult CompletedAssignmentsTodayGet(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "users/{userid}/completedassignmentstoday")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users/{userid}/completedassignmentstoday")] HttpRequest req,
             ILogger log,
             string userId)
         {

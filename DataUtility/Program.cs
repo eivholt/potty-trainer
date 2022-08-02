@@ -44,92 +44,92 @@ var retryCreateTable = true;
 //}
 
 // Assignments
-//var assignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignments);
-//var deleteAssignmentsTableResult = await assignmentsTableClient.DeleteAsync();
-//Console.WriteLine("Table assignments deleted: " + deleteAssignmentsTableResult.Status);
+var assignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignments);
+var deleteAssignmentsTableResult = await assignmentsTableClient.DeleteAsync();
+Console.WriteLine("Table assignments deleted: " + deleteAssignmentsTableResult.Status);
 
-//retryCreateTable = true;
+retryCreateTable = true;
 
-//while (retryCreateTable)
-//{
-//    try
-//    {
-//        var createAssignmentsTableResult = await assignmentsTableClient.CreateAsync();
-//        Console.WriteLine("\t" + createAssignmentsTableResult);
-//        retryCreateTable = false;
-//    }
-//    catch (RequestFailedException rfe)
-//    {
-//        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
-//        {
-//            Console.WriteLine("Table busy, retrying in 5 seconds..");
-//            await Task.Delay(5000);
-//        }
-//    }
-//}
+while (retryCreateTable)
+{
+    try
+    {
+        var createAssignmentsTableResult = await assignmentsTableClient.CreateAsync();
+        Console.WriteLine("\t" + createAssignmentsTableResult);
+        retryCreateTable = false;
+    }
+    catch (RequestFailedException rfe)
+    {
+        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
+        {
+            Console.WriteLine("Table busy, retrying in 5 seconds..");
+            await Task.Delay(5000);
+        }
+    }
+}
 
-//var assignments = DataGenerator.UserData.GetAssignments();
+var assignments = DataGenerator.UserData.GetAssignments();
 
-//foreach (var assignment in assignments)
-//{
-//    var addEntityResult = await assignmentsTableClient.AddEntityAsync(AssignmentEntity.GetEntity(assignment));
-//    Console.WriteLine($"Created Assignment: {addEntityResult.ToString()}");
-//}
+foreach (var assignment in assignments)
+{
+    var addEntityResult = await assignmentsTableClient.AddEntityAsync(AssignmentEntity.GetEntity(assignment));
+    Console.WriteLine($"Created Assignment: {addEntityResult.ToString()}");
+}
 
 // Assignments for users
-//var assignmentsForUserTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignmentsForUser);
-//var deleteAssignmentsForUserTableResult = await assignmentsForUserTableClient.DeleteAsync();
-//Console.WriteLine("Table assignmentsforuser deleted: " + deleteAssignmentsForUserTableResult.Status);
+var assignmentsForUserTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignmentsForUser);
+var deleteAssignmentsForUserTableResult = await assignmentsForUserTableClient.DeleteAsync();
+Console.WriteLine("Table assignmentsforuser deleted: " + deleteAssignmentsForUserTableResult.Status);
 
-//retryCreateTable = true;
+retryCreateTable = true;
 
-//while (retryCreateTable)
-//{
-//    try
-//    {
-//        var createAssignmentsForUserTableResult = await assignmentsForUserTableClient.CreateAsync();
-//        Console.WriteLine("\t" + createAssignmentsForUserTableResult);
-//        retryCreateTable = false;
-//    }
-//    catch (RequestFailedException rfe)
-//    {
-//        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
-//        {
-//            Console.WriteLine("Table busy, retrying in 5 seconds..");
-//            await Task.Delay(5000);
-//        }
-//    }
-//}
+while (retryCreateTable)
+{
+    try
+    {
+        var createAssignmentsForUserTableResult = await assignmentsForUserTableClient.CreateAsync();
+        Console.WriteLine("\t" + createAssignmentsForUserTableResult);
+        retryCreateTable = false;
+    }
+    catch (RequestFailedException rfe)
+    {
+        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
+        {
+            Console.WriteLine("Table busy, retrying in 5 seconds..");
+            await Task.Delay(5000);
+        }
+    }
+}
 
-//foreach(var user in DataGenerator.UserData.GetUsers())
-//{
-//    var userWithAssignments = DataGenerator.UserData.GetUserWithAssignments(user.RowKey);
-//    foreach(var assignment in userWithAssignments.Assignments)
-//    {
-//        var addEntityResult = await assignmentsForUserTableClient.AddEntityAsync(AssignmentForUserEntity.GetEntity(assignment, user));
-//        Console.WriteLine($"Created Assignment for user: {addEntityResult.ToString()}");
-//    }
-//}
+foreach (var user in DataGenerator.UserData.GetUsers())
+{
+    var userWithAssignments = DataGenerator.UserData.GetUserWithAssignments(user.RowKey);
+    foreach (var assignment in userWithAssignments.Assignments)
+    {
+        var addEntityResult = await assignmentsForUserTableClient.AddEntityAsync(AssignmentForUserEntity.GetEntity(assignment, user));
+        Console.WriteLine($"Created Assignment for user: {addEntityResult.ToString()}");
+    }
+}
 
 // Completed assignments
-var completedAssignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableCompletedAssignments);
+//var completedAssignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableCompletedAssignments);
 
-var completedAssignments = completedAssignmentsTableClient.QueryAsync<CompletedAssignmentEntity>();
+//var completedAssignments = completedAssignmentsTableClient.QueryAsync<CompletedAssignmentEntity>();
 
-await foreach(var completedAssignmentEntity in completedAssignments)
-{
-    var patchedEntity = new CompletedAssignmentEntity(completedAssignmentEntity.RowKey.ToUpper())
-    {
-        AssignmentRowKey = completedAssignmentEntity.AssignmentRowKey,
-        UserRowKey = completedAssignmentEntity.UserRowKey,
-        TimeCompleted = completedAssignmentEntity.Timestamp.Value.UtcDateTime,
-        XP = completedAssignmentEntity.XP,
-        Name = completedAssignmentEntity.Name
-    };
+//await foreach(var completedAssignmentEntity in completedAssignments)
+//{
+//    var patchedEntity = new CompletedAssignmentEntity(completedAssignmentEntity.RowKey.ToUpper())
+//    {
+//        AssignmentRowKey = completedAssignmentEntity.AssignmentRowKey,
+//        UserRowKey = completedAssignmentEntity.UserRowKey,
+//        TimeCompleted = completedAssignmentEntity.Timestamp.Value.UtcDateTime,
+//        XP = completedAssignmentEntity.XP,
+//        Name = completedAssignmentEntity.Name
+//    };
 
-    await completedAssignmentsTableClient.AddEntityAsync<CompletedAssignmentEntity>(patchedEntity);
-    await completedAssignmentsTableClient.DeleteEntityAsync(CompletedAssignmentEntity.PartitionKeyName, completedAssignmentEntity.RowKey);
-}
+//    await completedAssignmentsTableClient.AddEntityAsync<CompletedAssignmentEntity>(patchedEntity);
+//    await completedAssignmentsTableClient.DeleteEntityAsync(CompletedAssignmentEntity.PartitionKeyName, completedAssignmentEntity.RowKey);
+//}
 
 
 //var deleteCompletedAssignmentsTableResult = await completedAssignmentsTableClient.DeleteAsync();

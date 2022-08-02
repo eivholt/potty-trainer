@@ -11,14 +11,15 @@
 
     <div class="user-card-details">
         <div class="progress-xp">
-            <progress class="progress is-small is-primary" value="@User.XP" max="@User.Goal" >@User.XP/@User.Goal</progress>
+            <progress class="progress is-small is-primary" value="@User.XP" max="@User.Goal"></progress>
+            <p class="subtitle">@User.XP/@User.Goal</p>
         </div>
-        <p class="subtitle">@User.XP/@User.Goal</p>
+        
     </div>
     <div class="user-card-history">
         @if(IsLoadingCompletedAssignmentsToday)
         {
-            <progress class="progress is-small is-dark" max="100"></progress>
+            <progress class="progress is-small is-warning" max="100"></progress>
         }
         
         @foreach (var completedAssignment in CompletedAssignmentsToday.OrderBy(a => a.TimeCompleted))

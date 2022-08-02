@@ -1,4 +1,5 @@
 ﻿using Data;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace DataGenerator
 {
@@ -63,7 +64,7 @@ namespace DataGenerator
             {
                 Name = "Matte",
                 Description = string.Empty,
-                OncePerDay = true,
+                OncePerDay = false,
                 Weight = 3,
                 Emoji = "twa-plus"
             },
@@ -71,7 +72,7 @@ namespace DataGenerator
             {
                 Name = "Lese",
                 Description = string.Empty,
-                OncePerDay = true,
+                OncePerDay = false,
                 Weight = 3,
                 Emoji = "twa-open-book"
             },
@@ -87,7 +88,7 @@ namespace DataGenerator
             {
                 Name = "Rydde fat",
                 Description = "Bære fat, bestikk og glass til kjøkken",
-                OncePerDay = true,
+                OncePerDay = false,
                 Weight = 1,
                 Emoji = "twa-fork-and-knife-with-plate"
             },
@@ -137,7 +138,7 @@ namespace DataGenerator
             {
                 Name = "Bade/dusje",
                 Description = string.Empty,
-                OncePerDay = false,
+                OncePerDay = true,
                 Weight = 1,
                 Emoji = "twa-bathtub",
                 EmojiModifier = "twa-shower"
@@ -210,10 +211,45 @@ namespace DataGenerator
             new Assignment("BA2737ED-9F57-4E93-8A62-24F1332B79F4")
             {
                 Name = "Gjøre noe fint for andre",
+                Description = string.Empty,
                 OncePerDay = false,
                 Weight = 3,
                 Emoji = "twa-heart-hands"
+            },
+            new Assignment("AFD8667D-4BE5-42A0-BC01-B1C7E4C5FC6C")
+            {
+                Name = "Nytt ord",
+                Description = string.Empty,
+                OncePerDay = false,
+                Weight = 1,
+                Emoji = "twa-speech-balloon"
+            },
+            new Assignment("2766B0C7-CB8A-4568-AE08-9D7BF8D513C8")
+            {
+                Name = "Veie",
+                Description = string.Empty,
+                OncePerDay = false,
+                Weight = 1,
+                Emoji = "twa-balance-scale"
+            },
+            new Assignment("433DE750-A150-42C7-9EA1-026DFC908B1D")
+            {
+                Name = "Lære noe nytt",
+                Description = string.Empty,
+                OncePerDay = false,
+                Weight = 1,
+                Emoji = "twa-light-bulb"
+            },
+            new Assignment("721CE2ED-761F-4D34-BD3D-9F2F27F47385")
+            {
+                Name = "Tømme søppel",
+                Description = "Sette ut søppeldunk",
+                OncePerDay = true,
+                Weight = 1,
+                Emoji = "twa-wastebasket"
             }
+
+
         };
 
         private static readonly List<User> m_users = new List<User>
@@ -278,7 +314,10 @@ namespace DataGenerator
                     "DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6",
                     "4390A97B-0323-4787-AC9E-02A5E2B36DEC",
                     "B8C0E9D3-F4AB-4586-B648-8CEC87F865FB",
-                    "BA2737ED-9F57-4E93-8A62-24F1332B79F4"
+                    "BA2737ED-9F57-4E93-8A62-24F1332B79F4",
+                    "AFD8667D-4BE5-42A0-BC01-B1C7E4C5FC6C",
+                    "433DE750-A150-42C7-9EA1-026DFC908B1D",
+                    "721CE2ED-761F-4D34-BD3D-9F2F27F47385"
                 };
             } 
             else if (user.Name == "Robin")
@@ -298,7 +337,9 @@ namespace DataGenerator
                     "5F2C5F1C-07D9-4300-A6B2-D152CBE1B857",
                     "137EF03A-D5A4-4B46-8DFE-266CFE31AAD3",
                     "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3",
-                    "BA2737ED-9F57-4E93-8A62-24F1332B79F4"
+                    "BA2737ED-9F57-4E93-8A62-24F1332B79F4",
+                    "AFD8667D-4BE5-42A0-BC01-B1C7E4C5FC6C",
+                    "433DE750-A150-42C7-9EA1-026DFC908B1D"
                 };
             }
             else if (user.Name == "Eivind")
@@ -327,7 +368,10 @@ namespace DataGenerator
                     "DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6",
                     "4390A97B-0323-4787-AC9E-02A5E2B36DEC",
                     "B8C0E9D3-F4AB-4586-B648-8CEC87F865FB",
-                    "BA2737ED-9F57-4E93-8A62-24F1332B79F4"
+                    "BA2737ED-9F57-4E93-8A62-24F1332B79F4",
+                    "2766B0C7-CB8A-4568-AE08-9D7BF8D513C8",
+                    "433DE750-A150-42C7-9EA1-026DFC908B1D",
+                    "721CE2ED-761F-4D34-BD3D-9F2F27F47385"
                 };
             }
 

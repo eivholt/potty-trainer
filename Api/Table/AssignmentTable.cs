@@ -74,11 +74,18 @@ namespace Api.Table
             e.UserRowKey.Equals(userId) &&
             e.TimeCompleted >= fromDateInclusive &&
             e.TimeCompleted <= toDateInclusive);
+
+            var allAssignmentsResponse = m_assigmentTableClient.QueryAsync<AssignmentEntity>();
+            var allAssignments = new List<AssignmentEntity>();
+
+            await foreach(var assignment in allAssignmentsResponse)
+            {
+                allAssignments.Add(assignment);
+            }
+
             await foreach(var completedAssignment in completedAssignmentsForUserTodayQuery)
             {
-                var assigmentResponse = await m_assigmentTableClient.GetEntityAsync<AssignmentEntity>(AssignmentEntity.PartitionKeyName, completedAssignment.AssignmentRowKey);
-
-                yield return CompletedAssignmentEntity.FromEntity(completedAssignment, assigmentResponse.Value);
+                yield return CompletedAssignmentEntity.FromEntity(completedAssignment, allAssignments.Find(a => a.RowKey.Equals(completedAssignment.AssignmentRowKey)));
             }
         }
 

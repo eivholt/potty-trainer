@@ -29,14 +29,24 @@ namespace Api.Table
             var assignmentsForUserQuery = m_assignmentsForUserTableClient.QueryAsync<AssignmentForUserEntity>(e => e.UserRowKey.Equals(userId)); //filter: "e => e.UserRowKey == 'userId'"
             var assignmentsForUserCompletedToday = m_assignmentData.GetCompletedAssignmentsToday(userId).SelectAwait(async a => await Task.Run(() => a.AssignmentRowKey));
 
-            var assignmentsIds = assignmentsForUserQuery.SelectAwait(async a => await Task.Run(() => a.AssignmentRowKey));
+            var assignmentsIds = new List<string>();
+            await foreach (var assignmentForUser in assignmentsForUserQuery)
+            {
+                assignmentsIds.Add(assignmentForUser.AssignmentRowKey);
+            }
+
+            var assignmentsCompletedTodayIds = new List<string>();
+            await foreach (var assignmentCompletedToday in assignmentsForUserCompletedToday)
+            {
+                assignmentsCompletedTodayIds.Add(assignmentCompletedToday);
+            }
 
             var assignmentsQuery = m_assigmentTableClient.QueryAsync<AssignmentEntity>();
             await foreach (var assignmentsResult in assignmentsQuery)
             {
-                if (await assignmentsIds.AnyAwaitAsync(async a => await Task.Run(() => a.Equals(assignmentsResult.RowKey))) &&
+                if (assignmentsIds.Contains(assignmentsResult.RowKey) &&
                     !(assignmentsResult.OncePerDay &&
-                        await assignmentsForUserCompletedToday.ContainsAsync(assignmentsResult.RowKey))
+                        assignmentsCompletedTodayIds.Contains(assignmentsResult.RowKey))
                     )
                 {
                     yield return AssignmentEntity.FromEntity(assignmentsResult);

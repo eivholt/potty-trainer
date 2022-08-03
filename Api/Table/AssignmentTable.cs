@@ -21,20 +21,11 @@ namespace Api.Table
             return AssignmentEntity.FromEntity(await m_assigmentTableClient.GetEntityAsync<AssignmentEntity>(AssignmentEntity.PartitionKeyName, assignmentId.ToUpper()));
         }
 
-        public async IAsyncEnumerable<Assignment> GetUserAssignments()
-        {
-            var assigmentQuery = m_assigmentTableClient.QueryAsync<AssignmentEntity>();
-            await foreach (var assignmentResult in assigmentQuery)
-            {
-                yield return AssignmentEntity.FromEntity(assignmentResult);
-            }
-        }
-
         public async Task<int> CompleteAssignment(string assignmentId, string userId)
         {
             var assignment = await GetUserAssignment(assignmentId);
 
-            await m_completedAssigmentTableClient.AddEntityAsync<CompletedAssignmentEntity>(CompletedAssignmentEntity.GetEntity(assignment.RowKey, userId, assignment.Weight, assignment.Name, DateTime.UtcNow));
+            await m_completedAssigmentTableClient.AddEntityAsync(CompletedAssignmentEntity.GetEntity(assignment.RowKey, userId, assignment.Weight, assignment.Name, DateTime.UtcNow));
 
             var completedAssignmentsForUserQuery = m_completedAssigmentTableClient.QueryAsync<CompletedAssignmentEntity>(e => e.UserRowKey.Equals(userId));
 
@@ -62,15 +53,39 @@ namespace Api.Table
 
         public async IAsyncEnumerable<CompletedAssignment> GetCompletedAssignmentsToday(string userId)
         {
+            await foreach(var completedAssignment in GetCompletedAssignmentsTimeSpan(userId, DateTime.UtcNow.Date, DateTime.UtcNow))
+            {
+                yield return completedAssignment;
+            }
+        }
+
+        public async IAsyncEnumerable<CompletedAssignment> GetCompletedAssignmentsYesterday(string userId)
+        {
+            await foreach (var completedAssignment in GetCompletedAssignmentsTimeSpan(userId, DateTime.UtcNow.AddDays(-1).Date, DateTime.UtcNow.Date))
+            {
+                yield return completedAssignment;
+            }
+        }
+
+        private async IAsyncEnumerable<CompletedAssignment> GetCompletedAssignmentsTimeSpan(string userId, DateTime fromDateInclusive, DateTime toDateInclusive)
+        {
             var completedAssignmentsForUserTodayQuery = m_completedAssigmentTableClient.QueryAsync<CompletedAssignmentEntity>(
             e =>
             e.UserRowKey.Equals(userId) &&
-            e.TimeCompleted >= DateTime.UtcNow.Date);
+            e.TimeCompleted >= fromDateInclusive &&
+            e.TimeCompleted <= toDateInclusive);
+
+            var allAssignmentsResponse = m_assigmentTableClient.QueryAsync<AssignmentEntity>();
+            var allAssignments = new List<AssignmentEntity>();
+
+            await foreach(var assignment in allAssignmentsResponse)
+            {
+                allAssignments.Add(assignment);
+            }
+
             await foreach(var completedAssignment in completedAssignmentsForUserTodayQuery)
             {
-                var assigmentResponse = await m_assigmentTableClient.GetEntityAsync<AssignmentEntity>(AssignmentEntity.PartitionKeyName, completedAssignment.AssignmentRowKey);
-
-                yield return CompletedAssignmentEntity.FromEntity(completedAssignment, assigmentResponse.Value);
+                yield return CompletedAssignmentEntity.FromEntity(completedAssignment, allAssignments.Find(a => a.RowKey.Equals(completedAssignment.AssignmentRowKey)));
             }
         }
 

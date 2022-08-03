@@ -1,5 +1,4 @@
 ﻿using Data;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,8 +9,8 @@ namespace Api
         Task<int> CompleteAssignment(string assignmentId, string userId);
         Task<int> CalculateXp(string userId);
         IAsyncEnumerable<CompletedAssignment> GetCompletedAssignmentsToday(string userId);
+        IAsyncEnumerable<CompletedAssignment> GetCompletedAssignmentsYesterday(string userId);
         Task<Assignment> GetUserAssignment(string assignmentId);
-        IAsyncEnumerable<Assignment> GetUserAssignments();
         Task<bool> DeleteCompletedAssignment(string userId, string completedAssignmentId);
     }
 }

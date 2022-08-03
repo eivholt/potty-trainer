@@ -140,8 +140,7 @@ namespace DataGenerator
                 Description = string.Empty,
                 OncePerDay = true,
                 Weight = 1,
-                Emoji = "twa-bathtub",
-                EmojiModifier = "twa-shower"
+                Emoji = "twa-bathtub"
             },
             new Assignment("98CE9CA3-5A23-42DC-9792-FB701D66562E")
             {
@@ -214,7 +213,7 @@ namespace DataGenerator
                 Description = string.Empty,
                 OncePerDay = false,
                 Weight = 3,
-                Emoji = "twa-heart-hands"
+                Emoji = "twa-growing-heart"
             },
             new Assignment("AFD8667D-4BE5-42A0-BC01-B1C7E4C5FC6C")
             {

@@ -66,7 +66,7 @@ namespace DataGenerator
                 Description = string.Empty,
                 OncePerDay = false,
                 Weight = 3,
-                Emoji = "twa-plus"
+                Emoji = "twa-input-numbers"
             },
             new Assignment("D07BA9CB-E4DB-40F8-9461-A4EC36C66826")
             {

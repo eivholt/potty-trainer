@@ -11,7 +11,7 @@
 
     <div class="user-card-details">
         <div class="progress-xp">
-            <progress class="progress is-small is-primary" value="@User.XP" max="@User.Goal"></progress>
+            <progress class="progress is-small @XpProgressBarColor" value="@User.XP" max="@User.Goal"></progress>
             <p class="subtitle">@User.XP/@User.Goal</p>
         </div>
         
@@ -22,9 +22,9 @@
             <progress class="progress is-small is-warning" max="100"></progress>
         }
         
-        @foreach (var completedAssignment in CompletedAssignmentsToday.OrderBy(a => a.TimeCompleted))
+        @foreach (var completedAssignment in Assignments.OrderBy(a => a.Assignment.Timestamp))
         {
-            <div class="symbols" @onclick="@(async _ => await UndoCompletedAssignmentCallback(completedAssignment))" @onclick:stopPropagation>
+            <div class="symbols" @onclick="@(async _ => await UndoCompletedAssignmentCallback(User.RowKey, completedAssignment.CompletedAssignmentRowKey))" @onclick:stopPropagation>
                 <div class="emoji">
                     <div class="twa-2x @completedAssignment.Assignment.Emoji"></div>
                 </div>
@@ -39,21 +39,56 @@
 @code {
     [Parameter] public User User { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
-    private List<CompletedAssignment> CompletedAssignmentsToday { get; set; } = new List<CompletedAssignment>();
+    private string XpProgressBarColor 
+    {
+        get
+        {
+            if(User.XP >= User.Goal)
+            {
+                return "is-warning";
+            } else
+            {
+                return "is-primary";
+            }
+        }
+    }
+    private List<GroupedAssignments> Assignments { get; set; } = new List<GroupedAssignments>();
     private bool IsLoadingCompletedAssignmentsToday { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
         IsLoadingCompletedAssignmentsToday = true;
-        CompletedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
+        var completedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
+
+        foreach (var completedAssignmentTodayGroup in completedAssignmentsToday.GroupBy(c => c.AssignmentRowKey))
+        {
+            Assignments.Add(new GroupedAssignments
+                {
+                    Assignment = completedAssignmentTodayGroup.First().Assignment,
+                    TimeStamp = completedAssignmentTodayGroup.First().TimeCompleted,
+                    CompletedAssignmentRowKey = completedAssignmentTodayGroup.First().RowKey,
+                    Completed = true,
+                    Count = completedAssignmentTodayGroup.Count()
+                });
+        }
+
         StateHasChanged();
         IsLoadingCompletedAssignmentsToday = false;
     }
 
-    private async Task UndoCompletedAssignmentCallback(CompletedAssignment completedAssignment)
+    private async Task UndoCompletedAssignmentCallback(string userId, string completedAssignmentRowKey)
     {
-        var deleteCompletedAssignmentResult = await http.DeleteAsync($"api/users/{completedAssignment.UserRowKey}/completedassignments/{completedAssignment.RowKey}");
+        var deleteCompletedAssignmentResult = await http.DeleteAsync($"api/users/{userId}/completedassignments/{completedAssignmentRowKey}");
         await OnInitializedAsync();
         NavigationManager.NavigateTo("/users", true);
+    }
+
+    private class GroupedAssignments
+    {
+        public Assignment Assignment { get; set; }
+        public string CompletedAssignmentRowKey { get; set; }
+        public DateTime TimeStamp { get; set; }
+        public bool Completed { get; set; }
+        public int Count { get; set; }
     }
 }

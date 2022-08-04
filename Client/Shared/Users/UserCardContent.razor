@@ -17,30 +17,37 @@
         
     </div>
     <div class="user-card-history">
-        @if(IsLoadingCompletedAssignmentsToday)
-        {
-            <progress class="progress is-small is-warning" max="100"></progress>
-        }
-        
-        @foreach (var completedAssignment in Assignments.OrderBy(a => a.Suggestion).ThenBy(a => a.TimeStamp))
-        {
-            <div class="symbols @completedAssignment.StyleClass" @onclick="@(async _ => await CompletedAssignmentAction(User.RowKey, completedAssignment))" @onclick:stopPropagation>
-                <div class="emoji">
-                    <div class="twa-3x @completedAssignment.Assignment.Emoji"></div>
-                </div>
-                <div class="emoji-modifier">
-                    <div class="twa-2x @completedAssignment.Assignment.EmojiModifier"></div>
-                </div>
 
-                @if (!completedAssignment.Suggestion && completedAssignment.Count > 1)
-                {
-                    <div class="assignment-count">
-                        @for (int i = 0; i<= completedAssignment.Count;  i++)
-                        {
-                            <div class="assignment-count-badge"/>
-                        }
+            @if(IsLoadingCompletedAssignments)
+            {
+                <progress class="progress is-small is-info" max="100"></progress>
+            }
+        
+            @foreach (var completedAssignment in Assignments.OrderBy(a => a.Suggestion).ThenBy(a => a.TimeStamp))
+            {
+                <div class="symbols @completedAssignment.StyleClass" @onclick="@(async _ => await CompletedAssignmentAction(User.RowKey, completedAssignment))" @onclick:stopPropagation>
+                    <div class="emoji">
+                        <div class="twa-3x @completedAssignment.Assignment.Emoji"></div>
                     </div>
-                }
+                    <div class="emoji-modifier">
+                        <div class="twa-2x @completedAssignment.Assignment.EmojiModifier"></div>
+                    </div>
+
+                    @if (!completedAssignment.Suggestion && completedAssignment.Count > 1)
+                    {
+                        <div class="assignment-count">
+                            @for (int i = 0; i<= completedAssignment.Count;  i++)
+                            {
+                                <div class="assignment-count-badge"/>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        @if (!IsLoadingCompletedAssignments)
+        {
+            <div class="add-completed-assignment" @onclick="@(e => NavigateToAssignmentsForUser(User))" @onclick:stopPropagation>
+                <div class="twa-3x twa-plus"></div>
             </div>
         }
     </div>
@@ -78,11 +85,11 @@
     }
 
     private List<GroupedAssignment> Assignments { get; set; } = new List<GroupedAssignment>();
-    private bool IsLoadingCompletedAssignmentsToday { get; set; } = true;
+    private bool IsLoadingCompletedAssignments { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
-        IsLoadingCompletedAssignmentsToday = true;
+        IsLoadingCompletedAssignments = true;
         var completedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
         var completedAssignmentsYesterday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentsyesterday");
 
@@ -114,7 +121,7 @@
         }
 
         StateHasChanged();
-        IsLoadingCompletedAssignmentsToday = false;
+        IsLoadingCompletedAssignments = false;
     }
 
     private async Task CompletedAssignmentAction(string userId, GroupedAssignment groupedAssignment)
@@ -129,6 +136,11 @@
         }
         await OnInitializedAsync();
         NavigationManager.NavigateTo("/users", true);
+    }
+
+    private void NavigateToAssignmentsForUser(User user)
+    {
+        NavigationManager.NavigateTo($"/user/{user.RowKey}");
     }
 
     private class GroupedAssignment

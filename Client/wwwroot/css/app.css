@@ -1,4 +1,8 @@
-﻿.menu-list .active-link,
+﻿html {
+    background-color: #eee;
+}
+
+.menu-list .active-link,
 .menu-list .router-link-active {
     color: #fff;
     background-color: #00b3e6;
@@ -297,7 +301,7 @@ body {
 }
 
 body .section {
-    padding: 0.5rem;
+    padding: 0.8rem;
 }
 
 code {

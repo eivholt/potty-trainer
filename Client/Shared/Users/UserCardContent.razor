@@ -11,7 +11,7 @@
 
     <div class="user-card-details">
         <div class="progress-xp">
-            <progress class="progress is-small @XpProgressBarColor" value="@User.XP" max="@User.Goal"></progress>
+            <progress class="progress is-small @XpProgressBarColor @DingStyle" value="@User.XP" max="@User.Goal"></progress>
             <p class="subtitle">@User.XP/@User.Goal</p>
         </div>
         
@@ -22,15 +22,25 @@
             <progress class="progress is-small is-warning" max="100"></progress>
         }
         
-        @foreach (var completedAssignment in Assignments.OrderBy(a => a.Assignment.Timestamp))
+        @foreach (var completedAssignment in Assignments.OrderBy(a => a.Suggestion).ThenBy(a => a.TimeStamp))
         {
-            <div class="symbols" @onclick="@(async _ => await UndoCompletedAssignmentCallback(User.RowKey, completedAssignment.CompletedAssignmentRowKey))" @onclick:stopPropagation>
+            <div class="symbols @completedAssignment.StyleClass" @onclick="@(async _ => await CompletedAssignmentAction(User.RowKey, completedAssignment))" @onclick:stopPropagation>
                 <div class="emoji">
-                    <div class="twa-2x @completedAssignment.Assignment.Emoji"></div>
+                    <div class="twa-3x @completedAssignment.Assignment.Emoji"></div>
                 </div>
                 <div class="emoji-modifier">
-                    <div class="twa @completedAssignment.Assignment.EmojiModifier"></div>
+                    <div class="twa-2x @completedAssignment.Assignment.EmojiModifier"></div>
                 </div>
+
+                @if (!completedAssignment.Suggestion && completedAssignment.Count > 1)
+                {
+                    <div class="assignment-count">
+                        @for (int i = 0; i<= completedAssignment.Count;  i++)
+                        {
+                            <div class="assignment-count-badge"/>
+                        }
+                    </div>
+                }
             </div>
         }
     </div>
@@ -52,43 +62,90 @@
             }
         }
     }
-    private List<GroupedAssignments> Assignments { get; set; } = new List<GroupedAssignments>();
+
+    private string DingStyle 
+    {
+        get
+        {
+            if(User.XP >= User.Goal)
+            {
+                return "ding-style";
+            } else
+            {
+                return "nonding-style";
+            }
+        }
+    }
+
+    private List<GroupedAssignment> Assignments { get; set; } = new List<GroupedAssignment>();
     private bool IsLoadingCompletedAssignmentsToday { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
         IsLoadingCompletedAssignmentsToday = true;
         var completedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
+        var completedAssignmentsYesterday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentsyesterday");
 
-        foreach (var completedAssignmentTodayGroup in completedAssignmentsToday.GroupBy(c => c.AssignmentRowKey))
+        foreach(var completedAssignmentTodayGroup in completedAssignmentsToday.GroupBy(c => c.AssignmentRowKey))
         {
-            Assignments.Add(new GroupedAssignments
+            Assignments.Add(new GroupedAssignment
                 {
                     Assignment = completedAssignmentTodayGroup.First().Assignment,
                     TimeStamp = completedAssignmentTodayGroup.First().TimeCompleted,
                     CompletedAssignmentRowKey = completedAssignmentTodayGroup.First().RowKey,
-                    Completed = true,
+                    Suggestion = false,
                     Count = completedAssignmentTodayGroup.Count()
                 });
+        }
+
+        foreach (var completedAssignmentYesterday in completedAssignmentsYesterday.DistinctBy(c => c.AssignmentRowKey))
+        {
+            if (!Assignments.Any(a => a.Assignment.RowKey.Equals(completedAssignmentYesterday.Assignment.RowKey)))
+            {
+                Assignments.Add(new GroupedAssignment
+                {
+                    Assignment = completedAssignmentYesterday.Assignment,
+                    TimeStamp = completedAssignmentYesterday.TimeCompleted,
+                    CompletedAssignmentRowKey = completedAssignmentYesterday.RowKey,
+                    Suggestion = true,
+                    Count = -1
+                    });
+            }
         }
 
         StateHasChanged();
         IsLoadingCompletedAssignmentsToday = false;
     }
 
-    private async Task UndoCompletedAssignmentCallback(string userId, string completedAssignmentRowKey)
+    private async Task CompletedAssignmentAction(string userId, GroupedAssignment groupedAssignment)
     {
-        var deleteCompletedAssignmentResult = await http.DeleteAsync($"api/users/{userId}/completedassignments/{completedAssignmentRowKey}");
+        if (groupedAssignment.Suggestion)
+        {
+            await http.PostAsync($"api/users/{userId}/completedassignment/{groupedAssignment.Assignment.RowKey}", null);
+        } else
+        {
+        
+            var deleteCompletedAssignmentResult = await http.DeleteAsync($"api/users/{userId}/completedassignments/{groupedAssignment.CompletedAssignmentRowKey}");
+        }
         await OnInitializedAsync();
         NavigationManager.NavigateTo("/users", true);
     }
 
-    private class GroupedAssignments
+    private class GroupedAssignment
     {
         public Assignment Assignment { get; set; }
         public string CompletedAssignmentRowKey { get; set; }
         public DateTime TimeStamp { get; set; }
-        public bool Completed { get; set; }
+        public bool Suggestion { get; set; }
         public int Count { get; set; }
+        
+        public string StyleClass
+        {
+            get
+            {
+                if (Suggestion) { return "assignment-suggestion"; }
+                else { return "assignment-completed-today"; }
+            }
+        }
     }
 }

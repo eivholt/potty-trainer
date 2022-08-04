@@ -23,5 +23,14 @@ namespace Api
         {
             return new OkObjectResult(m_assignmentData.GetCompletedAssignmentsToday(userId));
         }
+
+        [FunctionName("CompletedAssignmentsYesterday")]
+        public IActionResult CompletedAssignmentsYesterdayGet(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users/{userid}/completedassignmentsyesterday")] HttpRequest req,
+            ILogger log,
+            string userId)
+        {
+            return new OkObjectResult(m_assignmentData.GetCompletedAssignmentsYesterday(userId));
+        }
     }
 }

@@ -6,8 +6,7 @@
             <li role="presentation">
                 <div class="card">
                     <UserCardContent 
-                        User="@user"
-                        OnClick="@(async _ => await SelectUser.InvokeAsync(user))"/>
+                        User="@user"/>
                 </div>
             </li>
         }
@@ -19,5 +18,4 @@ else
 }
 @code {
     [Parameter] public IEnumerable<User> Users { get; set; }
-    [Parameter] public EventCallback<User> SelectUser { get; set; }
 }

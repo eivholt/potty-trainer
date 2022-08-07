@@ -6,8 +6,7 @@
     <div class="columns is-multiline is-variable">
         <div class="column is-8">
             <UserList
-                Users="@users"
-                SelectUser="@SelectUser"/>
+                Users="@users"/>
         </div>
     </div>
 </div>
@@ -23,10 +22,5 @@
     private async Task HandleRefresh()
     {
         users = await http.GetFromJsonAsync<IEnumerable<User>>("api/users");
-    }
-
-    private void SelectUser(User user)
-    {
-        NavigationManager.NavigateTo($"/user/{user.RowKey}");
     }
 }

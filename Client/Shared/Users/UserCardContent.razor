@@ -1,8 +1,7 @@
 ﻿@inject HttpClient http
 @inject NavigationManager NavigationManager
 
-<div class="user-card-content" contenteditable="false"
-     @onclick="OnClick">
+<div class="user-card-content" contenteditable="false">
             <div class="symbol">
                 <div class="twa-5x @User.Avatar"></div>
             </div>
@@ -46,8 +45,8 @@
             }
         @if (!IsLoadingCompletedAssignments)
         {
-            <div class="add-completed-assignment" @onclick="@(e => NavigateToAssignmentsForUser(User))" @onclick:stopPropagation>
-                <div class="twa-3x twa-plus"></div>
+            <div class="add-completed-assignment button is-primary" @onclick="@(e => NavigateToAssignmentsForUser(User))" @onclick:stopPropagation>
+                <i class="fas fa-plus" aria-hidden="true" />
             </div>
         }
     </div>
@@ -55,7 +54,6 @@
 
 @code {
     [Parameter] public User User { get; set; }
-    [Parameter] public EventCallback OnClick { get; set; }
     private string XpProgressBarColor 
     {
         get
@@ -86,56 +84,66 @@
 
     private List<GroupedAssignment> Assignments { get; set; } = new List<GroupedAssignment>();
     private bool IsLoadingCompletedAssignments { get; set; } = true;
+    private bool IsInputDisabled { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        IsLoadingCompletedAssignments = true;
-        var completedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
-        var completedAssignmentsYesterday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentsyesterday");
-
-        foreach(var completedAssignmentTodayGroup in completedAssignmentsToday.GroupBy(c => c.AssignmentRowKey))
+        if (!IsInputDisabled)
         {
-            Assignments.Add(new GroupedAssignment
-                {
-                    Assignment = completedAssignmentTodayGroup.First().Assignment,
-                    TimeStamp = completedAssignmentTodayGroup.First().TimeCompleted,
-                    CompletedAssignmentRowKey = completedAssignmentTodayGroup.First().RowKey,
-                    Suggestion = false,
-                    Count = completedAssignmentTodayGroup.Count()
-                });
-        }
+            IsInputDisabled = true;
+            IsLoadingCompletedAssignments = true;
+            var completedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
+            var completedAssignmentsYesterday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentsyesterday");
 
-        foreach (var completedAssignmentYesterday in completedAssignmentsYesterday.DistinctBy(c => c.AssignmentRowKey))
-        {
-            if (!Assignments.Any(a => a.Assignment.RowKey.Equals(completedAssignmentYesterday.Assignment.RowKey)))
+            foreach (var completedAssignmentTodayGroup in completedAssignmentsToday.GroupBy(c => c.AssignmentRowKey))
             {
                 Assignments.Add(new GroupedAssignment
-                {
-                    Assignment = completedAssignmentYesterday.Assignment,
-                    TimeStamp = completedAssignmentYesterday.TimeCompleted,
-                    CompletedAssignmentRowKey = completedAssignmentYesterday.RowKey,
-                    Suggestion = true,
-                    Count = -1
+                    {
+                        Assignment = completedAssignmentTodayGroup.First().Assignment,
+                        TimeStamp = completedAssignmentTodayGroup.First().TimeCompleted,
+                        CompletedAssignmentRowKey = completedAssignmentTodayGroup.First().RowKey,
+                        Suggestion = false,
+                        Count = completedAssignmentTodayGroup.Count()
                     });
             }
-        }
 
-        StateHasChanged();
-        IsLoadingCompletedAssignments = false;
+            foreach (var completedAssignmentYesterday in completedAssignmentsYesterday.DistinctBy(c => c.AssignmentRowKey))
+            {
+                if (!Assignments.Any(a => a.Assignment.RowKey.Equals(completedAssignmentYesterday.Assignment.RowKey)))
+                {
+                    Assignments.Add(new GroupedAssignment
+                        {
+                            Assignment = completedAssignmentYesterday.Assignment,
+                            TimeStamp = completedAssignmentYesterday.TimeCompleted,
+                            CompletedAssignmentRowKey = completedAssignmentYesterday.RowKey,
+                            Suggestion = true,
+                            Count = -1
+                        });
+                }
+            }
+
+            IsLoadingCompletedAssignments = false;
+            IsInputDisabled = false;
+        }
     }
 
     private async Task CompletedAssignmentAction(string userId, GroupedAssignment groupedAssignment)
     {
-        if (groupedAssignment.Suggestion)
+        if (!IsInputDisabled)
         {
-            await http.PostAsync($"api/users/{userId}/completedassignment/{groupedAssignment.Assignment.RowKey}", null);
-        } else
-        {
-        
-            var deleteCompletedAssignmentResult = await http.DeleteAsync($"api/users/{userId}/completedassignments/{groupedAssignment.CompletedAssignmentRowKey}");
+            IsInputDisabled = true;
+            if (groupedAssignment.Suggestion)
+            {
+                await http.PostAsync($"api/users/{userId}/completedassignment/{groupedAssignment.Assignment.RowKey}", null);
+            }
+            else
+            {
+                var deleteCompletedAssignmentResult = await http.DeleteAsync($"api/users/{userId}/completedassignments/{groupedAssignment.CompletedAssignmentRowKey}");
+            }
+            await OnInitializedAsync();
+            NavigationManager.NavigateTo("/users", true);
+            IsInputDisabled = false;
         }
-        await OnInitializedAsync();
-        NavigationManager.NavigateTo("/users", true);
     }
 
     private void NavigateToAssignmentsForUser(User user)

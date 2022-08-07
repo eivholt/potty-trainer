@@ -1,5 +1,4 @@
-﻿<div class="assignment-card-content"
-     @onclick="OnClick">
+﻿<div class="assignment-card-content">
     
      <div class="symbols">
         <div class="emoji">
@@ -32,7 +31,14 @@
     </div>
 
     <div class="name">@Assignment.Name</div>
-    <div class="description">@Assignment.Description</div>
+    
+    <div class="description-add">
+        <div class="description">@Assignment.Description</div>
+        <div class="add-completed-assignment button is-primary" @onclick="OnClick" @onclick:stopPropagation>
+            <i class="fas fa-plus" aria-hidden="true" />
+        </div>
+    </div>
+    
 </div>
 
 @code {

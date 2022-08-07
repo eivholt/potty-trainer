@@ -57,24 +57,6 @@ else
         user = await http.GetFromJsonAsync<User>($"api/users/{UserId}/assignments");
     }
 
-    private void CancelProduct()
-    {
-        NavigationManager.NavigateTo("/");
-    }
-
-    private async Task Save()
-    {
-        //if (user.Id == 0)
-        //{
-        //    await http.PostAsJsonAsync("api/products", user);
-        //}
-        //else
-        //{
-        //    await http.PutAsJsonAsync("api/products", user);
-        //}
-        NavigationManager.NavigateTo("/");
-    }
-
     private async Task SelectAssignment(Assignment assignment)
     {
         //"users/{userid}/completedassignment/{assignmentid}"

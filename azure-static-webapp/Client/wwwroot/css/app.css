@@ -231,7 +231,6 @@ div.assignment-card-content {
     grid-template-rows: auto 1fr;
     gap: 20px;
     width: 100%;
-    touch-action: none;
 }
 
     div.assignment-card-content .symbols {

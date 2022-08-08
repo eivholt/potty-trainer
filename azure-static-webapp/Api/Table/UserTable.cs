@@ -3,6 +3,7 @@ using Data;
 using Data.TableEntities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Api.Table
@@ -17,6 +18,30 @@ namespace Api.Table
         public async Task<User> GetUser(string userId)
         {
             return UserEntity.FromEntity(await m_userTableClient.GetEntityAsync<UserEntity>(UserEntity.PartitionKeyName, userId.ToUpper()));
+        }
+
+        public async Task<User> GetUserFromDeviceId(string deviceType, string deviceId)
+        {
+            var userByDeviceQuery = m_userTableClient.QueryAsync<UserEntity>(e => e.DosetteDeviceId.Equals(deviceId));
+
+            List<UserEntity> usersWithSelectedDeviceId = new List<UserEntity>();
+            
+            await foreach(var user in userByDeviceQuery)
+            {
+                usersWithSelectedDeviceId.Add(user);
+            }
+            
+            if(usersWithSelectedDeviceId.Count > 1)
+            {
+                throw new InvalidOperationException($"Non-unique use of device id: {deviceType}, {deviceId}");
+            }
+
+            if(usersWithSelectedDeviceId.Count == 0)
+            {
+                throw new InvalidOperationException($"Device id not found: {deviceType}, {deviceId}");
+            }
+
+            return UserEntity.FromEntity(usersWithSelectedDeviceId.First());
         }
 
         public async Task<User> UpdateXp(string userId, int xp)

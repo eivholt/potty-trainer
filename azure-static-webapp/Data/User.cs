@@ -18,5 +18,6 @@ namespace Data
         //public List<CompletedAssignment> CompletedAssignments {get; set;}
         public int Goal { get; set; }
         public int XP { get; set; }
+        public string DosetteDeviceId { get; set; }
     }
 }

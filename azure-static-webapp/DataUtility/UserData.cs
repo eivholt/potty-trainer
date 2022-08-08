@@ -246,9 +246,15 @@ namespace DataGenerator
                 OncePerDay = true,
                 Weight = 1,
                 Emoji = "twa-wastebasket"
+            },
+            new Assignment("D0DCECAB-17B4-4FC5-ADA9-13CB31144153")
+            {
+                Name = "Gå",
+                Description = "Nå dagens antall skritt",
+                OncePerDay = true,
+                Weight = 3,
+                Emoji = "twa-person-running"
             }
-
-
         };
 
         private static readonly List<User> m_users = new List<User>
@@ -339,7 +345,9 @@ namespace DataGenerator
                     "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3",
                     "BA2737ED-9F57-4E93-8A62-24F1332B79F4",
                     "AFD8667D-4BE5-42A0-BC01-B1C7E4C5FC6C",
-                    "433DE750-A150-42C7-9EA1-026DFC908B1D"
+                    "433DE750-A150-42C7-9EA1-026DFC908B1D",
+                    "D07BA9CB-E4DB-40F8-9461-A4EC36C66826",
+                    "CA55E579-76F9-4CFD-BDBB-A04736A20222"
                 };
             }
             else if (user.Name == "Eivind")
@@ -348,30 +356,19 @@ namespace DataGenerator
                 {
                     "A2327835-C13C-406D-923B-6F44C992785B",
                     "D8998F3D-5378-410E-86FF-D20E935173B3",
-                    "CA55E579-76F9-4CFD-BDBB-A04736A20222",
-                    "D07BA9CB-E4DB-40F8-9461-A4EC36C66826",
                     "CA3A3616-F1FE-4934-9D69-C9D00114E800",
-                    "E76BE7CD-B7E0-46BB-BE87-2296B52444F8",
-                    "1A3BA5D0-42A8-4123-82F8-DFB26756E29D",
-                    "9A0F2632-E68B-4DDC-977C-DF40E67B7B3B",
-                    "FD3F8399-59CF-400D-A8DA-3C0884DE692C",
-                    "6707DFD0-51DA-4BBD-95B4-721521B82837",
                     "93C83BD8-6DF3-4488-9DFB-8998D328D151",
                     "0E76A827-D309-47AE-AFCB-B2758DABEA88",
-                    "4F2C9358-D6CA-4A14-B78F-748A6C8653C9",
                     "D7573642-AF29-48C7-AFA2-4E3C6D3C7AFF",
                     "3214D15A-C87C-4AAE-BA73-0FBB5C384C7D",
-                    "98CE9CA3-5A23-42DC-9792-FB701D66562E",
-                    "5F2C5F1C-07D9-4300-A6B2-D152CBE1B857",
                     "137EF03A-D5A4-4B46-8DFE-266CFE31AAD3",
-                    "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3",
                     "DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6",
                     "4390A97B-0323-4787-AC9E-02A5E2B36DEC",
-                    "B8C0E9D3-F4AB-4586-B648-8CEC87F865FB",
                     "BA2737ED-9F57-4E93-8A62-24F1332B79F4",
                     "2766B0C7-CB8A-4568-AE08-9D7BF8D513C8",
                     "433DE750-A150-42C7-9EA1-026DFC908B1D",
-                    "721CE2ED-761F-4D34-BD3D-9F2F27F47385"
+                    "721CE2ED-761F-4D34-BD3D-9F2F27F47385",
+                    "D0DCECAB-17B4-4FC5-ADA9-13CB31144153"
                 };
             }
 

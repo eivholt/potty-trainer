@@ -272,7 +272,8 @@ namespace DataGenerator
                 Name = "Eivind",
                 Avatar = "twa-person-beard",
                 Goal = 100,
-                XP = 0
+                XP = 0,
+                DosetteDeviceId = "0004A30B00EB730A"
             }
         };
 

@@ -21,6 +21,7 @@ namespace Data.TableEntities
         public string Avatar { get; set; }
         public int Goal { get; set; } = 0;
         public int XP { get; set; } = 0;
+        public string DosetteDeviceId { get; set; } = string.Empty;
 
         public static UserEntity GetEntity(User user)
         {
@@ -43,6 +44,7 @@ namespace Data.TableEntities
                 Name = userEntity.Name,
                 Goal = userEntity.Goal,
                 XP = userEntity.XP,
+                DosetteDeviceId = userEntity.DosetteDeviceId
             };
         }
     }

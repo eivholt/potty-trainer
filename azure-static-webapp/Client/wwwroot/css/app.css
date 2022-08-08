@@ -197,12 +197,13 @@ div.user-card-content {
     }
 
     div.user-card-content .add-completed-assignment {
-        /*padding: 0.5em;*/
-        /*box-shadow: 0px 0.25em 0.5em -0.125em rgb(10, 10, 10, 20%);*/
-        /*background-color: white;*/ /*#00D1B2*/
         touch-action: none;
-        height: auto;
+        height: 3em;
         margin: 0.5em;
+    }
+
+    div.user-card-content .twa-3x {
+        margin: 0;
     }
 
 div.user-card-content .emoji-modifier {
@@ -263,27 +264,35 @@ div.assignment-card-content {
         filter: grayscale(1);
     }
 
-div.assignment-card-content .name {
-    font-size: 40px;
-    grid-area: 1 / 2 / 2 / 2;
-}
-
-    div.assignment-card-content .description-add {
-        font-size: 25px;
+    div.assignment-card-content .name-description {
         color: #000;
-        grid-area: 2 / 2 / 2 / 2;
+        grid-area: 1 / 2 / 2 / 2;
         display: flex;
+        flex-flow: column;
     }
 
+        div.assignment-card-content .name {
+            font-size: 30px;
+        }
+
         div.assignment-card-content .description {
-            font-size: 25px;
+            font-size: 20px;
             color: #000;
             flex-grow: 1;
         }
 
-        div.assignment-card-content .add-completed-assignment {
-            touch-action: none;
-        }
+    div.assignment-card-content .add-completed-assignmen-panel {
+        grid-area: 2 / 2 / 2 / 2;
+        display: flex;
+        flex-flow: column-reverse;
+    }
+
+    div.assignment-card-content .add-completed-assignment {
+        touch-action: none;
+        align-self: self-end;
+        width: fit-content;
+        height: 3em;
+    }
 
 .card {
     margin-bottom: 2em;

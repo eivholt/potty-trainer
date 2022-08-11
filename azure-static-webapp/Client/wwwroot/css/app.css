@@ -136,12 +136,17 @@ div.user-card-content {
         vertical-align: middle;
     }
 
-    div.user-card-content .name {
+    div.user-card-content .name-settings {
         grid-area: 1 / 2 / 1 / 2;
         vertical-align: middle;
-        font-size: 50px;
-        padding-left: 2rem;
+        display: flex;
+        flex-flow: row;
     }
+        div.user-card-content .name-settings .name {
+            font-size: 50px;
+            padding-left: 2rem;
+            flex-grow: 1;
+        }
 
     div.user-card-content .user-card-details {
         grid-column: 1 / span 2;

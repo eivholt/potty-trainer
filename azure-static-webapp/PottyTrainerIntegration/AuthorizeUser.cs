@@ -14,6 +14,7 @@ using System.Net.Http;
 using System.Text.Json;
 using Data.TableEntities;
 using System.Web;
+using Azure;
 
 namespace PottyTrainerIntegration
 {
@@ -36,9 +37,16 @@ namespace PottyTrainerIntegration
         }
 
         [Function("AccessToken")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "accesstoken")] HttpRequestData req)
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "head", Route = "accesstoken")] HttpRequestData req)
         {
             m_logger.LogInformation("AccessToken");
+
+            if (req.Method.Equals("head")) 
+            {
+                m_logger.LogInformation("AccessToken - HEAD");
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                return response;
+            }
 
             try
             {
@@ -96,7 +104,6 @@ namespace PottyTrainerIntegration
                         if (saveTokenResult)
                         {
                             var response = req.CreateResponse(HttpStatusCode.OK);
-
                             return response;
                         }
                     }

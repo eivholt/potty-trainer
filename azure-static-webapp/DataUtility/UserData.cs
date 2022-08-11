@@ -254,6 +254,27 @@ namespace DataGenerator
                 OncePerDay = true,
                 Weight = 3,
                 Emoji = "twa-person-running"
+            },
+            new Assignment("F61DB2E2-EDA3-480A-AD89-8F7507C81976")
+            {
+                Name = "Smake noe nytt",
+                Description = string.Empty,
+                Weight = 3,
+                Emoji = "twa-falafel"
+            },
+            new Assignment("59DD55D3-9F48-4B56-A905-BB433FF5441F")
+            {
+                Name = "Måle blodtrykk",
+                Description = string.Empty,
+                Weight = 1,
+                Emoji = "twa-stethoscope"
+            },
+            new Assignment("5DA4C692-8DCB-465A-A74F-0122AB33CABD")
+            {
+                Name = "Leggetid",
+                Description = "Overholde vanlig leggetid",
+                Weight = 3,
+                Emoji = "twa-person-in-bed"
             }
         };
 
@@ -323,7 +344,9 @@ namespace DataGenerator
                     "BA2737ED-9F57-4E93-8A62-24F1332B79F4",
                     "AFD8667D-4BE5-42A0-BC01-B1C7E4C5FC6C",
                     "433DE750-A150-42C7-9EA1-026DFC908B1D",
-                    "721CE2ED-761F-4D34-BD3D-9F2F27F47385"
+                    "721CE2ED-761F-4D34-BD3D-9F2F27F47385",
+                    "F61DB2E2-EDA3-480A-AD89-8F7507C81976",
+                    "5DA4C692-8DCB-465A-A74F-0122AB33CABD"
                 };
             } 
             else if (user.Name == "Robin")
@@ -347,7 +370,9 @@ namespace DataGenerator
                     "AFD8667D-4BE5-42A0-BC01-B1C7E4C5FC6C",
                     "433DE750-A150-42C7-9EA1-026DFC908B1D",
                     "D07BA9CB-E4DB-40F8-9461-A4EC36C66826",
-                    "CA55E579-76F9-4CFD-BDBB-A04736A20222"
+                    "CA55E579-76F9-4CFD-BDBB-A04736A20222",
+                    "F61DB2E2-EDA3-480A-AD89-8F7507C81976",
+                    "5DA4C692-8DCB-465A-A74F-0122AB33CABD"
                 };
             }
             else if (user.Name == "Eivind")
@@ -368,7 +393,10 @@ namespace DataGenerator
                     "2766B0C7-CB8A-4568-AE08-9D7BF8D513C8",
                     "433DE750-A150-42C7-9EA1-026DFC908B1D",
                     "721CE2ED-761F-4D34-BD3D-9F2F27F47385",
-                    "D0DCECAB-17B4-4FC5-ADA9-13CB31144153"
+                    "D0DCECAB-17B4-4FC5-ADA9-13CB31144153",
+                    "F61DB2E2-EDA3-480A-AD89-8F7507C81976",
+                    "59DD55D3-9F48-4B56-A905-BB433FF5441F",
+                    "5DA4C692-8DCB-465A-A74F-0122AB33CABD"
                 };
             }
 

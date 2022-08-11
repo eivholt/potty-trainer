@@ -1,12 +1,16 @@
 ﻿@inject HttpClient http
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 
 <div class="user-card-content" contenteditable="false">
-            <div class="symbol">
-                <div class="twa-5x @User.Avatar"></div>
-            </div>
-                    
-            <p class="name">@User.Name</p>
+    <div class="symbol">
+        <div class="twa-5x @User.Avatar"></div>
+    </div>
+            
+    <div class="name-settings">
+        <p class="name">@User.Name</p>
+        <i class="fa-solid fa-gear button is-small" @onclick="@(e => ConnectToWithings(User))" @onclick:stopPropagation />
+    </div>
 
     <div class="user-card-details">
         <div class="progress-xp">
@@ -46,7 +50,7 @@
         @if (!IsLoadingCompletedAssignments)
         {
             <div class="add-completed-assignment button is-primary" @onclick="@(e => NavigateToAssignmentsForUser(User))" @onclick:stopPropagation>
-                <i class="fa-solid fa-plus" aria-hidden="true" />
+                <i class="fa-solid fa-plus" />
             </div>
         }
     </div>
@@ -144,6 +148,12 @@
             NavigationManager.NavigateTo("/users", true);
             IsInputDisabled = false;
         }
+    }
+
+    private async Task ConnectToWithings(User user)
+    {
+        string url = $"https://account.withings.com/oauth2_user/account_login?response_type=code&client_id=acd7480715e459955b12d1ac0c309d40cc2a362f8eb719d02dcfa46b422c948b&redirect_uri=https%3A%2F%2Fde8a1a6d2b11e3fdf8f7439d09ed9428.m.pipedream.net&state={user.RowKey}&scope=user.activity&b=authorize2";
+        await JsRuntime.InvokeAsync<object>("open", url, "_blank");
     }
 
     private void NavigateToAssignmentsForUser(User user)

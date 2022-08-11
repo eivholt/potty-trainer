@@ -70,7 +70,7 @@ namespace PottyTrainerIntegration
 
                     if (status > 0)
                     {
-                        m_logger.LogError("https://wbsapi.withings.net/v2/oauth2 error:", responseAsJson);
+                        m_logger.LogError("https://wbsapi.withings.net/v2/oauth2 error:", responseAsJson.ToString());
                     }
 
                     if (status == 0)

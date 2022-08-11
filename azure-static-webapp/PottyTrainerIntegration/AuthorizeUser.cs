@@ -36,7 +36,7 @@ namespace PottyTrainerIntegration
         }
 
         [Function("AccessToken")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = "accesstoken")] HttpRequestData req)
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "accesstoken")] HttpRequestData req)
         {
             m_logger.LogInformation("AccessToken");
 

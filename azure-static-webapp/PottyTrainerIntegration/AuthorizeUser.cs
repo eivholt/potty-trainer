@@ -41,7 +41,7 @@ namespace PottyTrainerIntegration
         {
             m_logger.LogInformation("AccessToken");
 
-            if (req.Method.Equals("head")) 
+            if (req.Method.Equals("HEAD")) 
             {
                 m_logger.LogInformation("AccessToken - HEAD");
                 var response = req.CreateResponse(HttpStatusCode.OK);

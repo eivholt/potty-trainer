@@ -93,8 +93,8 @@ namespace PottyTrainerIntegration
 
                         var saveTokenResult = await m_authData.SaveAccessToken(
                             state,
-                            systemUserId,
                             UserAuthEntity.WithingsSystemPartitionKeyName,
+                            systemUserId,
                             accessToken,
                             refreshToken,
                             DateTime.UtcNow.AddSeconds(expiresIn),

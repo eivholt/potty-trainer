@@ -1,4 +1,5 @@
 ﻿using Azure.Data.Tables;
+using Data;
 using Data.TableEntities;
 using System;
 using System.Threading.Tasks;
@@ -34,6 +35,11 @@ namespace Api.Table
 
             var upserResponse = await m_userAuthTableClient.UpsertEntityAsync(userAuthEntity);
             return !upserResponse.IsError;
+        }
+
+        public async Task<UserAuth> GetUserAuth(string userKey, string system)
+        {
+            return UserAuthEntity.FromEntity(await m_userAuthTableClient.GetEntityAsync<UserAuthEntity>(system, userKey));
         }
     }
 }

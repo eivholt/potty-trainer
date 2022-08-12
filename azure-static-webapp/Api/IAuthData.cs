@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace Api
 {
     public interface IAuthData
     {
-        Task<bool> SaveAccessToken(string userKey, string systemUserId, string system, string accessToken, string refreshToken, DateTime expires, string scope, string tokenType);
+        Task<UserAuth> GetUserAuth(string userKey, string system);
+        Task<bool> SaveAccessToken(string userKey, string system, string systemUserId, string accessToken, string refreshToken, DateTime expires, string scope, string tokenType);
     }
 }

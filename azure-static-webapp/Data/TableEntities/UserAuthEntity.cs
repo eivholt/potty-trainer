@@ -17,5 +17,18 @@ namespace Data.TableEntities
         public string Scope { get; set; }
         public string SystemUserId { get; set; }
         public string TokenType { get; set; }
+
+        public static UserAuth FromEntity(UserAuthEntity userAuthEntity)
+        {
+            return new UserAuth(userAuthEntity.RowKey, userAuthEntity.PartitionKey)
+            {
+                AccessToken = userAuthEntity.AccessToken,
+                RefreshToken = userAuthEntity.RefreshToken,
+                Expires = userAuthEntity.Expires,
+                Scope = userAuthEntity.Scope,
+                SystemUserId = userAuthEntity.SystemUserId,
+                TokenType = userAuthEntity.TokenType
+            };
+        }
     }
 }

@@ -152,7 +152,7 @@
 
     private async Task ConnectToWithings(User user)
     {
-        string url = $"https://account.withings.com/oauth2_user/account_login?response_type=code&client_id=acd7480715e459955b12d1ac0c309d40cc2a362f8eb719d02dcfa46b422c948b&redirect_uri=https%3A%2F%2Fpottytrainerintegration20220807232206.azurewebsites.net%2Fapi%2Faccesstoken&state={user.RowKey}&scope=user.activity&b=authorize2";
+        string url = $"https://account.withings.com/oauth2_user/account_login?response_type=code&client_id=acd7480715e459955b12d1ac0c309d40cc2a362f8eb719d02dcfa46b422c948b&redirect_uri=https%3A%2F%2Fpottytrainerintegration20220807232206.azurewebsites.net%2Fapi%2Faccesstoken&state={user.RowKey}&scope=user.activity,user.metrics&b=authorize2";
         await JsRuntime.InvokeAsync<object>("open", url, "_blank");
     }
 

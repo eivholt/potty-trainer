@@ -67,7 +67,7 @@ namespace PottyTrainerIntegration
         public static QueueClient CreateQueueClient(string queueName)
         {
             // Get the connection string from app settings
-            string connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage", EnvironmentVariableTarget.Process);
+            string connectionString = Environment.GetEnvironmentVariable("AzureWebJobsSystemDataNotificationQueueConnection", EnvironmentVariableTarget.Process);
 
             // Instantiate a QueueClient which will be used to create and manipulate the queue
             return new QueueClient(connectionString, queueName);

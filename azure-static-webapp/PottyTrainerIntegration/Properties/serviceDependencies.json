@@ -15,6 +15,11 @@
       "type": "storage",
       "connectionId": "key1",
       "dynamicId": null
+    },
+    "storage3": {
+      "type": "storage",
+      "connectionId": "SystemDataNotificationQueueConnection",
+      "dynamicId": null
     }
   }
 }

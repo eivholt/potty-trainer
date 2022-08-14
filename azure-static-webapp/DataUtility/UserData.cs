@@ -313,6 +313,7 @@ namespace DataGenerator
             {
                 Name = "Leggetid",
                 Description = "Overholde vanlig leggetid",
+                OncePerDay = true,
                 Weight = 3,
                 Emoji = "twa-person-in-bed"
             },

@@ -27,7 +27,7 @@ namespace PottyTrainerIntegration
 
         [Function("NotifyPost")]
         [QueueOutput(c_incomingQueueName)]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "Users/Notify/{system}")] HttpRequestData req,
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", "head", Route = "Users/Notify/{system}")] HttpRequestData req,
             string system)
         {
             m_logger.LogInformation($"NotifyPost: {system}", req.Headers.ToString());

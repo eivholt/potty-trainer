@@ -2,6 +2,8 @@
 using Data;
 using Data.TableEntities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Api.Table
@@ -40,6 +42,26 @@ namespace Api.Table
         public async Task<UserAuth> GetUserAuth(string userKey, string system)
         {
             return UserAuthEntity.FromEntity(await m_userAuthTableClient.GetEntityAsync<UserAuthEntity>(system, userKey));
+        }
+
+        public async Task<UserAuth> GetUserAuthBySystemUserId(string systemUserId, string system)
+        {
+            var userAuthBySystemUserIdQuery = m_userAuthTableClient.QueryAsync<UserAuthEntity>(u => u.PartitionKey.Equals(system) && u.SystemUserId.Equals(systemUserId));
+
+            var users = new List<UserAuthEntity>();
+            await foreach(var userAuthEntity in userAuthBySystemUserIdQuery)
+            {
+                users.Add(userAuthEntity);
+            }
+
+            if(users.Count == 1)
+            {
+                return UserAuthEntity.FromEntity(users.First());
+            }
+            else
+            {
+                throw new InvalidOperationException($"GetUserAuthBySystemUserId: UserAuth count: {users.Count}");
+            }
         }
     }
 }

@@ -1,15 +1,11 @@
 ﻿using Api;
-using HttpMultipartParser;
+using Azure.Storage.Queues;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using System.Collections.Specialized;
 using System.Net;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using Azure.Storage.Queues;
-using Azure.Storage.Queues.Models;
-using Microsoft.Extensions.Configuration;
+using System.Web;
 
 namespace PottyTrainerIntegration
 {
@@ -26,7 +22,6 @@ namespace PottyTrainerIntegration
         }
 
         [Function("NotifyPost")]
-        [QueueOutput(c_incomingQueueName)]
         public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post", "head", Route = "Users/Notify/{system}")] HttpRequestData req,
             string system)
         {
@@ -39,26 +34,26 @@ namespace PottyTrainerIntegration
                 return headResponse;
             }
 
-            var multipartFormDataParser = await MultipartFormDataParser.ParseAsync(req.Body).ConfigureAwait(false);
-            m_logger.LogInformation($"NotifyPost: {system}", multipartFormDataParser.Parameters.ToString());
+            var requestParameters = HttpUtility.ParseQueryString(await req.ReadAsStringAsync());
+            m_logger.LogInformation($"NotifyPost: {system}", requestParameters);
 
-            var userid = multipartFormDataParser.GetParameterValue("userid");
-            var appli = multipartFormDataParser.GetParameterValue("appli");
-            var startdate = multipartFormDataParser.GetParameterValue("startdate");
-            var enddate = multipartFormDataParser.GetParameterValue("enddate");
+            var userid = requestParameters["userid"];
+            var appli = requestParameters["appli"];
+            var startdate = requestParameters["startdate"];
+            var enddate = requestParameters["enddate"];
 
             dynamic withingsNotification = new
             {
                 system = system,
-                userid = multipartFormDataParser.GetParameterValue("userid"),
-                appli = multipartFormDataParser.GetParameterValue("appli"),
-                startdate = multipartFormDataParser.GetParameterValue("startdate"),
-                enddate = multipartFormDataParser.GetParameterValue("enddate")
+                userid = userid,
+                appli = appli,
+                startdate = startdate,
+                enddate = enddate
             };
 
             var notificationMessageAsJson = JsonSerializer.Serialize(withingsNotification);
 
-            await InsertMessageAsync(m_queueClient, withingsNotification);
+            await InsertMessageAsync(m_queueClient, notificationMessageAsJson);
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             return response;

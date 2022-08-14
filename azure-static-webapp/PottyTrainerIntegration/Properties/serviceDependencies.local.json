@@ -19,6 +19,13 @@
       "type": "storage.azure",
       "connectionId": "key1",
       "dynamicId": null
+    },
+    "storage3": {
+      "secretStore": "AzureKeyVault",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/pottytrainerapistorage",
+      "type": "storage.azure",
+      "connectionId": "SystemDataNotificationQueueConnection",
+      "dynamicId": null
     }
   }
 }

@@ -1,16 +1,13 @@
 ﻿using Api;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Azure.Functions.Worker.Http;
+using Api.Table;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace PottyTrainerIntegration
 {
@@ -18,11 +15,13 @@ namespace PottyTrainerIntegration
     {
         private readonly ILogger m_logger;
         private readonly IAuthData m_authData;
+        private readonly HttpClient m_httpClient;
 
-        public UserSubscribeSystemPost(ILoggerFactory loggerFactory, IAuthData authData)
+        public UserSubscribeSystemPost(ILoggerFactory loggerFactory, IAuthData authData, IHttpClientFactory httpClientFactory)
         {
             m_logger = loggerFactory.CreateLogger<CompleteAssignmentForUser>();
             m_authData = authData;
+            m_httpClient = httpClientFactory.CreateClient();
         }
 
         [Function("UserSubscribeSystemPost")]
@@ -38,12 +37,41 @@ namespace PottyTrainerIntegration
 
                 var userAuth = await m_authData.GetUserAuth(userid, system);
 
+                var withingsNotifyUrl = "https://wbsapi.withings.net/notify";
+                var parameters = new Dictionary<string, string>
+                                {
+                                    { "action", "subscribe" },
+                                    { "callbackurl", "https://pottytrainerintegration20220807232206.azurewebsites.net/api/Users/Notify/withings?code=XZfRuvrXeTe92fEaHGYN8aGQZa3EWCbHYINxMvsULfjlAzFuUzdQiA==" },
+                                    { "appli", "1" },
+                                    { "signature", "" },
+                                    { "nonce", "" },
+                                    { "client_id", "" },
+                                    { "comment", "" }
+                                };
+                var encodedContent = new FormUrlEncodedContent(parameters);
+                m_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAuth.AccessToken);
+                var measureResponse = await m_httpClient.PostAsync(withingsNotifyUrl, encodedContent);
 
+                if (measureResponse.IsSuccessStatusCode) // 200 - OK from Withings doesn't mean operation was ok..
+                {
+                    var responseAsJson = JsonSerializer.Deserialize<JsonObject>(await measureResponse.Content.ReadAsStreamAsync());
+                    var status = (int)responseAsJson?["status"];
+                    var error = (string)responseAsJson?["error"];
 
-                var response = req.CreateResponse(HttpStatusCode.OK);
-                await response.WriteAsJsonAsync(userAuth);
-                return response;
-            } 
+                    if (status > 0)
+                    {
+                        m_logger.LogError(withingsNotifyUrl, responseAsJson.ToString());
+                    }
+
+                    var response = req.CreateResponse(HttpStatusCode.OK);
+                    await response.WriteAsJsonAsync(userAuth);
+                    return response;
+                }
+                else
+                {
+                    throw new InvalidOperationException();
+                }
+            }
             catch
             {
                 m_logger.LogError($"UserSubscribeSystemPost");
@@ -53,3 +81,42 @@ namespace PottyTrainerIntegration
         }
     }
 }
+
+//var meastype = (int)requestBodyJsonDom?["meastype"]!;
+//var category = (int)requestBodyJsonDom?["category"]!;
+
+//m_logger.LogInformation($"UserSubscribeSystemPost:", requestBodyJsonDom.ToJsonString());
+
+//var userAuth = await m_authData.GetUserAuth(userid, system);
+
+//var withingsMeasureUrl = "https://wbsapi.withings.net/measure";
+//var parameters = new Dictionary<string, string>
+//                {
+//                    { "action", "getmeas" },
+//                    { "meastype", meastype.ToString() },
+//                    { "category", category.ToString() },
+//                    { "lastupdate", DateTimeOffset.UtcNow.AddDays(-1).ToUnixTimeSeconds().ToString() }
+//                };
+//var encodedContent = new FormUrlEncodedContent(parameters);
+//m_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAuth.AccessToken);
+//var measureResponse = await m_httpClient.PostAsync(withingsMeasureUrl, encodedContent);
+
+//if (measureResponse.IsSuccessStatusCode) // 200 - OK from Withings doesn't mean operation was ok..
+//{
+//    var responseAsJson = JsonSerializer.Deserialize<JsonObject>(await measureResponse.Content.ReadAsStreamAsync());
+//    var status = (int)responseAsJson?["status"];
+//    var error = (string)responseAsJson?["error"];
+
+//    if (status > 0)
+//    {
+//        m_logger.LogError(withingsMeasureUrl, responseAsJson.ToString());
+//    }
+
+//    var response = req.CreateResponse(HttpStatusCode.OK);
+//    await response.WriteAsJsonAsync(userAuth);
+//    return response;
+//}
+//else
+//{
+//    throw new InvalidOperationException();
+//}

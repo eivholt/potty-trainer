@@ -4,6 +4,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using System.Web;
 
@@ -17,7 +18,7 @@ namespace PottyTrainerIntegration
 
         public NotifyPost(ILoggerFactory loggerFactory, IUserData userData, IAssignmentData assignmentData)
         {
-            m_logger = loggerFactory.CreateLogger<CompleteAssignmentForUser>();
+            m_logger = loggerFactory.CreateLogger<NotifyPost>();
             m_queueClient = CreateQueueClient(c_incomingQueueName);
         }
 
@@ -71,10 +72,16 @@ namespace PottyTrainerIntegration
         public async Task InsertMessageAsync(QueueClient queueClient, string message)
         {
             // Create the queue if it doesn't already exist
-            await queueClient.CreateAsync();
-            await queueClient.SendMessageAsync(message);
+            //await queueClient.CreateAsync();
+            await queueClient.SendMessageAsync(Base64Encode(message));
 
             m_logger.LogInformation($"NotifyPost: Sent message to queue: {queueClient.Name}", message);
+        }
+
+        private static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
     }
 }

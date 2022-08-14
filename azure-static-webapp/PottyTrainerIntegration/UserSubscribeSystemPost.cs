@@ -30,7 +30,7 @@ namespace PottyTrainerIntegration
 
         public UserSubscribeSystemPost(ILoggerFactory loggerFactory, IAuthData authData, IHttpClientFactory httpClientFactory)
         {
-            m_logger = loggerFactory.CreateLogger<CompleteAssignmentForUser>();
+            m_logger = loggerFactory.CreateLogger<UserSubscribeSystemPost>();
             m_authData = authData;
             m_httpClient = httpClientFactory.CreateClient();
         }

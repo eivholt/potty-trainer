@@ -31,6 +31,14 @@ namespace PottyTrainerIntegration
             string system)
         {
             m_logger.LogInformation($"NotifyPost: {system}", req.Headers.ToString());
+
+            if (req.Method.Equals("HEAD"))
+            {
+                m_logger.LogInformation("NotifyPost - HEAD");
+                var headResponse = req.CreateResponse(HttpStatusCode.OK);
+                return headResponse;
+            }
+
             var multipartFormDataParser = await MultipartFormDataParser.ParseAsync(req.Body).ConfigureAwait(false);
             m_logger.LogInformation($"NotifyPost: {system}", multipartFormDataParser.Parameters.ToString());
 

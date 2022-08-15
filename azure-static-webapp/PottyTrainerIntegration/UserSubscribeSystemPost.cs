@@ -1,20 +1,15 @@
 ﻿using Api;
-using Api.Table;
 using Azure;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using System;
+using PottyTrainerIntegration.OAuth2;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PottyTrainerIntegration
 {
@@ -22,16 +17,18 @@ namespace PottyTrainerIntegration
     {
         private readonly ILogger m_logger;
         private readonly IAuthData m_authData;
+        private readonly IOauth2Client m_oauth2Client;
         private readonly HttpClient m_httpClient;
 
-        private static string m_withingsPottyTrainerClientId = Environment.GetEnvironmentVariable("WITHINGS_POTTYTRAINER_CLIENTID");
-        private static string m_withingsPottyTrainerClientSecret = Environment.GetEnvironmentVariable("WITHINGS_POTTYTRAINER_CLIENTSECRET");
-        private static string m_withingsPottyTrainerNotifyUrl = Environment.GetEnvironmentVariable("WITHINGS_POTTYTRAINER_NOTIFYURL");
+        private static string m_withingsPottyTrainerClientId = Environment.GetEnvironmentVariable("WITHINGS_POTTYTRAINER_CLIENTID")!;
+        private static string m_withingsPottyTrainerClientSecret = Environment.GetEnvironmentVariable("WITHINGS_POTTYTRAINER_CLIENTSECRET")!;
+        private static string m_withingsPottyTrainerNotifyUrl = Environment.GetEnvironmentVariable("WITHINGS_POTTYTRAINER_NOTIFYURL")!;
 
-        public UserSubscribeSystemPost(ILoggerFactory loggerFactory, IAuthData authData, IHttpClientFactory httpClientFactory)
+        public UserSubscribeSystemPost(ILoggerFactory loggerFactory, IAuthData authData, IOauth2Client oauth2Client, IHttpClientFactory httpClientFactory)
         {
             m_logger = loggerFactory.CreateLogger<UserSubscribeSystemPost>();
             m_authData = authData;
+            m_oauth2Client = oauth2Client;
             m_httpClient = httpClientFactory.CreateClient();
         }
 
@@ -44,6 +41,10 @@ namespace PottyTrainerIntegration
             try 
             { 
                 var userAuth = await m_authData.GetUserAuth(userid, system);
+                if(userAuth.Expires < DateTime.UtcNow)
+                {
+                    userAuth = await m_oauth2Client.RefreshAccessTokenAndStore(userid, userAuth.RefreshToken);
+                }
 
                 var action = "subscribe";
                 var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
@@ -67,12 +68,12 @@ namespace PottyTrainerIntegration
                 if (measureResponse.IsSuccessStatusCode) // 200 - OK from Withings doesn't mean operation was ok..
                 {
                     var responseAsJson = JsonSerializer.Deserialize<JsonObject>(await measureResponse.Content.ReadAsStreamAsync());
-                    var status = (int)responseAsJson?["status"];
-                    var error = (string)responseAsJson?["error"];
+                    var status = (int)responseAsJson?["status"]!;
+                    var error = (string)responseAsJson?["error"]!;
 
                     if (status > 0)
                     {
-                        m_logger.LogError(withingsNotifyUrl, responseAsJson.ToString());
+                        m_logger.LogError(withingsNotifyUrl, responseAsJson!.ToString());
                     }
 
                     var response = req.CreateResponse(HttpStatusCode.OK);

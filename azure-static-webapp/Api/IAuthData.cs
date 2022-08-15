@@ -11,6 +11,7 @@ namespace Api
     {
         Task<UserAuth> GetUserAuth(string userKey, string system);
         Task<UserAuth> GetUserAuthBySystemUserId(string systemUserId, string system);
-        Task<bool> SaveAccessToken(string userKey, string system, string systemUserId, string accessToken, string refreshToken, DateTime expires, string scope, string tokenType);
+        Task<UserAuth> RefreshAccessToken(string userKey, string system, string newAccessToken, string newRefreshToken, DateTime expires, string scope, string tokenType);
+        Task<UserAuth> SaveAccessToken(string userKey, string system, string systemUserId, string accessToken, string refreshToken, DateTime expires, string scope, string tokenType);
     }
 }

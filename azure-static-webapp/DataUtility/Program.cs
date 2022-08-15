@@ -60,7 +60,7 @@ while (retryCreateTable)
     }
     catch (RequestFailedException rfe)
     {
-        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
+        if (rfe.ErrorCode!.Equals("TableBeingDeleted"))
         {
             Console.WriteLine("Table busy, retrying in 5 seconds..");
             await Task.Delay(5000);
@@ -93,7 +93,7 @@ while (retryCreateTable)
     }
     catch (RequestFailedException rfe)
     {
-        if (rfe.ErrorCode.Equals("TableBeingDeleted"))
+        if (rfe.ErrorCode!.Equals("TableBeingDeleted"))
         {
             Console.WriteLine("Table busy, retrying in 5 seconds..");
             await Task.Delay(5000);

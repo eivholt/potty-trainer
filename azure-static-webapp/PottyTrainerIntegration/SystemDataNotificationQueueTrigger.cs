@@ -54,11 +54,19 @@ namespace PottyTrainerIntegration
                     userAuth = await m_oauth2Client.RefreshAccessTokenAndStore(userAuth.RefreshToken);
                 }
 
+                var meastype = string.Empty;
+
+                meastype = appli switch
+                {
+                    "4" => "9,10",
+                    _ => "1",
+                };
+
                 var withingsMeasureUrl = "https://wbsapi.withings.net/measure";
                 var measureParameters = new Dictionary<string, string>
                                 {
                                     { "action", "getmeas" },
-                                    { "meastype", "1" },
+                                    { "meastype", meastype },
                                     { "category", "1" },
                                     { "startdate", startDateUnix },
                                     { "enddate", endDateUnix }
@@ -72,7 +80,7 @@ namespace PottyTrainerIntegration
                     var responseAsJson = JsonSerializer.Deserialize<JsonObject>(await measureResponse.Content.ReadAsStreamAsync());
                     var status = (int)responseAsJson?["status"]!;
                     var error = (string)responseAsJson?["error"]!;
-                    m_logger.LogInformation($"Queue trigger function processed: {status}, {error} - {responseAsJson}");
+                    m_logger.LogInformation($"Queue trigger function processed: Status:{status}, Error:{error} - {responseAsJson}");
 
                     if (status == 401)
                     {
@@ -80,17 +88,21 @@ namespace PottyTrainerIntegration
                     }
                     if (status > 0)
                     {
-                        m_logger.LogError($"SystemDataNotificationQueueTrigger: {status}, {error}", responseAsJson!.ToString());
+                        m_logger.LogError($"SystemDataNotificationQueueTrigger: Status:{status}, Error:{error}", responseAsJson!.ToString());
                     }
                     else
                     {
                         m_logger.LogInformation($"Queue trigger function processed: {responseAsJson}");
 
-
-                        //BP: "59DD55D3-9F48-4B56-A905-BB433FF5441F"
                         try
                         {
-                            var xpSum = await m_assignmentData.CompleteAssignment("2766B0C7-CB8A-4568-AE08-9D7BF8D513C8", userAuth.RowKey);
+                            var assignmentToComplete = appli switch
+                            {
+                                "4" => "59DD55D3-9F48-4B56-A905-BB433FF5441F", // BP
+                                _ => "2766B0C7-CB8A-4568-AE08-9D7BF8D513C8", // Weight
+                            };
+
+                            var xpSum = await m_assignmentData.CompleteAssignment(assignmentToComplete, userAuth.RowKey);
                             var updatedUser = await m_userData.UpdateXp(userAuth.RowKey, xpSum);
                         }
                         catch (Exception ex)

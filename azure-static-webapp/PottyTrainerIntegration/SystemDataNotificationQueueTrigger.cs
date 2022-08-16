@@ -88,8 +88,15 @@ namespace PottyTrainerIntegration
 
 
                         //BP: "59DD55D3-9F48-4B56-A905-BB433FF5441F"
-                        var xpSum = await m_assignmentData.CompleteAssignment("2766B0C7-CB8A-4568-AE08-9D7BF8D513C8", userAuth.RowKey);
-                        var updatedUser = await m_userData.UpdateXp(userAuth.RowKey, xpSum);
+                        try
+                        {
+                            var xpSum = await m_assignmentData.CompleteAssignment("2766B0C7-CB8A-4568-AE08-9D7BF8D513C8", userAuth.RowKey);
+                            var updatedUser = await m_userData.UpdateXp(userAuth.RowKey, xpSum);
+                        }
+                        catch (Exception ex)
+                        {
+                            m_logger.LogError($"Queue trigger function failed, CompleteAssignment: {userAuth.RowKey}", ex);
+                        }
                     }
                 }
             }

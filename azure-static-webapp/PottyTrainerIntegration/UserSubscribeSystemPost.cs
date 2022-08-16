@@ -43,7 +43,7 @@ namespace PottyTrainerIntegration
                 var userAuth = await m_authData.GetUserAuth(userid, system);
                 if(userAuth.Expires < DateTime.UtcNow)
                 {
-                    userAuth = await m_oauth2Client.RefreshAccessTokenAndStore(userid, userAuth.RefreshToken);
+                    userAuth = await m_oauth2Client.RefreshAccessTokenAndStore(userAuth.RefreshToken);
                 }
 
                 var action = "subscribe";

@@ -51,7 +51,7 @@ namespace PottyTrainerIntegration
 
                 if (userAuth.Expires < DateTime.UtcNow)
                 {
-                    userAuth = await m_oauth2Client.RefreshAccessTokenAndStore(userId, userAuth.RefreshToken);
+                    userAuth = await m_oauth2Client.RefreshAccessTokenAndStore(userAuth.RefreshToken);
                 }
 
                 var withingsMeasureUrl = "https://wbsapi.withings.net/measure";
@@ -72,19 +72,22 @@ namespace PottyTrainerIntegration
                     var responseAsJson = JsonSerializer.Deserialize<JsonObject>(await measureResponse.Content.ReadAsStreamAsync());
                     var status = (int)responseAsJson?["status"]!;
                     var error = (string)responseAsJson?["error"]!;
+                    m_logger.LogInformation($"Queue trigger function processed: {status}, {error} - {responseAsJson}");
 
-                    if(status == 401)
+                    if (status == 401)
                     {
-
+                        m_logger.LogError(withingsMeasureUrl, responseAsJson!.ToString());
                     }
                     if (status > 0)
                     {
-                        m_logger.LogError(withingsMeasureUrl, responseAsJson!.ToString());
+                        m_logger.LogError($"SystemDataNotificationQueueTrigger: {status}, {error}", responseAsJson!.ToString());
                     }
                     else
                     {
                         m_logger.LogInformation($"Queue trigger function processed: {responseAsJson}");
 
+
+                        //BP: "59DD55D3-9F48-4B56-A905-BB433FF5441F"
                         var xpSum = await m_assignmentData.CompleteAssignment("2766B0C7-CB8A-4568-AE08-9D7BF8D513C8", userAuth.RowKey);
                         var updatedUser = await m_userData.UpdateXp(userAuth.RowKey, xpSum);
                     }

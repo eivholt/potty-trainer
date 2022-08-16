@@ -77,23 +77,23 @@ namespace Api.Table
             }
         }
 
-        public async Task<UserAuth> RefreshAccessToken(string userKey, string system, string newAccessToken, string newRefreshToken, DateTime expires, string scope, string tokenType)
+        public async Task<UserAuth> RefreshAccessToken(string systemUserId, string system, string newAccessToken, string newRefreshToken, DateTime expires, string scope, string tokenType)
         {
-            var expiredUserAuth = await m_userAuthTableClient.GetEntityAsync<UserAuthEntity>(system, userKey);
-            expiredUserAuth.Value.AccessToken = newAccessToken;
-            expiredUserAuth.Value.RefreshToken = newRefreshToken;
-            expiredUserAuth.Value.Expires = expires;
-            expiredUserAuth.Value.Scope = scope;
-            expiredUserAuth.Value.TokenType = tokenType;
+            var expiredUserAuth = await GetUserAuthBySystemUserId(systemUserId, system);
+            expiredUserAuth.AccessToken = newAccessToken;
+            expiredUserAuth.RefreshToken = newRefreshToken;
+            expiredUserAuth.Expires = expires;
+            expiredUserAuth.Scope = scope;
+            expiredUserAuth.TokenType = tokenType;
 
-            var updateUserAuthResponse = await m_userAuthTableClient.UpdateEntityAsync<UserAuthEntity>(expiredUserAuth, Azure.ETag.All, TableUpdateMode.Merge);
+            var updateUserAuthResponse = await m_userAuthTableClient.UpdateEntityAsync<UserAuthEntity>(UserAuthEntity.GetEntity(expiredUserAuth), Azure.ETag.All, TableUpdateMode.Merge);
             if (updateUserAuthResponse.IsError)
             {
                 m_logger.LogError($"RefreshAccessToken failed: {updateUserAuthResponse.ReasonPhrase}", updateUserAuthResponse);
                 throw new InvalidOperationException($"RefreshAccessToken failed: {updateUserAuthResponse.ReasonPhrase}");
             }
 
-            return UserAuthEntity.FromEntity(await m_userAuthTableClient.GetEntityAsync<UserAuthEntity>(system, userKey));
+            return UserAuthEntity.FromEntity(await m_userAuthTableClient.GetEntityAsync<UserAuthEntity>(system, systemUserId));
         }
     }
 }

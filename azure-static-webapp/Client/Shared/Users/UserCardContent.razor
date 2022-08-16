@@ -21,38 +21,40 @@
     </div>
     <div class="user-card-history">
 
-            @if(IsLoadingCompletedAssignments)
-            {
-                <progress class="progress is-small is-info" max="100"></progress>
-            }
-        
-            @foreach (var completedAssignment in Assignments.OrderBy(a => a.Suggestion).ThenBy(a => a.TimeStamp))
-            {
-                <div class="symbols @completedAssignment.StyleClass" @onclick="@(async _ => await CompletedAssignmentAction(User.RowKey, completedAssignment))" @onclick:stopPropagation>
-                    <div class="emoji">
-                        <div class="twa-3x @completedAssignment.Assignment.Emoji"></div>
-                    </div>
-                    <div class="emoji-modifier">
-                        <div class="twa-2x @completedAssignment.Assignment.EmojiModifier"></div>
-                    </div>
+        @if(IsLoadingCompletedAssignments)
+        {
+            <progress class="progress is-small is-info" max="100"></progress>
+        }
 
-                    @if (!completedAssignment.Suggestion && completedAssignment.Count > 1)
-                    {
-                        <div class="assignment-count">
-                            @for (int i = 0; i<completedAssignment.Count;  i++)
-                            {
-                                <div class="assignment-count-badge"/>
-                            }
-                        </div>
-                    }
-                </div>
-            }
         @if (!IsLoadingCompletedAssignments)
         {
             <div class="add-completed-assignment button is-primary" @onclick="@(e => NavigateToAssignmentsForUser(User))" @onclick:stopPropagation>
                 <i class="fa-solid fa-plus" />
             </div>
         }
+
+        @foreach (var completedAssignment in Assignments.OrderBy(a => a.Suggestion).ThenBy(a => a.TimeStamp))
+        {
+            <div class="symbols @completedAssignment.StyleClass" @onclick="@(async _ => await CompletedAssignmentAction(User.RowKey, completedAssignment))" @onclick:stopPropagation>
+                <div class="emoji">
+                    <div class="twa-3x @completedAssignment.Assignment.Emoji"></div>
+                </div>
+                <div class="emoji-modifier">
+                    <div class="twa-2x @completedAssignment.Assignment.EmojiModifier"></div>
+                </div>
+
+                @if (!completedAssignment.Suggestion && completedAssignment.Count > 1)
+                {
+                    <div class="assignment-count">
+                        @for (int i = 0; i<completedAssignment.Count;  i++)
+                        {
+                            <div class="assignment-count-badge"/>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        
     </div>
 </div>
 

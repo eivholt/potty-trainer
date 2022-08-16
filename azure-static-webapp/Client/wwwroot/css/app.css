@@ -286,15 +286,14 @@ div.assignment-card-content {
             flex-grow: 1;
         }
 
-    div.assignment-card-content .add-completed-assignmen-panel {
+    div.assignment-card-content .add-completed-assignment-panel {
         grid-area: 2 / 2 / 2 / 2;
-        display: flex;
-        flex-flow: column-reverse;
+        display: grid;
+        justify-items: end;
     }
 
     div.assignment-card-content .add-completed-assignment {
         touch-action: none;
-        align-self: self-end;
         width: fit-content;
         height: 3em;
     }

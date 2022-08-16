@@ -18,6 +18,21 @@ namespace Data.TableEntities
         public string SystemUserId { get; set; }
         public string TokenType { get; set; }
 
+        public static UserAuthEntity GetEntity(UserAuth userAuth)
+        {
+            var userAuthEntity = new UserAuthEntity(WithingsSystemPartitionKeyName, userAuth.RowKey)
+            {
+                AccessToken = userAuth.AccessToken,
+                RefreshToken = userAuth.RefreshToken,
+                Expires = userAuth.Expires,
+                Scope = userAuth.Scope,
+                SystemUserId = userAuth.SystemUserId,
+                TokenType = userAuth.TokenType
+            };
+
+            return userAuthEntity;
+        }
+
         public static UserAuth FromEntity(UserAuthEntity userAuthEntity)
         {
             return new UserAuth(userAuthEntity.RowKey, userAuthEntity.PartitionKey)

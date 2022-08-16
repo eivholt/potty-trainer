@@ -79,7 +79,7 @@ namespace PottyTrainerIntegration.OAuth2
             throw new Exception("GetAndStoreAccessToken failed.");
         }
 
-        public async Task<UserAuth> RefreshAccessTokenAndStore(string userKey, string oldRefreshToken)
+        public async Task<UserAuth> RefreshAccessTokenAndStore(string oldRefreshToken)
         {
             var parameters = new Dictionary<string, string>
             {
@@ -112,7 +112,7 @@ namespace PottyTrainerIntegration.OAuth2
                 var tokenType = (string)authResponseBody?["token_type"]!;
 
                 var refreshUserAuth = await m_authData.RefreshAccessToken(
-                    userKey,
+                    systemUserId.ToString(),
                     UserAuthEntity.WithingsSystemPartitionKeyName,
                     accessToken,
                     refreshToken,

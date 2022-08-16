@@ -51,7 +51,7 @@ namespace PottyTrainerIntegration
 
                 if (userAuth.Expires < DateTime.UtcNow)
                 {
-                    userAuth = await m_oauth2Client.RefreshAccessTokenAndStore(userId, userAuth.RefreshToken);
+                    userAuth = await m_oauth2Client.RefreshAccessTokenAndStore(userAuth.RefreshToken);
                 }
 
                 var withingsMeasureUrl = "https://wbsapi.withings.net/measure";

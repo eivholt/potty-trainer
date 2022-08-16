@@ -39,7 +39,25 @@ namespace PottyTrainerIntegration
         {
             m_logger.LogInformation($"UserSubscribeSystemPost: {userid} - {system}");
             try 
-            { 
+            {
+                JsonObject? requestBodyJsonDom = null;
+                int appli = 0;
+                try
+                {
+                    requestBodyJsonDom = await JsonSerializer.DeserializeAsync<JsonObject>(req.Body);
+                    appli = (int)requestBodyJsonDom?["appli"]!;
+                }
+                catch 
+                { 
+                    m_logger.LogError("UserSubscribeSystemPost - Error in body, can't find 'appli'.", req.Body.ToString());
+                    throw new ArgumentNullException(req.Body.ToString());
+                }
+
+                if(appli <= 0)
+                {
+                    throw new ArgumentException($"appli must be a positive integer: {appli}");
+                }
+
                 var userAuth = await m_authData.GetUserAuth(userid, system);
                 if(userAuth.Expires < DateTime.UtcNow)
                 {
@@ -55,11 +73,10 @@ namespace PottyTrainerIntegration
                                 {
                                     { "action", action },
                                     { "callbackurl", m_withingsPottyTrainerNotifyUrl },
-                                    { "appli", "1" },
+                                    { "appli", appli.ToString() },
                                     { "signature", signature },
                                     { "nonce", nonce },
-                                    { "client_id", m_withingsPottyTrainerClientId },
-                                    { "comment", "" }
+                                    { "client_id", m_withingsPottyTrainerClientId }
                                 };
                 var encodedContent = new FormUrlEncodedContent(parameters);
                 m_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userAuth.AccessToken);
@@ -77,7 +94,7 @@ namespace PottyTrainerIntegration
                     }
 
                     var response = req.CreateResponse(HttpStatusCode.OK);
-                    await response.WriteAsJsonAsync(userAuth);
+                    await response.WriteAsJsonAsync(responseAsJson);
                     return response;
                 }
                 else
@@ -85,9 +102,9 @@ namespace PottyTrainerIntegration
                     throw new InvalidOperationException();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                m_logger.LogError($"UserSubscribeSystemPost");
+                m_logger.LogError($"UserSubscribeSystemPost - Error", ex);
                 var response = req.CreateResponse(HttpStatusCode.BadRequest);
                 return response;
             }

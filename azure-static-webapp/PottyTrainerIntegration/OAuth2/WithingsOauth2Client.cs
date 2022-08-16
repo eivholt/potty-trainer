@@ -100,7 +100,7 @@ namespace PottyTrainerIntegration.OAuth2
 
                 if (status > 0)
                 {
-                    m_logger.LogError("withings refresh token error:", responseAsJson.ToString());
+                    m_logger.LogError("withings refresh token error:", responseAsJson!.ToString());
                 }
 
                 var authResponseBody = responseAsJson?["body"];

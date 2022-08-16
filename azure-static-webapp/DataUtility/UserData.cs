@@ -60,6 +60,14 @@ namespace DataGenerator
                 Emoji = "twa-toothbrush",
                 EmojiModifier = "twa-first-quarter-moon-face"
             },
+            new Assignment("C65FA114-273C-4305-A44B-1A70C6E01173")
+            {
+                Name = "Tanntråd",
+                Description = string.Empty,
+                OncePerDay = true,
+                Weight = 3,
+                Emoji = "twa-tooth"
+            },
             new Assignment("CA55E579-76F9-4CFD-BDBB-A04736A20222")
             {
                 Name = "Matte",
@@ -369,6 +377,7 @@ namespace DataGenerator
                 {
                     "A2327835-C13C-406D-923B-6F44C992785B",
                     "D8998F3D-5378-410E-86FF-D20E935173B3",
+                    "C65FA114-273C-4305-A44B-1A70C6E01173",
                     "CA55E579-76F9-4CFD-BDBB-A04736A20222",
                     "D07BA9CB-E4DB-40F8-9461-A4EC36C66826",
                     "CA3A3616-F1FE-4934-9D69-C9D00114E800",
@@ -408,7 +417,8 @@ namespace DataGenerator
                     "14F831F8-2951-4FAB-8E76-68C925076793", 
                     "36A7CDC7-BD3D-4876-B962-628870C0C72C", 
                     "A2327835-C13C-406D-923B-6F44C992785B", 
-                    "D8998F3D-5378-410E-86FF-D20E935173B3", 
+                    "D8998F3D-5378-410E-86FF-D20E935173B3",
+                    "C65FA114-273C-4305-A44B-1A70C6E01173",
                     "E76BE7CD-B7E0-46BB-BE87-2296B52444F8", 
                     "FD3F8399-59CF-400D-A8DA-3C0884DE692C",
                     "93C83BD8-6DF3-4488-9DFB-8998D328D151",
@@ -437,6 +447,7 @@ namespace DataGenerator
                 {
                     "A2327835-C13C-406D-923B-6F44C992785B",
                     "D8998F3D-5378-410E-86FF-D20E935173B3",
+                    "C65FA114-273C-4305-A44B-1A70C6E01173",
                     "CA3A3616-F1FE-4934-9D69-C9D00114E800",
                     "93C83BD8-6DF3-4488-9DFB-8998D328D151",
                     "0E76A827-D309-47AE-AFCB-B2758DABEA88",

@@ -100,6 +100,7 @@
             IsLoadingCompletedAssignments = true;
             var completedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
             var completedAssignmentsYesterday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentsyesterday");
+            var availableAssignments = await http.GetFromJsonAsync<List<AvailableAssignment>>($"api/users/{User.RowKey}/availableassignments");
 
             foreach (var completedAssignmentTodayGroup in completedAssignmentsToday.GroupBy(c => c.AssignmentRowKey))
             {
@@ -128,6 +129,19 @@
                 }
             }
 
+            foreach (var availableAssignment in availableAssignments.DistinctBy(c => c.AssignmentRowKey))
+            {
+                Assignments.Add(new GroupedAssignment
+                    {
+                        Assignment = availableAssignment.Assignment,
+                        TimeStamp = availableAssignment.TimePosted,
+                        CompletedAssignmentRowKey = availableAssignment.RowKey,
+                        Suggestion = false,
+                        IsReadOnly = true,
+                        Count = -1
+                    });
+            }
+
             IsLoadingCompletedAssignments = false;
             IsInputDisabled = false;
         }
@@ -135,7 +149,7 @@
 
     private async Task CompletedAssignmentAction(string userId, GroupedAssignment groupedAssignment)
     {
-        if (!IsInputDisabled)
+        if (!IsInputDisabled && !groupedAssignment.IsReadOnly)
         {
             IsInputDisabled = true;
             if (groupedAssignment.Suggestion)
@@ -169,6 +183,7 @@
         public string CompletedAssignmentRowKey { get; set; }
         public DateTime TimeStamp { get; set; }
         public bool Suggestion { get; set; }
+        public bool IsReadOnly { get; set; } = false;
         public int Count { get; set; }
         
         public string StyleClass

@@ -68,15 +68,19 @@ namespace PottyTrainerIntegration
                     // if aa exists, complete
                     if (await availableAssignmentsGotMailToday.CountAsync() > 0)
                     {
+                        m_logger.LogInformation("Complete available assignment for user.");
                         var firstAvailableAssignmentOfType = await availableAssignmentsGotMailToday.FirstAsync();
                         var xpSum = await m_assignmentData.CompleteAvailableAssignment(firstAvailableAssignmentOfType.RowKey, m_gotmailAndHousePlantsUserKey);
                         var updatedUser = await m_userData.UpdateXp(m_gotmailAndHousePlantsUserKey, xpSum);
+                        m_logger.LogInformation("Complete available assignment for user done.");
                     }
 
                     // if aa not exists, create aa
                     else 
                     {
+                        m_logger.LogInformation("Create available assignment.");
                         await m_assignmentData.AddAvailableAssignment(m_gotmailAssignmentId, system);
+                        m_logger.LogInformation("Create available assignment done.");
                     }
 
                     return req.CreateResponse(HttpStatusCode.OK);

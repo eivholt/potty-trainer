@@ -23,8 +23,8 @@ namespace Api
             m_userData = userData;
         }
 
-        [FunctionName("AssignmentsGet")]
-        public async Task<IActionResult> GetUserAssignments(
+        [FunctionName("UserWithAssignmentsGet")]
+        public async Task<IActionResult> GetUserWithAssignments(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users/{userid}/assignments")] HttpRequest req,
             ILogger log,
             string userId)

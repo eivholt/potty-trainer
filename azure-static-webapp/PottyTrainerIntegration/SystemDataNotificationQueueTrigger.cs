@@ -112,9 +112,9 @@ namespace PottyTrainerIntegration
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                m_logger.LogError($"Queue trigger function failed: {message}");
+                m_logger.LogError($"Queue trigger function failed: {ex.Message}");
             }
         }
     }

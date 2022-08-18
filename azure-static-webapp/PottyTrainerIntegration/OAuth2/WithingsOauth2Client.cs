@@ -100,7 +100,7 @@ namespace PottyTrainerIntegration.OAuth2
 
                 if (status > 0)
                 {
-                    m_logger.LogError("withings refresh token error:", responseAsJson!.ToString());
+                    m_logger.LogError($"withings refresh token error: {responseAsJson!.ToString()}");
                 }
 
                 var authResponseBody = responseAsJson?["body"];
@@ -124,7 +124,7 @@ namespace PottyTrainerIntegration.OAuth2
             }
             else
             {
-                throw new InvalidOperationException("RefreshAccessToken: withings failed.");
+                throw new InvalidOperationException($"RefreshAccessToken: withings oauth failed: status: {oauth2Response.StatusCode}, reason: {oauth2Response.ReasonPhrase}.");
             }
 
         }

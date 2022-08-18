@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataUtility", "DataUtility\DataUtility.csproj", "{3CD80493-F8E5-42E8-A640-BB14517FEC7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PottyTrainerIntegration", "PottyTrainerIntegration\PottyTrainerIntegration.csproj", "{2E59C1F7-904F-4F12-9618-FA4B3A64012F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PottyTrainerIntegration", "PottyTrainerIntegration\PottyTrainerIntegration.csproj", "{2E59C1F7-904F-4F12-9618-FA4B3A64012F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

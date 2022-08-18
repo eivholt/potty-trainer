@@ -17,6 +17,13 @@ namespace Data.TableEntities
             RowKey = rowKey;
         }
 
+        public TableEntityBase(string partitionKey, string rowKey, DateTimeOffset timestamp)
+        {
+            PartitionKey = partitionKey;
+            RowKey = rowKey;
+            Timestamp = timestamp;
+        }
+
         public string PartitionKey { get; set; }
         public string RowKey { get; set; }
         public DateTimeOffset? Timestamp { get; set; }

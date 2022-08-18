@@ -12,9 +12,11 @@ namespace Api.Table
         private static string m_storageConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING");
         private static string m_pottytrainerTableAssignments = "assignments";
         private static string m_pottytrainerTableCompletedAssignments = "completedassignments";
+        private static string m_pottytrainerTableAvailableAssignments = "availableassignments";
         private static TableServiceClient m_tableServiceClient = new TableServiceClient(m_storageConnectionString);
         private TableClient m_assigmentTableClient = m_tableServiceClient.GetTableClient(m_pottytrainerTableAssignments);
         private TableClient m_completedAssigmentTableClient = m_tableServiceClient.GetTableClient(m_pottytrainerTableCompletedAssignments);
+        private TableClient m_availableAssigmentTableClient = m_tableServiceClient.GetTableClient(m_pottytrainerTableAvailableAssignments);
 
         public async Task<Assignment> GetUserAssignment(string assignmentId)
         {
@@ -69,7 +71,7 @@ namespace Api.Table
 
         private async IAsyncEnumerable<CompletedAssignment> GetCompletedAssignmentsTimeSpan(string userId, DateTime fromDateInclusive, DateTime toDateInclusive)
         {
-            var completedAssignmentsForUserTodayQuery = m_completedAssigmentTableClient.QueryAsync<CompletedAssignmentEntity>(
+            var completedAssignmentsForUserTimespanQuery = m_completedAssigmentTableClient.QueryAsync<CompletedAssignmentEntity>(
             e =>
             e.UserRowKey.Equals(userId) &&
             e.TimeCompleted >= fromDateInclusive &&
@@ -83,7 +85,7 @@ namespace Api.Table
                 allAssignments.Add(assignment);
             }
 
-            await foreach(var completedAssignment in completedAssignmentsForUserTodayQuery)
+            await foreach(var completedAssignment in completedAssignmentsForUserTimespanQuery)
             {
                 yield return CompletedAssignmentEntity.FromEntity(completedAssignment, allAssignments.Find(a => a.RowKey.Equals(completedAssignment.AssignmentRowKey)));
             }
@@ -93,6 +95,55 @@ namespace Api.Table
         {
             var deleteCompletedAssignmentResult = await m_completedAssigmentTableClient.DeleteEntityAsync(CompletedAssignmentEntity.PartitionKeyName, completedAssignmentId);
             return !deleteCompletedAssignmentResult.IsError;
+        }
+
+        public async IAsyncEnumerable<AvailableAssignment> GetAvailableAssignments()
+        {
+            var availabledAssignmentsTimespanQuery = m_availableAssigmentTableClient.QueryAsync<AvailableAssignmentEntity>(e => e.TimePosted >= DateTime.UtcNow.Date);
+
+            var allAssignmentsResponse = m_assigmentTableClient.QueryAsync<AssignmentEntity>();
+            var allAssignments = new List<AssignmentEntity>();
+
+            await foreach (var assignment in allAssignmentsResponse)
+            {
+                allAssignments.Add(assignment);
+            }
+
+            await foreach (var availableAssignment in availabledAssignmentsTimespanQuery)
+            {
+                yield return AvailableAssignmentEntity.FromEntity(availableAssignment, allAssignments.Find(a => a.RowKey.Equals(availableAssignment.AssignmentRowKey)));
+            }
+        }
+
+        public async Task<AvailableAssignment> AddAvailableAssignment(string assignmentId, string system)
+        {
+            var assignment = await GetUserAssignment(assignmentId);
+
+            var avaliableAssignment = AvailableAssignmentEntity.GetEntity(assignment.RowKey, assignment.Name, system, DateTime.UtcNow);
+            await m_availableAssigmentTableClient.AddEntityAsync(avaliableAssignment);
+
+            return AvailableAssignmentEntity.FromEntity(avaliableAssignment, AssignmentEntity.GetEntity(assignment));
+        }
+
+        public async Task<int> CompleteAvailableAssignment(string availableAssignmentId, string userId)
+        {
+            var availableAssignmentEntity = await m_availableAssigmentTableClient.GetEntityAsync<AvailableAssignmentEntity>(AvailableAssignmentEntity.PartitionKeyName, availableAssignmentId.ToUpper());
+            var xpSum = await CompleteAssignment(availableAssignmentEntity.Value.AssignmentRowKey, userId);
+            await m_availableAssigmentTableClient.DeleteEntityAsync(AvailableAssignmentEntity.PartitionKeyName, availableAssignmentId.ToUpper());
+
+            return xpSum;
+        }
+
+        public async IAsyncEnumerable<AvailableAssignment> AvailableAssignmentTypeTodayExists(string assignmentId)
+        {
+            var availabledAssignmentsTimespanQuery = m_availableAssigmentTableClient.QueryAsync<AvailableAssignmentEntity>(
+                e => e.AssignmentRowKey.Equals(assignmentId) && 
+                e.TimePosted >= DateTime.UtcNow.Date);
+
+            await foreach(var availableAssignmentEntity in availabledAssignmentsTimespanQuery)
+            {
+                yield return AvailableAssignmentEntity.FromEntity(availableAssignmentEntity, AssignmentEntity.GetEntity(await GetUserAssignment(availableAssignmentEntity.AssignmentRowKey)));
+            }
         }
     }
 }

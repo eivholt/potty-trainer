@@ -8,7 +8,7 @@ namespace Data
         public CompletedAssignment() {}
         public CompletedAssignment(string rowKey, string partitionKey, DateTimeOffset? timestamp) : base(rowKey, partitionKey, timestamp) {}
 
-        public CompletedAssignment(string rowKey) : base(rowKey, AssignmentEntity.PartitionKeyName) { }
+        public CompletedAssignment(string rowKey) : base(rowKey, CompletedAssignmentEntity.PartitionKeyName) { }
 
         public Assignment Assignment { get; set; }
 

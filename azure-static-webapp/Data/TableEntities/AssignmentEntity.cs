@@ -7,6 +7,11 @@ namespace Data.TableEntities
     {
         public static string PartitionKeyName = "assignment";
 
+        public AssignmentEntity() { }
+
+        public AssignmentEntity(string rowKey) : base(PartitionKeyName, rowKey) { }
+        public AssignmentEntity(string rowKey, DateTime timestamp) : base(PartitionKeyName, rowKey, timestamp) { }
+
         public string Name { get; set; }
         public string Description { get; set; }
         public string Emoji { get; set; }
@@ -14,18 +19,9 @@ namespace Data.TableEntities
         public bool OncePerDay { get; set; }
         public int Weight { get; set; }
 
-        public AssignmentEntity(string rowKey) : base(PartitionKeyName, rowKey)
-        {
-        }
-
-        public AssignmentEntity()
-        {
-
-        }
-
         public static AssignmentEntity GetEntity(Assignment assignment)
         {
-            var assignmentEntity = new AssignmentEntity(assignment.RowKey) 
+            var assignmentEntity = new AssignmentEntity(assignment.RowKey, assignment.Timestamp.Value.DateTime) 
             {
                 Name = assignment.Name,
                 Description = assignment.Description,

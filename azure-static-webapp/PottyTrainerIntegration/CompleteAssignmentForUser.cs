@@ -17,8 +17,12 @@ namespace PottyTrainerIntegration
         private readonly IAssignmentData m_assignmentData;
         private const string m_dosetteSystemName = "dosette";
         private const string m_gotmailSystemName = "gotmail";
+        private const string m_houseplantsSystemName = "houseplants";
         private const string m_dosetteAssignmentId = "4390A97B-0323-4787-AC9E-02A5E2B36DEC";
         private const string m_gotmailAssignmentId = "4187A11D-ABCA-4AEA-AF1B-C8E23CB28D96";
+        private const string m_houseplants1AssignmentId = "E54ABEA8-F97F-48FD-884B-B8FBB38323FC";
+        private const string m_houseplants2AssignmentId = "4DFD8832-7C27-45C2-A370-FC9A3656F926";
+        private const string m_houseplants3AssignmentId = "BC72D11B-E34C-494A-B882-B703FB410220";
         private const string m_gotmailAndHousePlantsUserKey = "BAA25D7F-4462-482F-B919-83F938FC72D3"; // Eivind
 
         public CompleteAssignmentForUser(ILoggerFactory loggerFactory, IUserData userData, IAssignmentData assignmentData)
@@ -47,7 +51,7 @@ namespace PottyTrainerIntegration
 
                 if (system.Equals(m_dosetteSystemName))
                 {
-                    string deviceId = (string)requestBodyJsonDom?["end_device_ids"]!["dev_eui"]!;
+                    var deviceId = (string)requestBodyJsonDom?["end_device_ids"]!["dev_eui"]!;
                     if (string.IsNullOrEmpty(deviceId))
                     {
                         throw new ArgumentNullException(nameof(deviceId));
@@ -63,27 +67,41 @@ namespace PottyTrainerIntegration
                 }
                 else if (system.Equals(m_gotmailSystemName))
                 {
-                    var availableAssignmentsGotMailToday = m_assignmentData.AvailableAssignmentTypeTodayExists(m_gotmailAssignmentId);
-
-                    // if aa exists, complete
-                    if (await availableAssignmentsGotMailToday.CountAsync() > 0)
-                    {
-                        m_logger.LogInformation("Complete available assignment for user.");
-                        var firstAvailableAssignmentOfType = await availableAssignmentsGotMailToday.FirstAsync();
-                        var xpSum = await m_assignmentData.CompleteAvailableAssignment(firstAvailableAssignmentOfType.RowKey, m_gotmailAndHousePlantsUserKey);
-                        var updatedUser = await m_userData.UpdateXp(m_gotmailAndHousePlantsUserKey, xpSum);
-                        m_logger.LogInformation("Complete available assignment for user done.");
-                    }
-
-                    // if aa not exists, create aa
-                    else 
-                    {
-                        m_logger.LogInformation("Create available assignment.");
-                        await m_assignmentData.AddAvailableAssignment(m_gotmailAssignmentId, system);
-                        m_logger.LogInformation("Create available assignment done.");
-                    }
-
+                    await CreateOrCompleteAvailableAssignment(system, m_gotmailAssignmentId);
                     return req.CreateResponse(HttpStatusCode.OK);
+                }
+                else if (system.Equals(m_houseplantsSystemName))
+                {
+                    var capacitance1 = (int)requestBodyJsonDom?["uplink_message"]!["decoded_payload"]!["capacitance1"]!;
+                    var capacitance2 = (int)requestBodyJsonDom?["uplink_message"]!["decoded_payload"]!["capacitance2"]!;
+                    var capacitance3 = (int)requestBodyJsonDom?["uplink_message"]!["decoded_payload"]!["capacitance3"]!;
+                    
+                    if (capacitance1 <= 300)
+                    {
+                        await CreateAvailableAssignmentIfNotExists(system, m_houseplants1AssignmentId);
+                    }
+                    else
+                    {
+                        await CompleteAvailableAssignmentIfExists(m_houseplants1AssignmentId);
+                    }
+
+                    if (capacitance2 <= 300)
+                    {
+                        await CreateAvailableAssignmentIfNotExists(system, m_houseplants2AssignmentId);
+                    }
+                    else
+                    {
+                        await CompleteAvailableAssignmentIfExists(m_houseplants2AssignmentId);
+                    }
+
+                    if (capacitance3 <= 300)
+                    {
+                        await CreateAvailableAssignmentIfNotExists(system, m_houseplants3AssignmentId);
+                    }
+                    else
+                    {
+                        await CompleteAvailableAssignmentIfExists(m_houseplants3AssignmentId);
+                    }
                 }
             }
             catch (JsonException jex) 
@@ -102,10 +120,65 @@ namespace PottyTrainerIntegration
             return req.CreateResponse(HttpStatusCode.BadRequest);
         }
 
+        private async Task CreateOrCompleteAvailableAssignment(string system, string assignmentId)
+        {
+            var availableAssignmentsToday = m_assignmentData.AvailableAssignmentTypeTodayExists(assignmentId);
+
+            // if aa exists, complete
+            if (await availableAssignmentsToday.CountAsync() > 0)
+            {
+                m_logger.LogInformation("Complete available assignment for user.");
+                var firstAvailableAssignmentOfType = await availableAssignmentsToday.FirstAsync();
+                var xpSum = await m_assignmentData.CompleteAvailableAssignment(firstAvailableAssignmentOfType.RowKey, m_gotmailAndHousePlantsUserKey);
+                var updatedUser = await m_userData.UpdateXp(m_gotmailAndHousePlantsUserKey, xpSum);
+                m_logger.LogInformation("Complete available assignment for user done.");
+            }
+
+            // if aa not exists, create aa
+            else
+            {
+                await AddNewAvailableAssignment(system, assignmentId);
+            }
+        }
+
+        private async Task CreateAvailableAssignmentIfNotExists(string system, string assignmentId)
+        {
+            var availableAssignmentsToday = m_assignmentData.AvailableAssignmentTypeTodayExists(assignmentId);
+
+            // if aa exists, complete
+            if (await availableAssignmentsToday.CountAsync() == 0)
+            {
+                await AddNewAvailableAssignment(system, assignmentId);
+            }
+        }
+
+        private async Task AddNewAvailableAssignment(string system, string assignmentId)
+        {
+            m_logger.LogInformation($"Create available assignment, system: {system}, assignmentId: {assignmentId}.");
+            var availableAssignment = await m_assignmentData.AddAvailableAssignment(assignmentId, system);
+            m_logger.LogInformation($"Create available assignment done, {availableAssignment.RowKey}.");
+        }
+        private async Task CompleteAvailableAssignmentIfExists(string assignmentId)
+        {
+            var availableAssignmentsToday = m_assignmentData.AvailableAssignmentTypeTodayExists(assignmentId);
+
+            // if aa exists, complete
+            if (await availableAssignmentsToday.CountAsync() > 0)
+            {
+                m_logger.LogInformation("Complete available assignment for user.");
+                var firstAvailableAssignmentOfType = await availableAssignmentsToday.FirstAsync();
+                var xpSum = await m_assignmentData.CompleteAvailableAssignment(firstAvailableAssignmentOfType.RowKey, m_gotmailAndHousePlantsUserKey);
+                var updatedUser = await m_userData.UpdateXp(m_gotmailAndHousePlantsUserKey, xpSum);
+                m_logger.LogInformation("Complete available assignment for user done.");
+            }
+        }
+
         private async Task<User> CreateCompletedAssignmentAndUpdateXp(string userKey, string assignmentId)
         {
+            m_logger.LogInformation($"Updating XP for user: {userKey}.");
             var xpSum = await m_assignmentData.CompleteAssignment(assignmentId, userKey);
             var updatedUser = await m_userData.UpdateXp(userKey, xpSum);
+            m_logger.LogInformation($"Done updating XP for user: {updatedUser.Name}, xp: {updatedUser.XP}.");
             return updatedUser;
         }
     }

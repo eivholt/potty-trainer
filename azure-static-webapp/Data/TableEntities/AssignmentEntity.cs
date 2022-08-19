@@ -10,7 +10,6 @@ namespace Data.TableEntities
         public AssignmentEntity() { }
 
         public AssignmentEntity(string rowKey) : base(PartitionKeyName, rowKey) { }
-        public AssignmentEntity(string rowKey, DateTime timestamp) : base(PartitionKeyName, rowKey, timestamp) { }
 
         public string Name { get; set; }
         public string Description { get; set; }
@@ -21,7 +20,7 @@ namespace Data.TableEntities
 
         public static AssignmentEntity GetEntity(Assignment assignment)
         {
-            var assignmentEntity = new AssignmentEntity(assignment.RowKey, assignment.Timestamp.Value.DateTime) 
+            var assignmentEntity = new AssignmentEntity(assignment.RowKey) 
             {
                 Name = assignment.Name,
                 Description = assignment.Description,
@@ -36,7 +35,7 @@ namespace Data.TableEntities
 
         public static Assignment FromEntity(AssignmentEntity assignmentEntity)
         {
-            return new Assignment(assignmentEntity.RowKey, PartitionKeyName, assignmentEntity.Timestamp.Value)
+            return new Assignment(assignmentEntity.RowKey, PartitionKeyName, assignmentEntity.Timestamp)
             {
                 Emoji = assignmentEntity.Emoji,
                 EmojiModifier = assignmentEntity.EmojiModifier,

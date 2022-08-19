@@ -81,6 +81,7 @@ namespace PottyTrainerIntegration.OAuth2
 
         public async Task<UserAuth> RefreshAccessTokenAndStore(string oldRefreshToken)
         {
+            m_logger.LogInformation($"withings refresh token: Refresh token: {oldRefreshToken}.");
             var parameters = new Dictionary<string, string>
             {
                 { "action", "requesttoken" },
@@ -97,6 +98,8 @@ namespace PottyTrainerIntegration.OAuth2
                 var responseAsJson = JsonSerializer.Deserialize<JsonObject>(await oauth2Response.Content.ReadAsStreamAsync());
                 var status = (int)responseAsJson?["status"]!;
                 var error = (string)responseAsJson?["error"]!;
+
+                m_logger.LogInformation($"withings refresh token: status: {status}, error: {error}.");
 
                 if (status > 0)
                 {
@@ -120,6 +123,7 @@ namespace PottyTrainerIntegration.OAuth2
                     scope,
                     tokenType);
 
+                m_logger.LogInformation($"withings refresh token - success: Access token: {accessToken}, Refresh token: {refreshToken}.");
                 return refreshUserAuth;
             }
             else

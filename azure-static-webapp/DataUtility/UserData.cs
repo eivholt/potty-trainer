@@ -328,16 +328,33 @@ namespace DataGenerator
             new Assignment("4187A11D-ABCA-4AEA-AF1B-C8E23CB28D96")
             {
                 Name = "Hente post",
-                Description = string.Empty,
+                Description = "Klar til henting",
                 Weight = 1,
                 Emoji = "twa-open-mailbox-with-raised-flag"
             },
             new Assignment("E54ABEA8-F97F-48FD-884B-B8FBB38323FC")
             {
                 Name = "Vanne blomster",
-                Description = string.Empty,
+                Description = "Potte nr 1",
                 Weight = 1,
-                Emoji = "twa-potted-plant"
+                Emoji = "twa-potted-plant",
+                EmojiModifier = "twa-keycap-1"
+            },
+            new Assignment("4DFD8832-7C27-45C2-A370-FC9A3656F926")
+            {
+                Name = "Vanne blomster",
+                Description = "Potte nr 2",
+                Weight = 1,
+                Emoji = "twa-potted-plant",
+                EmojiModifier = "twa-keycap-2"
+            },
+            new Assignment("BC72D11B-E34C-494A-B882-B703FB410220")
+            {
+                Name = "Vanne blomster",
+                Description = "Potte nr 3",
+                Weight = 1,
+                Emoji = "twa-potted-plant",
+                EmojiModifier = "twa-keycap-3"
             }
         };
 
@@ -471,7 +488,10 @@ namespace DataGenerator
                     "F61DB2E2-EDA3-480A-AD89-8F7507C81976",
                     "59DD55D3-9F48-4B56-A905-BB433FF5441F",
                     "5DA4C692-8DCB-465A-A74F-0122AB33CABD",
-                    "8BC602FA-E97C-4F25-ACEC-DD1A910BBF71"
+                    "8BC602FA-E97C-4F25-ACEC-DD1A910BBF71",
+                    "E54ABEA8-F97F-48FD-884B-B8FBB38323FC",
+                    "4DFD8832-7C27-45C2-A370-FC9A3656F926",
+                    "BC72D11B-E34C-494A-B882-B703FB410220"
                 };
             }
 

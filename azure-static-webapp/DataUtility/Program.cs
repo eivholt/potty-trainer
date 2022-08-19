@@ -73,7 +73,7 @@ var assignments = DataGenerator.UserData.GetAssignments();
 foreach (var assignment in assignments)
 {
     var addEntityResult = await assignmentsTableClient.AddEntityAsync(AssignmentEntity.GetEntity(assignment));
-    Console.WriteLine($"Created Assignment: {addEntityResult.ToString()}");
+    Console.WriteLine($"Created Assignment: {assignment.Name}, {assignment.RowKey}");
 }
 
 // Assignments for users
@@ -107,7 +107,7 @@ foreach (var user in DataGenerator.UserData.GetUsers())
     foreach (var assignment in userWithAssignments.Assignments)
     {
         var addEntityResult = await assignmentsForUserTableClient.AddEntityAsync(AssignmentForUserEntity.GetEntity(assignment, user));
-        Console.WriteLine($"Created Assignment for user: {addEntityResult.ToString()}");
+        Console.WriteLine($"Created Assignment for user: {user.Name} - {assignment.Name}");
     }
 }
 

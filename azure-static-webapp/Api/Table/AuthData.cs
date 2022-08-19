@@ -59,6 +59,7 @@ namespace Api.Table
 
         public async Task<UserAuth> GetUserAuthBySystemUserId(string systemUserId, string system)
         {
+            m_logger.LogInformation($"GetUserAuthBySystemUserId, systemUserId: {systemUserId}, system: {system}.");
             var userAuthBySystemUserIdQuery = m_userAuthTableClient.QueryAsync<UserAuthEntity>(u => u.PartitionKey.Equals(system) && u.SystemUserId.Equals(systemUserId));
 
             var users = new List<UserAuthEntity>();
@@ -69,31 +70,46 @@ namespace Api.Table
 
             if(users.Count == 1)
             {
-                return UserAuthEntity.FromEntity(users.First());
+                var firstUserAuth = users.First();
+                m_logger.LogInformation($"GetUserAuthBySystemUserId, SystemUserId: {firstUserAuth.SystemUserId}, RowKey: {firstUserAuth.RowKey}, Expires: {firstUserAuth.Expires}.");
+                return UserAuthEntity.FromEntity(firstUserAuth);
             }
             else
             {
+                m_logger.LogError($"GetUserAuthBySystemUserId, UserAuth count: {users.Count}.");
                 throw new InvalidOperationException($"GetUserAuthBySystemUserId: UserAuth count: {users.Count}");
             }
         }
 
         public async Task<UserAuth> RefreshAccessToken(string systemUserId, string system, string newAccessToken, string newRefreshToken, DateTime expires, string scope, string tokenType)
         {
-            var expiredUserAuth = await GetUserAuthBySystemUserId(systemUserId, system);
-            expiredUserAuth.AccessToken = newAccessToken;
-            expiredUserAuth.RefreshToken = newRefreshToken;
-            expiredUserAuth.Expires = expires;
-            expiredUserAuth.Scope = scope;
-            expiredUserAuth.TokenType = tokenType;
+            m_logger.LogInformation($"RefreshAccessToken, update table. systemUserId: {systemUserId}, system: {system}, newAccessToken: {newAccessToken}, newRefreshToken: {newRefreshToken}.");
 
-            var updateUserAuthResponse = await m_userAuthTableClient.UpdateEntityAsync<UserAuthEntity>(UserAuthEntity.GetEntity(expiredUserAuth), Azure.ETag.All, TableUpdateMode.Merge);
-            if (updateUserAuthResponse.IsError)
+            UserAuth userAuthToUpdate;
+            try
             {
-                m_logger.LogError($"RefreshAccessToken failed: {updateUserAuthResponse.ReasonPhrase}", updateUserAuthResponse);
-                throw new InvalidOperationException($"RefreshAccessToken failed: {updateUserAuthResponse.ReasonPhrase}");
+                userAuthToUpdate = await GetUserAuthBySystemUserId(systemUserId, system);
+                userAuthToUpdate.AccessToken = newAccessToken;
+                userAuthToUpdate.RefreshToken = newRefreshToken;
+                userAuthToUpdate.Expires = expires;
+                userAuthToUpdate.Scope = scope;
+                userAuthToUpdate.TokenType = tokenType;
+
+                var updateUserAuthResponse = await m_userAuthTableClient.UpdateEntityAsync<UserAuthEntity>(UserAuthEntity.GetEntity(userAuthToUpdate), Azure.ETag.All, TableUpdateMode.Merge);
+                if (updateUserAuthResponse.IsError)
+                {
+                    m_logger.LogError($"RefreshAccessToken failed: {updateUserAuthResponse.ReasonPhrase}", updateUserAuthResponse);
+                    throw new InvalidOperationException($"RefreshAccessToken failed: {updateUserAuthResponse.ReasonPhrase}");
+                }
+
+                return userAuthToUpdate;
+            }
+            catch (Exception ex)
+            {
+                m_logger.LogError($"RefreshAccessToken failed: {ex}");
             }
 
-            return UserAuthEntity.FromEntity(await m_userAuthTableClient.GetEntityAsync<UserAuthEntity>(system, systemUserId));
+            throw new InvalidOperationException("RefreshAccessToken failed.");
         }
     }
 }

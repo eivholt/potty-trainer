@@ -102,6 +102,9 @@ namespace PottyTrainerIntegration
                     {
                         await CompleteAvailableAssignmentIfExists(m_houseplants3AssignmentId);
                     }
+
+                    m_logger.LogInformation($"CompleteAssignmentForUser - Success.");
+                    return req.CreateResponse(HttpStatusCode.OK);
                 }
             }
             catch (JsonException jex) 

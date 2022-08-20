@@ -1,11 +1,35 @@
-﻿<header>
-    <nav class="navbar has-background-dark is-dark"
+﻿@inject HttpClient http
+<header>
+    <nav class="navbar has-background-light"
          role="navigation"
          aria-label="main navigation">
         <div class="navbar-brand">
-            <NavLink to="/" class="navbar-item nav-home">
+            @*<NavLink to="/" class="navbar-item nav-home">
                 <span class="brand-third">Bæsj</span>
-            </NavLink>
+            </NavLink>*@
+            <div class="available-assignments-list">
+                
+            @foreach (var availableAssignment in AvailableAssignments.OrderBy(a => a.TimePosted))
+            {
+                    <div class="symbols">
+                        <div class="emoji">
+                            <div class="twa-3x @availableAssignment.Assignment.Emoji"></div>
+                        </div>
+                        <div class="emoji-modifier">
+                            <div class="twa-2x @availableAssignment.Assignment.EmojiModifier"></div>
+                        </div>
+                    </div>
+            }
+            </div>
         </div>
     </nav>
 </header>
+
+@code {
+    private List<AvailableAssignment> AvailableAssignments { get; set; } = new List<AvailableAssignment>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AvailableAssignments = await http.GetFromJsonAsync<List<AvailableAssignment>>($"api/users/availableassignments");
+    }
+}

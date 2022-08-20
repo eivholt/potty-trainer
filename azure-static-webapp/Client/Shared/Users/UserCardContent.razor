@@ -98,9 +98,19 @@
         {
             IsInputDisabled = true;
             IsLoadingCompletedAssignments = true;
-            var completedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday");
-            var completedAssignmentsYesterday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentsyesterday");
-            var availableAssignments = await http.GetFromJsonAsync<List<AvailableAssignment>>($"api/users/{User.RowKey}/availableassignments");
+
+            var loadCompletedAssignments = new List<Task>();
+
+            var completedAssignmentsToday = new List<CompletedAssignment>();
+            var completedAssignmentsYesterday = new List<CompletedAssignment>();
+
+            loadCompletedAssignments.Add(Task.Run(async () =>
+                completedAssignmentsToday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentstoday")));
+
+            loadCompletedAssignments.Add(Task.Run(async () =>
+                completedAssignmentsYesterday = await http.GetFromJsonAsync<List<CompletedAssignment>>($"api/users/{User.RowKey}/completedassignmentsyesterday")));
+
+            await Task.WhenAll(loadCompletedAssignments);
 
             foreach (var completedAssignmentTodayGroup in completedAssignmentsToday.GroupBy(c => c.AssignmentRowKey))
             {
@@ -129,19 +139,6 @@
                 }
             }
 
-            foreach (var availableAssignment in availableAssignments.DistinctBy(c => c.AssignmentRowKey))
-            {
-                Assignments.Add(new GroupedAssignment
-                    {
-                        Assignment = availableAssignment.Assignment,
-                        TimeStamp = availableAssignment.TimePosted,
-                        CompletedAssignmentRowKey = availableAssignment.RowKey,
-                        Suggestion = false,
-                        IsReadOnly = true,
-                        Count = -1
-                    });
-            }
-
             IsLoadingCompletedAssignments = false;
             IsInputDisabled = false;
         }
@@ -160,7 +157,7 @@
             {
                 var deleteCompletedAssignmentResult = await http.DeleteAsync($"api/users/{userId}/completedassignments/{groupedAssignment.CompletedAssignmentRowKey}");
             }
-            await OnInitializedAsync();
+            //await OnInitializedAsync();
             NavigationManager.NavigateTo("/users", true);
             IsInputDisabled = false;
         }

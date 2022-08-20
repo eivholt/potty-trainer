@@ -35,9 +35,8 @@ namespace Api
 
         [FunctionName("AvailableAssignments")]
         public IActionResult AvailableAssignmentsGet(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users/{userid}/availableassignments")] HttpRequest req,
-            ILogger log,
-            string userId)
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users/availableassignments")] HttpRequest req,
+            ILogger log)
         {
             return new OkObjectResult(m_assignmentData.GetAvailableAssignments());
         }

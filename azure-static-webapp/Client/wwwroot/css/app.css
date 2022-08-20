@@ -298,6 +298,31 @@ div.assignment-card-content {
         height: 3em;
     }
 
+div.available-assignments-list {
+    display: flex;
+    margin-left: 1em;
+}
+
+    div.available-assignments-list .symbols {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        margin: 0.3em;
+        padding: 0.2em;
+        touch-action: none;
+        cursor: pointer;
+    }
+
+    div.available-assignments-list .twa-3x {
+        margin: 0;
+    }
+
+    div.available-assignments-list .emoji-modifier {
+        margin-left: -2em;
+        margin-top: -0.5em;
+        transform: scale(0.8);
+    }
+
 .card {
     margin-bottom: 2em;
 }
@@ -373,7 +398,7 @@ code {
 }
 
 *.loader {
-    border: 16px solid #f3f3f3;
+    border: 16px solid #ddd;
     border-radius: 50%;
     border-top: 16px solid #ccc;
     width: 120px;

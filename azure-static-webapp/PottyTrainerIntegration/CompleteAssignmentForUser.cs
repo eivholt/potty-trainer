@@ -153,13 +153,17 @@ namespace PottyTrainerIntegration
             {
                 await AddNewAvailableAssignment(system, assignmentId);
             }
+            else
+            {
+                m_logger.LogInformation($"Available assignment already exists, done, system: {system}, assignmentId: {assignmentId}.");
+            }
         }
 
         private async Task AddNewAvailableAssignment(string system, string assignmentId)
         {
             m_logger.LogInformation($"Create available assignment, system: {system}, assignmentId: {assignmentId}.");
             var availableAssignment = await m_assignmentData.AddAvailableAssignment(assignmentId, system);
-            m_logger.LogInformation($"Create available assignment done, {availableAssignment.RowKey}.");
+            m_logger.LogInformation($"Create available assignment done, Assignment.Name: {availableAssignment.Assignment.Name}, RowKey: {availableAssignment.RowKey}.");
         }
         private async Task CompleteAvailableAssignmentIfExists(string assignmentId)
         {
@@ -172,7 +176,11 @@ namespace PottyTrainerIntegration
                 var firstAvailableAssignmentOfType = await availableAssignmentsToday.FirstAsync();
                 var xpSum = await m_assignmentData.CompleteAvailableAssignment(firstAvailableAssignmentOfType.RowKey, m_gotmailAndHousePlantsUserKey);
                 var updatedUser = await m_userData.UpdateXp(m_gotmailAndHousePlantsUserKey, xpSum);
-                m_logger.LogInformation("Complete available assignment for user done.");
+                m_logger.LogInformation($"Complete available assignment for user done, Assignment.Name: {firstAvailableAssignmentOfType.Assignment.Name}, RowKey: {availableAssignment.RowKey}.");
+            }
+            else
+            {
+                m_logger.LogInformation("No available assignment to complete, done.");
             }
         }
 

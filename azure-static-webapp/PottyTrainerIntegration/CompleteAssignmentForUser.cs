@@ -176,7 +176,7 @@ namespace PottyTrainerIntegration
                 var firstAvailableAssignmentOfType = await availableAssignmentsToday.FirstAsync();
                 var xpSum = await m_assignmentData.CompleteAvailableAssignment(firstAvailableAssignmentOfType.RowKey, m_gotmailAndHousePlantsUserKey);
                 var updatedUser = await m_userData.UpdateXp(m_gotmailAndHousePlantsUserKey, xpSum);
-                m_logger.LogInformation($"Complete available assignment for user done, Assignment.Name: {firstAvailableAssignmentOfType.Assignment.Name}, RowKey: {availableAssignment.RowKey}.");
+                m_logger.LogInformation($"Completed available assignment for user done, Assignment.Name: {firstAvailableAssignmentOfType.Assignment.Name}, RowKey: {firstAvailableAssignmentOfType.RowKey}.");
             }
             else
             {

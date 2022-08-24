@@ -20,9 +20,17 @@
     text-transform: none;
 }
 
+.navbar {
+    min-height: 0;
+}
+
+.navbar-brand, .navbar-tabs {
+    min-height: 0;
+}
+
 header {
     font-weight: 700;
-    font-family: Arial;
+    font-family: Arial;    
 }
 
     header span {

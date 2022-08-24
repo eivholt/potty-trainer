@@ -1,4 +1,6 @@
 ﻿using Data;
+using System;
+using System.Threading;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace DataGenerator
@@ -134,6 +136,22 @@ namespace DataGenerator
                 Emoji= "twa-sandwich",
                 EmojiModifier = "twa-backpack"
             },
+            new Assignment("074B7017-0D61-4248-8F37-C13F9AE7AE8F")
+            {
+                Name = "Lage kveldsmat",
+                OncePerDay = true,
+                Weight = 3,
+                Emoji= "twa-bread",
+                EmojiModifier = "twa-first-quarter-moon-face"
+            },
+            new Assignment("E283F98C-6F9A-4144-B657-506FB6B46EB7")
+            {
+                Name = "Vaske hender etter skole/bhg",
+                OncePerDay = true,
+                Weight = 1,
+                Emoji= "twa-palms-up-together",
+                EmojiModifier = "twa-microbe"
+            },            
             new Assignment("9A0F2632-E68B-4DDC-977C-DF40E67B7B3B")
             {
                 Name = "Henge opp klær",
@@ -355,7 +373,52 @@ namespace DataGenerator
                 Weight = 1,
                 Emoji = "twa-potted-plant",
                 EmojiModifier = "twa-keycap-3"
+            },
+            new Assignment("8FB2399E-1F84-4D57-BAAA-B3F7CC4F47B9")
+            {
+                Name = "God natt",
+                Description = "Minst 7 timer nattesøvn",
+                Weight = 3,
+                Emoji = "twa-sleeping-face",
+                EmojiModifier = "twa-alarm clock"
+            },
+            new Assignment("7263CFA7-3755-4B2A-8E85-24BC24198EE1")
+            {
+                Name = "Bursdag",
+                Description = "Gratulerer med dagen!",
+                Weight = 3,
+                Emoji = "twa-party-popper"
+            },
+            new Assignment("F3824842-5363-40CC-89DA-98B1E51F5366")
+            {
+                Name = "Lekser",
+                Description = "Starte med lekser på eget initiativ",
+                Weight = 3,
+                Emoji = "twa-three-thirty"
+            },
+            new Assignment("D822ED73-164E-46C2-856B-D6B01BC68B3D")
+            {
+                Name = "Stå opp",
+                Description = "På skoledag, uten masing",
+                Weight = 3,
+                Emoji = "twa-bed",
+                EmojiModifier = "twa-alarm-clock"
+            },
+            new Assignment("A30816D5-A4AE-4116-B3BA-E5340F5CD741")
+            {
+                Name = "Matlaging",
+                Description = "Hjelpe til med matlaging",
+                Weight = 2,
+                Emoji = "twa-shallow-pan-of-food"
+            },
+            new Assignment("B010225A-C3E2-4082-B72C-86F8E35BEC2F")
+            {
+                Name = "Voltige",
+                Weight = 2,
+                Emoji = "twa-horse",
+                EmojiModifier = "twa-person-cartwheeling"
             }
+            
         };
 
         private static readonly List<User> m_users = new List<User>
@@ -381,7 +444,7 @@ namespace DataGenerator
                 Goal = 100,
                 XP = 0,
                 DosetteDeviceId = "0004A30B00EB730A"
-            }
+            }            
         };
 
         public static User GetUser(string id)
@@ -407,6 +470,8 @@ namespace DataGenerator
                     "CA3A3616-F1FE-4934-9D69-C9D00114E800",
                     "E76BE7CD-B7E0-46BB-BE87-2296B52444F8",
                     "1A3BA5D0-42A8-4123-82F8-DFB26756E29D",
+                    "074B7017-0D61-4248-8F37-C13F9AE7AE8F",
+                    "E283F98C-6F9A-4144-B657-506FB6B46EB7",
                     "9A0F2632-E68B-4DDC-977C-DF40E67B7B3B",
                     "FD3F8399-59CF-400D-A8DA-3C0884DE692C",
                     "6707DFD0-51DA-4BBD-95B4-721521B82837",
@@ -429,9 +494,15 @@ namespace DataGenerator
                     "F61DB2E2-EDA3-480A-AD89-8F7507C81976",
                     "5DA4C692-8DCB-465A-A74F-0122AB33CABD",
                     "B69E89D5-D29B-4704-B1A9-924DC61C543E",
+                    "B010225A-C3E2-4082-B72C-86F8E35BEC2F",
                     "7147AD12-BCD8-4A7E-B7EC-B9903F0296F2",
+                    "F3824842-5363-40CC-89DA-98B1E51F5366",
                     "010D44F3-CBDB-48F9-9081-01F4345167B3",
-                    "8BC602FA-E97C-4F25-ACEC-DD1A910BBF71"
+                    "8BC602FA-E97C-4F25-ACEC-DD1A910BBF71",
+                    "D822ED73-164E-46C2-856B-D6B01BC68B3D",
+                    "A30816D5-A4AE-4116-B3BA-E5340F5CD741",
+
+                    "7263CFA7-3755-4B2A-8E85-24BC24198EE1"
                 };
             } 
             else if (user.Name == "Robin")
@@ -443,6 +514,7 @@ namespace DataGenerator
                     "A2327835-C13C-406D-923B-6F44C992785B", 
                     "D8998F3D-5378-410E-86FF-D20E935173B3",
                     "C65FA114-273C-4305-A44B-1A70C6E01173",
+                    "E283F98C-6F9A-4144-B657-506FB6B46EB7",
                     "E76BE7CD-B7E0-46BB-BE87-2296B52444F8", 
                     "FD3F8399-59CF-400D-A8DA-3C0884DE692C",
                     "93C83BD8-6DF3-4488-9DFB-8998D328D151",
@@ -450,6 +522,7 @@ namespace DataGenerator
                     "D7573642-AF29-48C7-AFA2-4E3C6D3C7AFF",
                     "3214D15A-C87C-4AAE-BA73-0FBB5C384C7D",
                     "5F2C5F1C-07D9-4300-A6B2-D152CBE1B857",
+                    "074B7017-0D61-4248-8F37-C13F9AE7AE8F",
                     "137EF03A-D5A4-4B46-8DFE-266CFE31AAD3",
                     "2DF2B8A2-95F6-41DD-B4A0-19311E8F5DA3",
                     "BA2737ED-9F57-4E93-8A62-24F1332B79F4",
@@ -460,9 +533,13 @@ namespace DataGenerator
                     "F61DB2E2-EDA3-480A-AD89-8F7507C81976",
                     "5DA4C692-8DCB-465A-A74F-0122AB33CABD",
                     "B69E89D5-D29B-4704-B1A9-924DC61C543E",
+                    "B010225A-C3E2-4082-B72C-86F8E35BEC2F",
                     "7147AD12-BCD8-4A7E-B7EC-B9903F0296F2",
                     "8BB046F4-4188-4BDA-AC54-0B6529F40B54",
-                    "8BC602FA-E97C-4F25-ACEC-DD1A910BBF71"
+                    "8BC602FA-E97C-4F25-ACEC-DD1A910BBF71",
+                    "A30816D5-A4AE-4116-B3BA-E5340F5CD741",
+
+                    "7263CFA7-3755-4B2A-8E85-24BC24198EE1"
                 };
             }
             else if (user.Name == "Eivind")
@@ -472,13 +549,10 @@ namespace DataGenerator
                     "A2327835-C13C-406D-923B-6F44C992785B",
                     "D8998F3D-5378-410E-86FF-D20E935173B3",
                     "C65FA114-273C-4305-A44B-1A70C6E01173",
-                    "CA3A3616-F1FE-4934-9D69-C9D00114E800",
                     "93C83BD8-6DF3-4488-9DFB-8998D328D151",
                     "0E76A827-D309-47AE-AFCB-B2758DABEA88",
                     "D7573642-AF29-48C7-AFA2-4E3C6D3C7AFF",
                     "3214D15A-C87C-4AAE-BA73-0FBB5C384C7D",
-                    "137EF03A-D5A4-4B46-8DFE-266CFE31AAD3",
-                    "DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6",
                     "4390A97B-0323-4787-AC9E-02A5E2B36DEC",
                     "BA2737ED-9F57-4E93-8A62-24F1332B79F4",
                     "2766B0C7-CB8A-4568-AE08-9D7BF8D513C8",
@@ -491,7 +565,10 @@ namespace DataGenerator
                     "8BC602FA-E97C-4F25-ACEC-DD1A910BBF71",
                     "E54ABEA8-F97F-48FD-884B-B8FBB38323FC",
                     "4DFD8832-7C27-45C2-A370-FC9A3656F926",
-                    "BC72D11B-E34C-494A-B882-B703FB410220"
+                    "BC72D11B-E34C-494A-B882-B703FB410220",
+                    "8FB2399E-1F84-4D57-BAAA-B3F7CC4F47B9",
+
+                    "7263CFA7-3755-4B2A-8E85-24BC24198EE1"
                 };
             }
 

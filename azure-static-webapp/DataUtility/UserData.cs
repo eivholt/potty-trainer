@@ -417,8 +417,22 @@ namespace DataGenerator
                 Weight = 2,
                 Emoji = "twa-horse",
                 EmojiModifier = "twa-person-cartwheeling"
+            },
+            new Assignment("9A7EFA06-D21D-4AFA-A65A-E0BB9248DFCA")
+            {
+                Name = "Spise opp skolematen",
+                Weight = 2,
+                Emoji = "twa-sandwich",
+                EmojiModifier = "twa-school"
+            },
+            new Assignment("D50A104A-C327-49A6-9CD0-BF44A8B92A22")
+            {
+                Name = "Lade nettbrett",
+                Weight = 1,
+                Emoji = "twa-mobile-phone",
+                EmojiModifier = "twa-low-battery"
             }
-            
+
         };
 
         private static readonly List<User> m_users = new List<User>
@@ -501,6 +515,8 @@ namespace DataGenerator
                     "8BC602FA-E97C-4F25-ACEC-DD1A910BBF71",
                     "D822ED73-164E-46C2-856B-D6B01BC68B3D",
                     "A30816D5-A4AE-4116-B3BA-E5340F5CD741",
+                    "9A7EFA06-D21D-4AFA-A65A-E0BB9248DFCA",
+                    "D50A104A-C327-49A6-9CD0-BF44A8B92A22",
 
                     "7263CFA7-3755-4B2A-8E85-24BC24198EE1"
                 };
@@ -567,6 +583,7 @@ namespace DataGenerator
                     "4DFD8832-7C27-45C2-A370-FC9A3656F926",
                     "BC72D11B-E34C-494A-B882-B703FB410220",
                     "8FB2399E-1F84-4D57-BAAA-B3F7CC4F47B9",
+                    "DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6",
 
                     "7263CFA7-3755-4B2A-8E85-24BC24198EE1"
                 };

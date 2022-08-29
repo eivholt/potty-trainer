@@ -99,7 +99,7 @@ namespace Api.Table
 
         public async IAsyncEnumerable<AvailableAssignment> GetAvailableAssignments()
         {
-            var availabledAssignmentsTimespanQuery = m_availableAssigmentTableClient.QueryAsync<AvailableAssignmentEntity>(e => e.TimePosted >= DateTime.UtcNow.Date);
+            var availabledAssignmentsTimespanQuery = m_availableAssigmentTableClient.QueryAsync<AvailableAssignmentEntity>();
 
             var allAssignmentsResponse = m_assigmentTableClient.QueryAsync<AssignmentEntity>();
             var allAssignments = new List<AssignmentEntity>();
@@ -134,11 +134,10 @@ namespace Api.Table
             return xpSum;
         }
 
-        public async IAsyncEnumerable<AvailableAssignment> AvailableAssignmentTypeTodayExists(string assignmentId)
+        public async IAsyncEnumerable<AvailableAssignment> AvailableAssignmentTypeExists(string assignmentId)
         {
             var availabledAssignmentsTimespanQuery = m_availableAssigmentTableClient.QueryAsync<AvailableAssignmentEntity>(
-                e => e.AssignmentRowKey.Equals(assignmentId) && 
-                e.TimePosted >= DateTime.UtcNow.Date);
+                e => e.AssignmentRowKey.Equals(assignmentId));
 
             await foreach(var availableAssignmentEntity in availabledAssignmentsTimespanQuery)
             {

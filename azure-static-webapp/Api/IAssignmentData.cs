@@ -15,6 +15,6 @@ namespace Api
         IAsyncEnumerable<AvailableAssignment> GetAvailableAssignments();
         Task<AvailableAssignment> AddAvailableAssignment(string assignmentId, string system);
         Task<int> CompleteAvailableAssignment(string availableAssignmentId, string userId);
-        IAsyncEnumerable<AvailableAssignment> AvailableAssignmentTypeTodayExists(string assignmentId);
+        IAsyncEnumerable<AvailableAssignment> AvailableAssignmentTypeExists(string assignmentId);
     }
 }

@@ -125,7 +125,7 @@ namespace PottyTrainerIntegration
 
         private async Task CreateOrCompleteAvailableAssignment(string system, string assignmentId)
         {
-            var availableAssignmentsToday = m_assignmentData.AvailableAssignmentTypeTodayExists(assignmentId);
+            var availableAssignmentsToday = m_assignmentData.AvailableAssignmentTypeExists(assignmentId);
 
             // if aa exists, complete
             if (await availableAssignmentsToday.CountAsync() > 0)
@@ -146,7 +146,7 @@ namespace PottyTrainerIntegration
 
         private async Task CreateAvailableAssignmentIfNotExists(string system, string assignmentId)
         {
-            var availableAssignmentsToday = m_assignmentData.AvailableAssignmentTypeTodayExists(assignmentId);
+            var availableAssignmentsToday = m_assignmentData.AvailableAssignmentTypeExists(assignmentId);
 
             // if aa exists, complete
             if (await availableAssignmentsToday.CountAsync() == 0)
@@ -167,7 +167,7 @@ namespace PottyTrainerIntegration
         }
         private async Task CompleteAvailableAssignmentIfExists(string assignmentId)
         {
-            var availableAssignmentsToday = m_assignmentData.AvailableAssignmentTypeTodayExists(assignmentId);
+            var availableAssignmentsToday = m_assignmentData.AvailableAssignmentTypeExists(assignmentId);
 
             // if aa exists, complete
             if (await availableAssignmentsToday.CountAsync() > 0)

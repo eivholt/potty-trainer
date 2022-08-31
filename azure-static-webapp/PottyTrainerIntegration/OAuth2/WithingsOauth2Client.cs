@@ -1,6 +1,7 @@
 ﻿using Api;
 using Data;
 using Data.TableEntities;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -50,7 +51,8 @@ namespace PottyTrainerIntegration.OAuth2
 
                 if (status > 0)
                 {
-                    m_logger.LogError("https://wbsapi.withings.net/v2/oauth2 error:", responseAsJson!.ToString());
+                    m_logger.LogError($"{m_withingsOauth2Url} error: {responseAsJson}");
+                    throw new Exception($"GetAndStoreAccessToken failed. status: {status}, error: {error}.");
                 }
 
                 if (status == 0)
@@ -76,7 +78,7 @@ namespace PottyTrainerIntegration.OAuth2
                 }
             }
 
-            throw new Exception("GetAndStoreAccessToken failed.");
+            throw new Exception($"GetAndStoreAccessToken failed.");
         }
 
         public async Task<UserAuth> RefreshAccessTokenAndStore(string oldRefreshToken)

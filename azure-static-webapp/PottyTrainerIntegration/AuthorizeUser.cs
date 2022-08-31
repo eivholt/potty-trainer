@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage.Blob;
 using PottyTrainerIntegration.OAuth2;
 using System.Net;
 using System.Web;
@@ -39,18 +40,18 @@ namespace PottyTrainerIntegration
                 if (string.IsNullOrEmpty(state)) { throw new ArgumentException("Invalid state", nameof(state)); }
                 if (string.IsNullOrEmpty(code)) { throw new ArgumentException("Invalid code", nameof(code)); }
 
-                var userAuth = await m_oauth2Client.GetAndStoreAccessToken(state, code);
+                var userAuth = await m_oauth2Client.GetAndStoreAccessToken(code, state);
 
                 var response = req.CreateResponse(HttpStatusCode.OK);
                 return response;
             }
             catch (ArgumentException aex)
             {
-                m_logger.LogError($"AccessToken - code or state invalid", aex);
+                m_logger.LogError($"AccessToken - code or state invalid. {aex.Message}", aex);
             }
             catch (Exception ex)
             {
-                m_logger.LogError($"AccessToken", ex);
+                m_logger.LogError($"AccessToken. {ex.Message}", ex);
             }
 
             return req.CreateResponse(HttpStatusCode.BadRequest);

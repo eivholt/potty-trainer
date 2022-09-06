@@ -62,6 +62,24 @@ namespace DataGenerator
                 Emoji = "twa-toothbrush",
                 EmojiModifier = "twa-first-quarter-moon-face"
             },
+            new Assignment("453231BE-208B-4649-804A-9E2C3545C445")
+            {
+                Name = "Gå til skole/barnehage",
+                Description = string.Empty,
+                OncePerDay = true,
+                Weight = 2,
+                Emoji = "twa-running-shoe",
+                EmojiModifier = "twa-school"
+            },
+            new Assignment("4721779F-6C99-4FCF-A502-C2522E8C0AD5")
+            {
+                Name = "Gå fra skole/barnehage",
+                Description = string.Empty,
+                OncePerDay = true,
+                Weight = 1,
+                Emoji = "twa-running-shoe",
+                EmojiModifier = "twa-house-with-garden"
+            },
             new Assignment("C65FA114-273C-4305-A44B-1A70C6E01173")
             {
                 Name = "Tanntråd",
@@ -479,6 +497,8 @@ namespace DataGenerator
                     "A2327835-C13C-406D-923B-6F44C992785B",
                     "D8998F3D-5378-410E-86FF-D20E935173B3",
                     "C65FA114-273C-4305-A44B-1A70C6E01173",
+                    "453231BE-208B-4649-804A-9E2C3545C445",
+                    "4721779F-6C99-4FCF-A502-C2522E8C0AD5",
                     "CA55E579-76F9-4CFD-BDBB-A04736A20222",
                     "D07BA9CB-E4DB-40F8-9461-A4EC36C66826",
                     "CA3A3616-F1FE-4934-9D69-C9D00114E800",
@@ -546,6 +566,8 @@ namespace DataGenerator
                     "433DE750-A150-42C7-9EA1-026DFC908B1D",
                     "D07BA9CB-E4DB-40F8-9461-A4EC36C66826",
                     "CA55E579-76F9-4CFD-BDBB-A04736A20222",
+                    "453231BE-208B-4649-804A-9E2C3545C445",
+                    "4721779F-6C99-4FCF-A502-C2522E8C0AD5",
                     "F61DB2E2-EDA3-480A-AD89-8F7507C81976",
                     "5DA4C692-8DCB-465A-A74F-0122AB33CABD",
                     "B69E89D5-D29B-4704-B1A9-924DC61C543E",
@@ -579,9 +601,6 @@ namespace DataGenerator
                     "59DD55D3-9F48-4B56-A905-BB433FF5441F",
                     "5DA4C692-8DCB-465A-A74F-0122AB33CABD",
                     "8BC602FA-E97C-4F25-ACEC-DD1A910BBF71",
-                    "E54ABEA8-F97F-48FD-884B-B8FBB38323FC",
-                    "4DFD8832-7C27-45C2-A370-FC9A3656F926",
-                    "BC72D11B-E34C-494A-B882-B703FB410220",
                     "8FB2399E-1F84-4D57-BAAA-B3F7CC4F47B9",
                     "DC4CA6D6-0B0E-42DE-85D6-A7247A2994C6",
 

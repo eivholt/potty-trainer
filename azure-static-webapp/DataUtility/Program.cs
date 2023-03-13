@@ -46,7 +46,7 @@ var retryCreateTable = true;
 // Assignments
 var assignmentsTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignments);
 var deleteAssignmentsTableResult = await assignmentsTableClient.DeleteAsync();
-Console.WriteLine("Table assignments deleted: " + deleteAssignmentsTableResult.Status);
+Console.WriteLine("Table assignments deleted. Status: " + deleteAssignmentsTableResult.Status);
 
 retryCreateTable = true;
 
@@ -79,7 +79,7 @@ foreach (var assignment in assignments)
 // Assignments for users
 var assignmentsForUserTableClient = m_tableServiceClient.GetTableClient(pottytrainerTableAssignmentsForUser);
 var deleteAssignmentsForUserTableResult = await assignmentsForUserTableClient.DeleteAsync();
-Console.WriteLine("Table assignmentsforuser deleted: " + deleteAssignmentsForUserTableResult.Status);
+Console.WriteLine("Table assignmentsforuser deleted. Status: " + deleteAssignmentsForUserTableResult.Status);
 
 retryCreateTable = true;
 
@@ -133,7 +133,7 @@ foreach (var user in DataGenerator.UserData.GetUsers())
 
 
 //var deleteCompletedAssignmentsTableResult = await completedAssignmentsTableClient.DeleteAsync();
-//Console.WriteLine("Table completedassignments deleted: " + deleteCompletedAssignmentsTableResult.Status);
+//Console.WriteLine("Table completedassignments deleted. Status: " + deleteCompletedAssignmentsTableResult.Status);
 
 //retryCreateTable = true;
 
